@@ -1,67 +1,45 @@
 /* line 1, ../sass/_main.scss */
-body {
-  font-size: 17px;
-}
-
-/* line 4, ../sass/_main.scss */
-td, th#check {
-  padding: 5px;
-}
-
-/* line 7, ../sass/_main.scss */
-i#star-heading {
-  color: #454545;
-  padding: 5px;
-}
-
-/* line 11, ../sass/_main.scss */
-tr {
-  transition: all 700ms cubic-bezier(0.19, 1, 0.22, 1);
-  transform: translateY(0) scale(0.95, 0.95);
-  -moz-box-shadow: rgba(0, 0, 0, 0.7) 0 0px 4px 0px;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.7) 0 0px 4px 0px;
-  box-shadow: rgba(0, 0, 0, 0.7) 0 0px 4px 0px;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-}
-/* line 16, ../sass/_main.scss */
-tr:hover {
-  background-color: #959595;
-  color: #2546bc;
-}
-
-/* line 22, ../sass/_main.scss */
 table {
   width: 100%;
 }
 
-/* line 25, ../sass/_main.scss */
-.fa-star, .fa-star-o {
-  color: #8f7513;
-}
-/* line 27, ../sass/_main.scss */
-.fa-star:hover, .fa-star-o:hover {
-  color: #ffe513;
+/* line 5, ../sass/_main.scss */
+#searchtext {
+  padding: 9.5px 15px;
 }
 
-/* line 32, ../sass/_main.scss */
-h3#date {
-  text-align: right;
+/* line 8, ../sass/_main.scss */
+#searchbtn {
   float: right;
 }
 
-/* line 37, ../sass/_main.scss */
-#clickstar {
-  cursor: pointer;
+/* line 12, ../sass/_main.scss */
+.btn {
+  padding: 10px 15px;
+  border: 0 none;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
-/* line 41, ../sass/_main.scss */
-div.text {
-  padding-left: 40px;
-  white-space: pre-line;
-  background-color: #f4f4f4;
-  -moz-box-shadow: rgba(0, 0, 0, 0.5) 0 0px 3px 0px;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0 0px 3px 0px;
-  box-shadow: rgba(0, 0, 0, 0.5) 0 0px 3px 0px;
+/* line 20, ../sass/_main.scss */
+.btn:focus, .btn:active:focus, .btn.active:focus {
+  outline: 0 none;
+}
+
+/* line 24, ../sass/_main.scss */
+.btn-primary {
+  background: #0099cc;
+  color: #ffffff;
+}
+
+/* line 29, ../sass/_main.scss */
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
+  background: #33a6cc;
+}
+
+/* line 33, ../sass/_main.scss */
+.btn-primary:active, .btn-primary.active {
+  background: #007299;
+  box-shadow: none;
 }
