@@ -1,4 +1,4 @@
-table{
+table#names{
   width: 100%;
 }
 
@@ -10,27 +10,46 @@ table{
 }
 
 .btn {
-    padding: 10px 15px;
-    border: 0 none;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+  padding: 10px 15px;
+  border: 0 none;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .btn:focus, .btn:active:focus, .btn.active:focus {
-    outline: 0 none;
+  outline: 0 none;
 }
 
 .btn-primary {
-    background: #0099cc;
-    color: #ffffff;
+  background: #0099cc;
+  color: #ffffff;
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
-    background: #33a6cc;
+  background: #33a6cc;
 }
 
 .btn-primary:active, .btn-primary.active {
-    background: #007299;
-    box-shadow: none;
+  background: #007299;
+  box-shadow: none;
+}
+
+.navbar.navbar-inverse.navbar-fixed-top{
+  background: #204d76;
+}
+
+.col-xs-4{
+  float: none;
+}
+
+form#form_login {
+  margin: auto;
+}
+
+#tutorsignup{
+  width:227px;
+}
+#studentsignup{
+  width:228px;
 }

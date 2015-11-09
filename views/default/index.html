@@ -1,16 +1,30 @@
 {{extend 'layout.html'}}
 
 {{if auth.user_id is None:}}
-    <div id="buttoncontainer">
-        {{=A('Sign Up', _id='signup', _class='btn btn-success', _href=URL('default', 'user', args=['register']))}}
-        {{=A('Sign In', _id='signin',_class='btn btn-primary', _href=URL('default', 'user', args=['login']))}}
-    </div>
+    <form id="form_login" class="col-xs-4">
+        <p>
+            <input class="form-control" type="text" id="username" placeholder="username" />
+        </p>
+        <p>
+            <input class="form-control" type="password" id="password" placeholder="password" />
+        </p>
+        <p>
+            <a id="loginbtn" class="btn btn-primary form-control" type="button">Login</a>
+        </p>
+        <p id="signupbtns" class="btn-group">
+            <a id="tutorsignup" class="btn btn-primary form-control">Sign Up As Tutor</a>
+            <a id="studentsignup" class="btn btn-primary form-control">Sign Up As Student</a>
+        </p>
+    </form>
+
+
+
 {{else:}}
     <div class="btn-group">
         <input id="searchtext" type="text">
         <a id="searchbtn" class="btn btn-primary">Search</a>
     </div>
-    <table>
+    <table id="names">
         <tr>
             <th>Tutor/Student Name</th>
             <th>Courses To Tutor/Want To Be Taught In</th>
@@ -20,3 +34,9 @@
     </table>
 {{pass}}
 
+<script src="//www.parsecdn.com/js/parse-1.6.7.min.js">
+    Parse.initialize("sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO", "MaOO36yKaoEH6bdOlVCnNsaBYAhMfxnGS8MhYrTv");
+
+    $("#loginbtn").click(function(e){
+    });
+</script>
