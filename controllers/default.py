@@ -9,14 +9,15 @@ apiKey = "4udDwLuCkvJLR09ypSp1xsgKKVwBDmncRSRBd24K"
 
 
 def get_info(strng):
-    if strng == "get users":
-        connection = httplib.HTTPSConnection('api.parse.com', 443)
-        connection.connect()
-        connection.request('GET', '/1/users', '', {
-               "X-Parse-Application-Id": appId,
-               "X-Parse-REST-API-Key": apiKey
-             })
-        return json.loads(connection.getresponse().read())
+    return strng
+    # if strng == "get users":
+    #     connection = httplib.HTTPSConnection('api.parse.com', 443)
+    #     connection.connect()
+    #     connection.request('GET', '/1/users', '', {
+    #            "X-Parse-Application-Id": appId,
+    #            "X-Parse-REST-API-Key": apiKey
+    #          })
+    #     return json.loads(connection.getresponse().read())
     # elif strng == "signup as tutor":
     #     connection = httplib.HTTPSConnection('api.parse.com', 443)
     #     connection.connect()
@@ -36,6 +37,11 @@ def get_info(strng):
 def index():
     users = get_info("get users")
     session.users = users
-    #print users.get('results')
+    return dict(users=users)
+
+
+def name_list():
+    users = get_info("get users")
+    session.users = users
     return dict(users=users)
 

@@ -1,42 +1,38 @@
 {{extend 'layout.html'}}
+<head>
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+</head>
 
-{{if auth.user_id is None:}}
-    <form id="form_login" class="col-xs-4">
-        <p>
-            <input class="form-control" type="text" id="username" placeholder="username" />
-        </p>
-        <p>
-            <input class="form-control" type="password" id="password" placeholder="password" />
-        </p>
-        <p>
-            <a id="loginbtn" class="btn btn-primary form-control" type="button">Login</a>
-        </p>
-        <p id="signupbtns" class="btn-group">
-            <a id="tutorsignup" class="btn btn-primary form-control">Sign Up As Tutor</a>
-            <a id="studentsignup" class="btn btn-primary form-control">Sign Up As Student</a>
-        </p>
-    </form>
+<form id="form_login" class="col-xs-4">
+    <p>
+        <input class="form-control" type="text" id="username" placeholder="username" />
+    </p>
+    <p>
+        <input class="form-control" type="password" id="password" placeholder="password" />
+    </p>
+    <p>
+        <a id="loginbtn" class="btn btn-primary form-control" type="button">Login</a>
+    </p>
+    <p id="signupbtns" class="btn-group">
+        <a id="tutorsignup" class="btn btn-primary">Sign Up As Tutor</a>
+        <a id="studentsignup" class="btn btn-primary">Sign Up As Student</a>
+    </p>
+</form>
 
-
-
-{{else:}}
-    <div class="btn-group">
-        <input id="searchtext" type="text">
-        <a id="searchbtn" class="btn btn-primary">Search</a>
-    </div>
-    <table id="names">
-        <tr>
-            <th>Tutor/Student Name</th>
-            <th>Courses To Tutor/Want To Be Taught In</th>
-            <th>Availability</th>
-            <th>Location</th>
-        </tr>
-    </table>
-{{pass}}
-
-<script src="//www.parsecdn.com/js/parse-1.6.7.min.js">
+<script type="text/javascript">
     Parse.initialize("sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO", "MaOO36yKaoEH6bdOlVCnNsaBYAhMfxnGS8MhYrTv");
 
     $("#loginbtn").click(function(e){
+       Parse.User.logIn($("#username").val(), $("#password").val(), {
+           success: function(user) {
+               // Do stuff after successful login.
+               console.log(user);
+               document.location.href = "name_list";
+           },
+           error: function(user, error) {
+               // The login failed. Check error to see why.
+               alert(error.message);
+           }
+       });
     });
 </script>

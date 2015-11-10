@@ -13,7 +13,12 @@ table#names {
   float: right;
 }
 
-/* line 12, ../sass/_main.scss */
+/* line 11, ../sass/_main.scss */
+#logoutbtn {
+  float: right;
+}
+
+/* line 14, ../sass/_main.scss */
 .btn {
   padding: 10px 15px;
   border: 0 none;
@@ -22,49 +27,44 @@ table#names {
   text-transform: uppercase;
 }
 
-/* line 20, ../sass/_main.scss */
+/* line 22, ../sass/_main.scss */
 .btn:focus, .btn:active:focus, .btn.active:focus {
   outline: 0 none;
 }
 
-/* line 24, ../sass/_main.scss */
+/* line 26, ../sass/_main.scss */
 .btn-primary {
   background: #0099cc;
   color: #ffffff;
 }
 
-/* line 29, ../sass/_main.scss */
+/* line 31, ../sass/_main.scss */
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
   background: #33a6cc;
 }
 
-/* line 33, ../sass/_main.scss */
+/* line 35, ../sass/_main.scss */
 .btn-primary:active, .btn-primary.active {
   background: #007299;
   box-shadow: none;
 }
 
-/* line 38, ../sass/_main.scss */
+/* line 40, ../sass/_main.scss */
 .navbar.navbar-inverse.navbar-fixed-top {
   background: #204d76;
 }
 
-/* line 42, ../sass/_main.scss */
+/* line 44, ../sass/_main.scss */
 .col-xs-4 {
   float: none;
 }
 
-/* line 46, ../sass/_main.scss */
+/* line 48, ../sass/_main.scss */
 form#form_login {
   margin: auto;
 }
 
-/* line 50, ../sass/_main.scss */
-#tutorsignup {
-  width: 227px;
-}
-
-/* line 53, ../sass/_main.scss */
-#studentsignup {
-  width: 228px;
+/* line 52, ../sass/_main.scss */
+#signupbtns {
+  margin-left: 35px;
 }

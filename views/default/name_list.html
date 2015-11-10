@@ -1,0 +1,28 @@
+{{extend 'layout.html'}}
+<head>
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+</head>
+
+<div id="logout">
+    <a id="logoutbtn" class="btn btn-primary">Log Out</a>
+</div>
+<div id="search" class="btn-group">
+    <input id="searchtext" type="text">
+    <a id="searchbtn" class="btn btn-primary">Search</a>
+</div>
+<table id="names">
+    <tr>
+        <th>Tutor/Student Name</th>
+        <th>Courses To Tutor/Want To Be Taught In</th>
+        <th>Availability</th>
+        <th>Location</th>
+    </tr>
+</table>
+
+<script type="text/javascript">
+    Parse.initialize("sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO", "MaOO36yKaoEH6bdOlVCnNsaBYAhMfxnGS8MhYrTv");
+    $("#logoutbtn").click(function(e){
+        Parse.User.logOut();
+        document.location.href = "index";
+    });
+</script>

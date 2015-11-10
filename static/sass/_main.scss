@@ -8,7 +8,9 @@ table#names{
 #searchbtn{
   float: right;
 }
-
+#logoutbtn{
+  float:right;
+}
 .btn {
   padding: 10px 15px;
   border: 0 none;
@@ -47,9 +49,6 @@ form#form_login {
   margin: auto;
 }
 
-#tutorsignup{
-  width:227px;
-}
-#studentsignup{
-  width:228px;
+#signupbtns{
+  margin-left: 35px;
 }

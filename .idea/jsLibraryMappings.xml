@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="PROJECT" libraries="{parse-1.6.7}" />
+    <file url="PROJECT" libraries="{parse-1.6.7, parse-latest}" />
   </component>
 </project>
