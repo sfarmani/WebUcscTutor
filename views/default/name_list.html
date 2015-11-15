@@ -6,16 +6,35 @@
 <div id="logout">
     <a id="logoutbtn" class="btn btn-primary">Log Out</a>
 </div>
+
 <div id="search" class="btn-group">
     <input id="searchtext" type="text">
     <a id="searchbtn" class="btn btn-primary">Search</a>
 </div>
+
+<!--
+<form id="search" enctype="multipart/form-data" action="" method="post">
+
+</form>
+-->
+
+<!--
+<div id="search" class="btn-group">
+    <input id="searchtext" type="text">
+    <a id="searchbtn" class="btn btn-primary">Search</a>
+</div>
+-->
+
 <table id="names">
     <tr>
         <th>Tutor/Student Name</th>
         <th>Courses To Tutor/Want To Be Taught In</th>
         <th>Availability</th>
         <th>Location</th>
+    </tr>
+
+    <tr>
+        <td id="tutorName"></td>
     </tr>
 </table>
 
@@ -24,5 +43,33 @@
     $("#logoutbtn").click(function(e){
         Parse.User.logOut();
         document.location.href = "index";
+    });
+
+    $("#searchbtn").click(function(e){
+        var currUser = Parse.User.current();
+        var objectId = currUser.id;
+        // get text from input field
+        var searchUsername = $("#searchtext").val();
+
+        // start query
+        var query = new Parse.Query(Parse.User);
+        query.equalTo("isTutor", true);
+        query.equalTo("username", searchUsername);
+        query.notEqualTo("objectId", objectId);
+
+        query.find({
+            success: function (results) {
+                // results has the list of users that match the search criterion
+                $("#tutorName")[0].innerHTML = results[0].get('username');
+                console.log(results[0]);
+                for (var i = 0; i < results.length; i++) {
+                    var object = results[i];
+                    $("#tutorName")[0].innerHTML = object.get('username');
+                }
+            },
+            error: function (error) {
+                alert("Error: " + error.code + " " + error.message);
+            }
+        });
     });
 </script>

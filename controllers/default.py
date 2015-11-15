@@ -43,5 +43,8 @@ def index():
 def name_list():
     users = get_info("get users")
     session.users = users
+
     return dict(users=users)
+
+
 
