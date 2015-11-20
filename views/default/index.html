@@ -3,36 +3,160 @@
     <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
 </head>
 
+<div id="logout" class="btn-group">
+    <a id="searchTutor" class="btn btn-primary">Search For Tutors</a>
+    <a id="message" class="btn btn-primary disabled">Messages</a>
+    <a id="editprof" class="btn btn-primary">Edit Profile</a>
+    <a id="logoutbtn" class="btn btn-primary">Log Out</a>
+</div>
+
+<div id="profile">
+    <img src="" id="profilepic">
+    <input type="file" id="fileBrowser" style="visibility:hidden; display:none;" />
+</div>
+<div id="userInfo">
+    <table>
+        <tr>
+            <td>
+                <p id="name"></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p id="username"></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p id="biolabel">Description</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p id="bio"></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p id="courselabel"></p>
+            </td>
+        </tr>
+    </table>
+</div>
+
 <form id="form_login" class="col-xs-4">
-    <p>
-        <input class="form-control" type="text" id="username" placeholder="username" />
-    </p>
-    <p>
+    <div>
+        <input class="form-control" type="text" id="usernamefield" placeholder="username">
+    </div>
+    <br>
+    <div>
         <input class="form-control" type="password" id="password" placeholder="password" />
-    </p>
-    <p>
+    </div>
+    <br>
+    <div>
         <a id="loginbtn" class="btn btn-primary form-control" type="button">Login</a>
-    </p>
-    <p id="signupbtns" class="btn-group">
+    </div>
+    <br>
+    <div id="signupbtns" class="btn-group">
         <a id="tutorsignup" class="btn btn-primary">Sign Up As Tutor</a>
         <a id="studentsignup" class="btn btn-primary">Sign Up As Student</a>
-    </p>
+    </div>
 </form>
 
 <script type="text/javascript">
     Parse.initialize("sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO", "MaOO36yKaoEH6bdOlVCnNsaBYAhMfxnGS8MhYrTv");
 
-    $("#loginbtn").click(function(e){
-       Parse.User.logIn($("#username").val(), $("#password").val(), {
-           success: function(user) {
-               // Do stuff after successful login.
-               console.log(user);
-               document.location.href = "name_list";
-           },
-           error: function(user, error) {
-               // The login failed. Check error to see why.
-               alert(error.message);
-           }
-       });
-    });
+    function login(){
+        Parse.User.logIn($("#usernamefield").val(), $("#password").val(), {
+            success: function(user) {
+                // Do stuff after successful login.
+                document.location.href = "index";
+            },
+            error: function(user, error) {
+                // The login failed. Check error to see why.
+                alert(error.message);
+            }
+        });
+    }
+
+    var currUser = Parse.User.current();
+
+    var inactivityTime = function () {
+        var t;
+        window.onload = resetTimer;
+        document.onmousemove = resetTimer;
+        document.onkeypress = resetTimer;
+
+        function logout() {
+            alert("Your Session has Timed Out!");
+            Parse.User.logOut();
+            document.location.href = "index";
+        }
+
+        function resetTimer() {
+            clearTimeout(t);
+            t = setTimeout(logout, 3600000);
+        }
+    };
+
+    if(currUser){
+        inactivityTime();
+
+        if(currUser.get("isTutor")){
+            $("#searchTutor").hide();
+        }
+
+        $("#form_login").hide();
+        $("#profile").show();
+        $("#userInfo").show();
+
+        $("#logoutbtn").click(function(e){
+            Parse.User.logOut();
+            document.location.href = "index";
+        });
+
+        $("#editprof").click(function(e){
+            document.location.href = "editprof";
+        });
+
+        $("#searchTutor").click(function(e){
+           document.location.href = "name_list";
+        });
+
+        var profilepic = currUser.get("ProfilePic");
+        $("#profilepic")[0].src = profilepic.url();
+        var fname = currUser.get("FirstName");
+        var lname = currUser.get("LastName");
+        $("#name")[0].innerHTML = fname+" "+lname;
+        $("#username")[0].innerHTML = currUser.get("username");
+        if(currUser.get("bio") == ""){
+            $("#bio")[0].innerHTML = "No Description";
+        }
+        else{
+            $("#bio")[0].innerHTML = currUser.get("bio");
+        }
+        if(currUser.get("isTutor")){
+            $("#courselabel")[0].innerHTML = "Courses I Can Tutor";
+        }
+        else{
+            $("#courselabel")[0].innerHTML = "Courses I Want a Tutor For";
+        }
+    }
+    else{
+        document.onkeydown=function(evt){
+            var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
+            if(keyCode == 13) {
+                login();
+            }
+        };
+
+        $("#profile").hide();
+        $("#userInfo").hide();
+        $("#logout").hide();
+        $("#form_login").show();
+        $("#loginbtn").click(function(e){
+            login();
+        });
+    }
+
 </script>

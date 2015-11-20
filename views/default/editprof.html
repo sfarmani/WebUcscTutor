@@ -1,0 +1,134 @@
+{{extend 'layout.html'}}
+<head>
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+</head>
+
+<div id="logout" class="btn-group">
+    <a id="saveprof" class="btn btn-primary">Save Profile</a>
+    <a id="logoutbtn" class="btn btn-primary">Log Out</a>
+</div>
+
+
+
+<div id="profile">
+    <img src="" id="editprofilepic">
+    <input type="file" id="fileBrowser" style="visibility:hidden; display:none;" />
+</div>
+<div id="userInfo">
+    <table>
+        <tr>
+            <td>
+                <p id="name"></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p id="username"></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p id="biolabel">Description</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="editbio"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p id="courselabel"></p>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+<script type="text/javascript">
+    Parse.initialize("sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO", "MaOO36yKaoEH6bdOlVCnNsaBYAhMfxnGS8MhYrTv");
+    var currUser = Parse.User.current();
+
+    var inactivityTime = function () {
+        var t;
+        window.onload = resetTimer;
+        document.onmousemove = resetTimer;
+        document.onkeypress = resetTimer;
+
+        function logout() {
+            alert("Your Session has Timed Out!");
+            Parse.User.logOut();
+            document.location.href = "index";
+        }
+
+        function resetTimer() {
+            clearTimeout(t);
+            t = setTimeout(logout, 3600000);
+        }
+    };
+
+    inactivityTime();
+
+    $("#editbio").val(currUser.get("bio"));
+    $("#logoutbtn").click(function(e){
+        Parse.User.logOut();
+        document.location.href = "index";
+    });
+    $("#editprofilepic").click(function(e){
+        document.getElementById('fileBrowser').click();
+    });
+    function readURL(input){
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#editprofilepic').attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("#fileBrowser").change(function(e){
+       readURL(this);
+    });
+    $("#saveprof").click(function(e){
+
+        var fileUploadControl = $("#fileBrowser")[0];
+        if (fileUploadControl.files.length > 0) {
+            var file = fileUploadControl.files[0];
+            var name = "ProfilePic.jpg";
+            var parseFile = new Parse.File(name, file);
+            currUser.save(null, {
+                success: function(currUser) {
+                    // Now let's update it with some new data. In this case, only cheatMode and score
+                    // will get sent to the cloud. playerName hasn't changed.
+                    alert("rawr");
+                    currUser.set("bio", $("#bio").val());
+                    currUser.set("ProfilePic", parseFile);
+                    document.location.href = "index";
+                    console.log("success");
+                    currUser.save();
+                }
+            });
+        }
+    });
+
+    var profilepic = currUser.get("ProfilePic");
+    $("#editprofilepic")[0].src = profilepic.url();
+    var fname = currUser.get("FirstName");
+    var lname = currUser.get("LastName");
+    $("#name")[0].innerHTML = fname+" "+lname;
+    $("#username")[0].innerHTML = currUser.get("username");
+    if(currUser.get("bio") == ""){
+        $("#editbio")[0].val = "No Description";
+    }
+    else{
+        $("#editbio")[0].val = currUser.get("bio");
+    }
+    if(currUser.get("isTutor")){
+        $("#courselabel")[0].innerHTML = "Courses I Can Tutor";
+    }
+    else{
+        $("#courselabel")[0].innerHTML = "Courses I Want a Tutor For";
+    }
+</script>
