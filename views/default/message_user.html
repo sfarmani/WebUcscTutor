@@ -1,0 +1,51 @@
+{{extend 'layout.html'}}
+
+<head>
+  <script src='/static/js/require.js'></script>
+  <script src='/static/js/require-inline.js'></script>
+</head>
+
+<html xmlns="http://www.w3.org/1999/html">
+<body>
+    <div id="container">
+        <div id="header">{{=tutor_name}}</div>
+        <div id="messages">
+            {{for i in range(len(messages.get("results"))):}}
+                <div id="tutorName">{{=messages.get("results")[i].get("senderId")}}</div>
+                <div id="message">{{=messages.get("results")[i].get("messageText")}}</div>
+            {{pass}}
+        </div>
+        <div id="footer" style="bottom: 0px;">
+                    <form id="message-form" onsubmit="TS.view.submit(); return false;">
+                        <textarea id="message-input" class="no-menu" maxlength="" aria-label="Message input" style="overflow-y: hidden; height: 38px;" autocorrect="off" autocomplete="off" spellcheck="true"></textarea>
+                        <div id="message-input-message" class=""><span></span></div>
+                    </form>
+
+            </div>
+            <div id="footer_archives" class="hidden">
+                <div id="footer_archives_table">
+                    <div id="footer_archives_left"><span id="footer_archives_text"></span></div>
+                    <div id="footer_archives_right"><a class="btn btn_outline btn_small" id="footer_archives_action_button"></a><br><span id="footer_archives_action_tip"></span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/static/js/require-inline.js" data-require="/static/js/cloud/pubnub">
+
+        var Pubnub = require('/static/js/cloud/pubnub');
+        console.log("Initializing the instance.");
+        function publish() {
+            pubnub = PUBNUB({
+                publish_key   : 'demo',
+                subscribe_key : 'demo'
+            });
+
+            pubnub.publish({
+                channel : "hello_world",
+                message : "Hello from PubNub Docs!",
+                callback: function(m){ console.log(m) }
+            })
+        }
+    </script>
+</body>
+</html>

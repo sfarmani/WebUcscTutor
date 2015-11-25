@@ -5,7 +5,7 @@
 
 <div id="logout" class="btn-group">
     <a id="searchTutor" class="btn btn-primary">Search For Tutors</a>
-    <a id="message" class="btn btn-primary disabled">Messages</a>
+    <a id="message" class="btn btn-primary">Messages</a>
     <a id="editprof" class="btn btn-primary">Edit Profile</a>
     <a id="logoutbtn" class="btn btn-primary">Log Out</a>
 </div>
@@ -121,6 +121,10 @@
 
         $("#searchTutor").click(function(e){
            document.location.href = "name_list";
+        });
+
+        $("#message").click(function(e){
+            document.location.href = "messaging";
         });
 
         var profilepic = currUser.get("ProfilePic");

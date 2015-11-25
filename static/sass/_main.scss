@@ -1,3 +1,9 @@
+body{
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
 table#names{
   width: 100%;
 }
@@ -96,4 +102,20 @@ form#form_login {
   font-size: 15pt;
   width: 323px;
   height: 126px;
+}
+
+#messages{
+  overflow-y: auto;
+  margin-top: 2%;
+  height: 400px;
+  width: 100%;
+}
+
+
+#message-input{
+  overflow-y: auto;
+  resize: none;
+  position: fixed;
+  height: 38px;
+  width: 95%;
 }

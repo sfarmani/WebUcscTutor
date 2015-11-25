@@ -4,7 +4,7 @@
 </head>
 
 <div id="logout" class="btn-group">
-    <a id="message" class="btn btn-primary disabled">Messages</a>
+    <a id="message" class="btn btn-primary">Messages</a>
     <a id="prof" class="btn btn-primary">Profile</a>
     <a id="logoutbtn" class="btn btn-primary">Log Out</a>
 </div>
@@ -13,6 +13,7 @@
     <input id="searchtext" type="text">
     <a id="searchbtn" class="btn btn-primary">Search</a>
 </div>
+
 <table id="names">
     <tr>
         <th>Tutor Name</th>
@@ -57,6 +58,9 @@
     });
     $("#prof").click(function(e){
         document.location.href = "index";
+    });
+    $("#message").click(function(e){
+        document.location.href = "messaging";
     });
     
 //    $("#searchbtn").click(function(e){
