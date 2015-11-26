@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ce43f85f-2f9b-4a71-8a1c-08699ddbe9cf" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/controllers/default.py" afterPath="$PROJECT_DIR$/controllers/default.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/default/index.html" afterPath="$PROJECT_DIR$/views/default/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/default/message_user.html" afterPath="$PROJECT_DIR$/views/default/message_user.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/default/messaging.html" afterPath="$PROJECT_DIR$/views/default/messaging.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="start.iws" />
@@ -47,12 +44,22 @@
       <file leaf-file-name="message_user.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/views/default/message_user.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.14697406">
-              <caret line="9" column="67" selection-start-line="9" selection-start-column="67" selection-end-line="10" selection-end-column="121" />
+            <state vertical-scroll-proportion="0.31412104">
+              <caret line="10" column="74" selection-start-line="10" selection-start-column="74" selection-end-line="10" selection-end-column="74" />
               <folding>
                 <element signature="n#style#0;n#div#2;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#textarea#0;n#form#0;n#div#2;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="editprof.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/views/default/editprof.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-5.8846154">
+              <caret line="78" column="7" selection-start-line="76" selection-start-column="4" selection-end-line="78" selection-end-column="7" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -72,16 +79,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="-10.730769">
               <caret line="24" column="54" selection-start-line="24" selection-start-column="54" selection-end-line="24" selection-end-column="54" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="editprof.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/views/default/editprof.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.076923">
-              <caret line="47" column="20" selection-start-line="47" selection-start-column="19" selection-end-line="47" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -952,14 +949,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/default/editprof.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.076923">
-          <caret line="47" column="20" selection-start-line="47" selection-start-column="19" selection-end-line="47" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/controllers/default.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -967,14 +956,6 @@
           <folding>
             <element signature="e#105#116#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/default/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-92.84615">
-          <caret line="142" column="56" selection-start-line="142" selection-start-column="56" selection-end-line="142" selection-end-column="56" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -986,10 +967,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/views/default/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-92.84615">
+          <caret line="142" column="56" selection-start-line="142" selection-start-column="56" selection-end-line="142" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/default/editprof.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.8846154">
+          <caret line="78" column="7" selection-start-line="76" selection-start-column="4" selection-end-line="78" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/views/default/message_user.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.14697406">
-          <caret line="9" column="67" selection-start-line="9" selection-start-column="67" selection-end-line="10" selection-end-column="121" />
+        <state vertical-scroll-proportion="0.31412104">
+          <caret line="10" column="74" selection-start-line="10" selection-start-column="74" selection-end-line="10" selection-end-column="74" />
           <folding>
             <element signature="n#style#0;n#div#2;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#textarea#0;n#form#0;n#div#2;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />

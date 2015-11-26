@@ -3,13 +3,13 @@
 <html>
 <head>
     <body>
-        <script type="javascript">
+        <script type="text/javascript">
             var objDiv = document.getElementById("messages");
             objDiv.scrollTop = objDiv.scrollHeight;
         </script>
-        <script src="{{=URL('static', 'js/require.js')}}"></script>
-        <script src="{{=URL('static', 'js/require-inline.js')}}" data-require="{{=URL('static', 'js/cloud/pubnub.js')}}">
-            var Pubnub = require(["{{=URL('static', 'js/cloud/pubnub')}}", 'publish'], {
+        <script src="{{=URL('static', 'js/require.js')}}">
+            var Pubnub = require('{{=URL('static', 'js/cloud/pubnub')}}');
+            function publish(){
                 pubnub = PUBNUB({
                     publish_key   : 'demo',
                     subscribe_key : 'demo'
