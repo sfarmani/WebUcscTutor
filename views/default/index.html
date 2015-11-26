@@ -100,6 +100,22 @@
     };
 
     if(currUser){
+        var currUserId = currUser.id;
+        console.log(currUserId);
+        $.ajax('{{=URL('default', 'index')}}', {
+            data: {'currUserId': currUserId},
+            dataType: "text",
+            success: successFunc,
+            error: errorFunc
+        });
+
+    function successFunc(data, status){
+        console.log("Success! User ID = " + currUserId);
+    }
+
+    function errorFunc() {
+        alert('error');
+    }
         inactivityTime();
 
         if(currUser.get("isTutor")){
@@ -124,7 +140,7 @@
         });
 
         $("#message").click(function(e){
-            document.location.href = "messaging";
+           document.location.href = "messaging" + "/" + currUserId;
         });
 
         var profilepic = currUser.get("ProfilePic");

@@ -4,6 +4,7 @@
 import json
 import httplib
 import re
+import urllib
 
 appId = "sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO"
 apiKey = "4udDwLuCkvJLR09ypSp1xsgKKVwBDmncRSRBd24K"
@@ -30,7 +31,9 @@ def get_info(strng):
 
 
 def index():
-    return dict()
+    curr_user_id = request.vars.currUserId
+
+    return dict(curr_user_id=curr_user_id)
 
 
 def name_list():
@@ -46,7 +49,10 @@ def editprof():
 def messaging():
     users = get_info("get users")
     session.users = users
-    return dict(users=users)
+
+    curr_user_id = request.args(0)
+
+    return dict(users=users, curr_user_id=curr_user_id)
 
 
 def message_user():
@@ -57,8 +63,31 @@ def message_user():
     users = get_info("get users")
     session.users = users
 
-    messages = get_info("get messages")
+    curr_user_id = request.args(3)
+    tutor_id = request.args(2)
+    user_list = [curr_user_id, tutor_id]
+    print user_list
+    connection = httplib.HTTPSConnection('api.parse.com', 443)
+    params = urllib.urlencode({
+        "where": json.dumps({
+            "senderId": {
+                "$in": user_list
+             },
+            "recipientId": {
+                 "$in": user_list
+            }
+        }),
+        "order": "createdAt"
+    })
+    connection.connect()
+    connection.request('GET', '/1/classes/ParseMessage?%s' % params, '', {
+               "X-Parse-Application-Id": appId,
+               "X-Parse-REST-API-Key": apiKey
+    })
+
+    messages = json.loads(connection.getresponse().read())
+    print messages
     # session.messages = messages
-    return dict(tutor_name=tutor_name, users=users, messages=messages)
+    return dict(tutor_name=tutor_name, users=users, messages=messages, tutor_id=tutor_id)
 
 

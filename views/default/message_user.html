@@ -1,26 +1,40 @@
 {{extend 'layout.html'}}
 
+<html>
 <head>
-  <script src='/static/js/require.js'></script>
-  <script src='/static/js/require-inline.js'></script>
-</head>
+    <body>
+        <script type="javascript">
+            var objDiv = document.getElementById("messages");
+            objDiv.scrollTop = objDiv.scrollHeight;
+        </script>
+        <script src="{{=URL('static', 'js/require.js')}}"></script>
+        <script src="{{=URL('static', 'js/require-inline.js')}}" data-require="{{=URL('static', 'js/cloud/pubnub.js')}}">
+            var Pubnub = require(["{{=URL('static', 'js/cloud/pubnub')}}", 'publish'], {
+                pubnub = PUBNUB({
+                    publish_key   : 'demo',
+                    subscribe_key : 'demo'
+                });
 
-<html xmlns="http://www.w3.org/1999/html">
-<body>
-    <div id="container">
-        <div id="header">{{=tutor_name}}</div>
-        <div id="messages">
-            {{for i in range(len(messages.get("results"))):}}
-                <div id="tutorName">{{=messages.get("results")[i].get("senderId")}}</div>
-                <div id="message">{{=messages.get("results")[i].get("messageText")}}</div>
-            {{pass}}
-        </div>
-        <div id="footer" style="bottom: 0px;">
-                    <form id="message-form" onsubmit="TS.view.submit(); return false;">
-                        <textarea id="message-input" class="no-menu" maxlength="" aria-label="Message input" style="overflow-y: hidden; height: 38px;" autocorrect="off" autocomplete="off" spellcheck="true"></textarea>
-                        <div id="message-input-message" class=""><span></span></div>
-                    </form>
-
+                pubnub.publish({
+                    channel : "hello_world",
+                    message : "Hello from PubNub Docs!",
+                    callback: function(m){ console.log(m) }
+                })
+            }
+        </script>
+        <div id="container">
+            <div id="header">{{=tutor_name}}</div>
+            <div id="messages">
+                {{for i in range(len(messages.get("results"))):}}
+                    <div id="tutorName">{{=messages.get("results")[i].get("senderId")}}</div>
+                    <div id="message">{{=messages.get("results")[i].get("messageText")}}</div>
+                {{pass}}
+            </div>
+            <div id="footer" style="bottom: 0px;">
+                <form id="message-form" onsubmit="TS.view.submit(); return false;">
+                    <textarea id="message-input" class="no-menu" maxlength="" aria-label="Message input" style="overflow-y: hidden; height: 38px;" autocorrect="off" autocomplete="off" spellcheck="true"></textarea>
+                    <div id="message-input-message" class=""><span></span></div>
+                </form>
             </div>
             <div id="footer_archives" class="hidden">
                 <div id="footer_archives_table">
@@ -29,23 +43,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    <script src="/static/js/require-inline.js" data-require="/static/js/cloud/pubnub">
-
-        var Pubnub = require('/static/js/cloud/pubnub');
-        console.log("Initializing the instance.");
-        function publish() {
-            pubnub = PUBNUB({
-                publish_key   : 'demo',
-                subscribe_key : 'demo'
-            });
-
-            pubnub.publish({
-                channel : "hello_world",
-                message : "Hello from PubNub Docs!",
-                callback: function(m){ console.log(m) }
-            })
-        }
-    </script>
-</body>
+    </body>
+</head>
 </html>

@@ -1,0 +1,21 @@
+(dp1
+S'output'
+p2
+S"<type 'exceptions.TypeError'> cannot concatenate 'str' and 'dict' objects"
+p3
+sS'layer'
+p4
+S'C:\\Users\\Brad Cardello\\Desktop\\Computer Science\\CMPS-183\\web2py-class\\applications\\WebUcscTutor\\controllers/default.py'
+p5
+sS'code'
+p6
+S'# -*- coding: utf-8 -*-\n# this file is released under public domain and you can use without limitations\n\nimport json\nimport httplib\nimport re\nimport urllib\n\nappId = "sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO"\napiKey = "4udDwLuCkvJLR09ypSp1xsgKKVwBDmncRSRBd24K"\n\n\ndef get_info(strng):\n    if strng == "get users":\n        connection = httplib.HTTPSConnection(\'api.parse.com\', 443)\n        connection.connect()\n        connection.request(\'GET\', \'/1/users\', \'\', {\n               "X-Parse-Application-Id": appId,\n               "X-Parse-REST-API-Key": apiKey\n        })\n        return json.loads(connection.getresponse().read())\n    elif strng == "get messages":\n        connection = httplib.HTTPSConnection(\'api.parse.com\', 443)\n        connection.connect()\n        connection.request(\'GET\', \'/1/classes/ParseMessage\', \'\', {\n               "X-Parse-Application-Id": appId,\n               "X-Parse-REST-API-Key": apiKey\n        })\n        # print json.loads(connection.getresponse().read())\n        return json.loads(connection.getresponse().read())\n\n\ndef index():\n    return dict()\n\n\ndef name_list():\n    users = get_info("get users")\n    session.users = users\n    return dict(users=users)\n\n\ndef editprof():\n    return dict()\n\n\ndef messaging():\n    users = get_info("get users")\n    session.users = users\n    return dict(users=users)\n\n\ndef message_user():\n    # replace non-alphanumeric characters from args with spaces\n    title = request.args(0)\n    tutor_name = re.sub(\'[^0-9a-zA-Z]+\', \' \', title)\n\n    users = get_info("get users")\n    session.users = users\n\n    curr_user_id = "jQuery(\'#target\').html(%s);" % repr(request.vars.currUserId)\n    tutor_id = request.args(2)\n    user_list = [curr_user_id, tutor_id]\n    connection = httplib.HTTPSConnection(\'api.parse.com\', 443)\n    params = urllib.urlencode({"where": json.dumps({\n                    "senderId": {\n                        "$in": user_list\n                    },\n                    "recipientId": {\n                        "$in": user_list\n                    },\n                    "order": "createdAt"\n    })})\n    connection.connect()\n    connection.request(\'GET\', \'/1/classes/ParseMessage?%s\' % params, \'\', {\n               "X-Parse-Application-Id": appId,\n               "X-Parse-REST-API-Key": apiKey\n    })\n\n    messages = json.loads(connection.getresponse().read())\n    print "hello" + messages\n    # session.messages = messages\n    return dict(tutor_name=tutor_name, users=users, messages=messages, tutor_id=tutor_id)\n\n\n\nresponse._vars=response._caller(message_user)\n'
+p7
+sS'snapshot'
+p8
+(dp9
+sS'traceback'
+p10
+S'Traceback (most recent call last):\n  File "C:\\Users\\Brad Cardello\\Desktop\\Computer Science\\CMPS-183\\web2py-class\\gluon\\restricted.py", line 227, in restricted\n    exec ccode in environment\n  File "C:\\Users\\Brad Cardello\\Desktop\\Computer Science\\CMPS-183\\web2py-class\\applications\\WebUcscTutor\\controllers/default.py", line 87, in <module>\n  File "C:\\Users\\Brad Cardello\\Desktop\\Computer Science\\CMPS-183\\web2py-class\\gluon\\globals.py", line 412, in <lambda>\n    self._caller = lambda f: f()\n  File "C:\\Users\\Brad Cardello\\Desktop\\Computer Science\\CMPS-183\\web2py-class\\applications\\WebUcscTutor\\controllers/default.py", line 81, in message_user\n    print "hello" + messages\nTypeError: cannot concatenate \'str\' and \'dict\' objects\n'
+p11
+s.
