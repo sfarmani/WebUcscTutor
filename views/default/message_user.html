@@ -1,48 +1,47 @@
 {{extend 'layout.html'}}
+<head xmlns="http://www.w3.org/1999/html">
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+</head>
 
 <html>
-<head>
     <body>
-        <script type="text/javascript">
-            var objDiv = document.getElementById("messages");
-            objDiv.scrollTop = objDiv.scrollHeight;
-        </script>
-        <script src="{{=URL('static', 'js/require.js')}}">
-            var Pubnub = require('{{=URL('static', 'js/cloud/pubnub')}}');
-            function publish(){
-                pubnub = PUBNUB({
-                    publish_key   : 'demo',
-                    subscribe_key : 'demo'
-                });
-
-                pubnub.publish({
-                    channel : "hello_world",
-                    message : "Hello from PubNub Docs!",
-                    callback: function(m){ console.log(m) }
-                })
-            }
-        </script>
-        <div id="container">
-            <div id="header">{{=tutor_name}}</div>
-            <div id="messages">
-                {{for i in range(len(messages.get("results"))):}}
-                    <div id="tutorName">{{=messages.get("results")[i].get("senderId")}}</div>
-                    <div id="message">{{=messages.get("results")[i].get("messageText")}}</div>
-                {{pass}}
-            </div>
-            <div id="footer" style="bottom: 0px;">
-                <form id="message-form" onsubmit="TS.view.submit(); return false;">
-                    <textarea id="message-input" class="no-menu" maxlength="" aria-label="Message input" style="overflow-y: hidden; height: 38px;" autocorrect="off" autocomplete="off" spellcheck="true"></textarea>
-                    <div id="message-input-message" class=""><span></span></div>
-                </form>
-            </div>
-            <div id="footer_archives" class="hidden">
-                <div id="footer_archives_table">
-                    <div id="footer_archives_left"><span id="footer_archives_text"></span></div>
-                    <div id="footer_archives_right"><a class="btn btn_outline btn_small" id="footer_archives_action_button"></a><br><span id="footer_archives_action_tip"></span></div>
-                </div>
-            </div>
-        </div>
+        <script src="{{=URL('static', 'js/pubnub-3.7.18.min.js')}}"></script>
     </body>
-</head>
+    <div id="container">
+        <div id="header">{{=tutor_name}}</div>
+        <div id="messages" class="scrollable-messages">
+        {{for i in range(len(messages.get("results"))):}}
+            <div id="tutorName">{{=messages.get("results")[i].get("senderId")}}</div>
+            <div id="message">{{=messages.get("results")[i].get("messageText")}}</div>
+        {{pass}}
+        </div>
+    </div>
+
+    <div id="input-area">
+        <textarea id="message-input" class="no-menu" maxlength="" aria-label="Message input"  spellcheck="true"></textarea>
+        <div id="send-message">
+            <a id="send-message-btn" class="btn btn-primary">Send</a>
+        </div>
+    </div>
 </html>
+
+<script>
+    $("#send-message").click(function(e){
+        publish();
+    });
+
+    $('#messages').scrollTop($('#messages')[0].scrollHeight - $('#messages')[0].clientHeight);
+
+    function publish(){
+        pubnub = PUBNUB({
+            publish_key   : 'demo',
+            subscribe_key : 'demo'
+        });
+
+        pubnub.publish({
+            channel : "hello_world",
+            message : "Hello from PubNub Docs!",
+            callback: function(m){ console.log(m) }
+        })
+    }
+</script>

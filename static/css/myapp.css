@@ -141,15 +141,22 @@ form#form_login {
 #messages {
   overflow-y: auto;
   margin-top: 2%;
-  height: 400px;
+  height: 370px;
   width: 100%;
 }
 
-/* line 115, ../sass/_main.scss */
+/* line 114, ../sass/_main.scss */
 #message-input {
-  overflow-y: auto;
+  overflow-y: hidden;
   resize: none;
   position: fixed;
   height: 38px;
-  width: 95%;
+  width: 89%;
+}
+
+/* line 122, ../sass/_main.scss */
+#send-message-btn {
+  float: right;
+  height: 38px;
+  width: 80px;
 }
