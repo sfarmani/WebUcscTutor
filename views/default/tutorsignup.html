@@ -1,0 +1,157 @@
+{{extend 'layout.html'}}
+<head>
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+</head>
+
+<div id="loggedin">
+    <span>You're Already Logged in!</span>
+</div>
+
+<form id="form_login" class="col-xs-4">
+    <div>
+        <input class="form-control" type="text" id="FirstName" placeholder="First Name">
+    </div>
+    <br>
+    <div>
+        <input class="form-control" type="text" id="LastName" placeholder="Last Name">
+    </div>
+    <br>
+    <div>
+        <input class="form-control" type="text" id="usernamefield" placeholder="Username">
+    </div>
+    <br>
+    <div>
+        <input class="form-control" type="email" id="email" placeholder="Email(UCSC)">
+    </div>
+    <br>
+    <div>
+        <input class="form-control" type="password" id="password" placeholder="Password" />
+    </div>
+    <br>
+    <div>
+        <input class="form-control" type="password" id="passwordconfirm" placeholder="Confirm Password">
+    </div>
+    <br>
+    <div>
+        <div id="containerpic">
+            <img src="http://oi63.tinypic.com/2lmt1zq.jpg" id="pic">
+        </div>
+        <input type="file" id="fileBrowser" style="visibility:hidden; display:none;" />
+    </div>
+    <br>
+    <div>
+        <a id="signup" class="btn btn-primary form-control" type="button">Sign Up</a>
+    </div>
+</form>
+
+
+<script type="text/javascript">
+    Parse.initialize("sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO", "MaOO36yKaoEH6bdOlVCnNsaBYAhMfxnGS8MhYrTv");
+
+    if(Parse.User.current() != null){
+        $("#loggedin").show();
+        $("#form_login").hide();
+        setTimeout(function(){
+            document.location.href = "/WebUcscTutor/default/index";
+        }, 5000);
+    }
+    else{
+        $("#loggedin").hide();
+        $("#form_login").show();
+        $("#pic").click(function(e){
+            document.getElementById('fileBrowser').click();
+        });
+        function readURL(input){
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#pic').attr('src', e.target.result);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        $("#fileBrowser").change(function(e){
+           readURL(this);
+        });
+
+        $("#signup").click(function(e){
+            if($("#password").val() == "" ||
+               $("#passwordconfirm").val() == "" ||
+               $("#email").val() == "" ||
+               $("#usernamefield").val() == "" ||
+               $("#FirstName").val() == "" ||
+               $("#LastName").val() == ""){
+                alert("Please complete the form");
+            }
+            else if($("#password").val() != $("#passwordconfirm").val()){
+                alert("Password Does Not Match");
+            }
+            else if(!$("#email").val().match(/[a-zA-Z]+@ucsc.edu/)){
+                alert("Please sign up with your UCSC email")
+            }
+            else if($("#password").val().length < 4){
+                alert("Password has to be 4 or more characters.");
+            }
+            else if(!$("#usernamefield").val().match(/[a-zA-Z]+/)){
+                alert("Username cannot include any non-word character\n(letter, number, underscore)");
+            }
+            else{
+
+                var fileUploadControl = $("#fileBrowser")[0];
+                if (fileUploadControl.files.length > 0) {
+                    var file = fileUploadControl.files[0];
+                    var name = "ProfilePic";
+
+                    var parseFile = new Parse.File(name, file);
+
+                    parseFile.save().then(function() {
+                        var user = new Parse.User();
+                        user.set("isTutor", true);
+                        user.set("username", $("#usernamefield").val());
+                        user.set("password", $("#password").val());
+                        user.set("email", $("#email").val());
+                        user.set("FirstName", $("#FirstName").val());
+                        user.set("LastName", $("#LastName").val());
+                        user.set("ProfilePic", parseFile);
+
+                        user.signUp(null, {
+                            success: function(user) {
+                                // Hooray! Let them use the app now.
+                                document.location.href = "/WebUcscTutor/default/index";
+                            },
+                          error: function(user, error) {
+                            // Show the error message somewhere and let the user try again.
+                            alert("Error: " + error.code + " " + error.message);
+                          }
+                        });
+                    }, function(error) {
+                      // The file either could not be read, or could not be saved to Parse.
+                        alert("Error: " + error.code + " " + error.message);
+                    });
+                }
+                else if(fileUploadControl.files.length <= 0){
+                    var user = new Parse.User();
+                    user.set("isTutor", true);
+                    user.set("username", $("#usernamefield").val());
+                    user.set("password", $("#password").val());
+                    user.set("email", $("#email").val());
+                    user.set("FirstName", $("#FirstName").val().charAt(0).toUpperCase() + $("#FirstName").val().substr(1));
+                    user.set("LastName", $("#LastName").val().charAt(0).toUpperCase() + $("#LastName").val().substr(1));
+                    user.signUp(null, {
+                        success: function(user) {
+                            // Hooray! Let them use the app now.
+                            document.location.href = "/WebUcscTutor/default/index";
+                        },
+                        error: function(user, error) {
+                            // Show the error message somewhere and let the user try again.
+                            alert("Error: " + error.code + " " + error.message);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+</script>

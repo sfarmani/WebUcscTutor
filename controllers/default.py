@@ -13,11 +13,16 @@ apiKey = "4udDwLuCkvJLR09ypSp1xsgKKVwBDmncRSRBd24K"
 def get_info(strng):
     if strng == "get users":
         connection = httplib.HTTPSConnection('api.parse.com', 443)
-        connection.connect()
-        connection.request('GET', '/1/users', '', {
-               "X-Parse-Application-Id": appId,
-               "X-Parse-REST-API-Key": apiKey
+        params = urllib.urlencode({
+            "where": json.dumps({
+                "isTutor": True
+            })
         })
+        connection.connect()
+        connection.request('GET', '/1/classes/_User?%s' % params, '', {
+               "X-Parse-Application-Id": "sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO",
+               "X-Parse-REST-API-Key": "4udDwLuCkvJLR09ypSp1xsgKKVwBDmncRSRBd24K"
+             })
         return json.loads(connection.getresponse().read())
     elif strng == "get messages":
         connection = httplib.HTTPSConnection('api.parse.com', 443)
@@ -91,3 +96,10 @@ def message_user():
     return dict(tutor_name=tutor_name, users=users, messages=messages, tutor_id=tutor_id)
 
 
+
+def tutorsignup():
+    return dict()
+
+
+def studentsignup():
+    return dict()

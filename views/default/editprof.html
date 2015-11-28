@@ -3,8 +3,13 @@
     <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
 </head>
 
+<div id="notloggedin">
+    <span>You haven't logged in yet! Please login or Sign Up!</span>
+</div>
+
 <div id="logout" class="btn-group">
     <a id="saveprof" class="btn btn-primary">Save Profile</a>
+    <a id="cancel" class="btn btn-primary">cancel</a>
     <a id="logoutbtn" class="btn btn-primary">Log Out</a>
 </div>
 
@@ -18,22 +23,13 @@
     <table>
         <tr>
             <td>
-                <p id="name"></p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p id="username"></p>
-            </td>
-        </tr>
-        <tr>
-            <td>
                 <p id="biolabel">Description</p>
             </td>
         </tr>
         <tr>
             <td>
-                <textarea id="editbio"></textarea>
+                <textarea id="inputbio" class="form-control no-menu" style="display: none;" spellcheck="true"></textarea>
+                <p id="editbio"></p>
             </td>
         </tr>
         <tr>
@@ -49,86 +45,147 @@
     Parse.initialize("sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO", "MaOO36yKaoEH6bdOlVCnNsaBYAhMfxnGS8MhYrTv");
     var currUser = Parse.User.current();
 
-    var inactivityTime = function () {
-        var t;
-        window.onload = resetTimer;
-        document.onmousemove = resetTimer;
-        document.onkeypress = resetTimer;
-
-        function logout() {
-            alert("Your Session has Timed Out!");
-            Parse.User.logOut();
-            document.location.href = "index";
-        }
-
-        function resetTimer() {
-            clearTimeout(t);
-            t = setTimeout(logout, 3600000);
-        }
-    };
-
-    inactivityTime();
-
-    $("#editbio").val(currUser.get("bio"));
-    $("#logoutbtn").click(function(e){
-        Parse.User.logOut();
-        document.location.href = "index";
-    });
-    $("#editprofilepic").click(function(e){
-        document.getElementById('fileBrowser').click();
-    });
-    function readURL(input){
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                $('#editprofilepic').attr('src', e.target.result);
-            };
-
-            reader.readAsDataURL(input.files[0]);
-        }
+    function isHidden(el) {
+        var style = window.getComputedStyle(el);
+        return (style.display === 'none')
     }
-    $("#fileBrowser").change(function(e){
-       readURL(this);
-    });
-    $("#saveprof").click(function(e){
 
-        var fileUploadControl = $("#fileBrowser")[0];
-        if (fileUploadControl.files.length > 0) {
-            var file = fileUploadControl.files[0];
-            var name = "ProfilePic.jpg";
-            var parseFile = new Parse.File(name, file);
-            currUser.save(null, {
-                success: function(currUser) {
-                    // Now let's update it with some new data. In this case, only cheatMode and score
-                    // will get sent to the cloud. playerName hasn't changed.
-                    alert("rawr");
-                    currUser.set("bio", $("#bio").val());
-                    currUser.set("ProfilePic", parseFile);
-                    document.location.href = "index";
-                    console.log("success");
-                    currUser.save();
+    if(currUser == null){
+        $("#notloggedin").show();
+        $("#profile").hide();
+        $("#userInfo").hide();
+        $("#logout").hide();
+        setTimeout(function(){
+            document.location.href = "/WebUcscTutor/default/index"
+        }, 5000);
+    }
+    else {
+
+        currUser.fetch({
+            success: function (currUser) {
+                $("#notloggedin").hide();
+                $("#profile").show();
+                $("#userInfo").show();
+                $("#logout").show();
+
+                var inactivityTime = function () {
+                    var t;
+                    window.onload = resetTimer;
+                    document.onmousemove = resetTimer;
+                    document.onkeypress = resetTimer;
+
+                    function logout() {
+                        alert("Your Session has Timed Out!");
+                        Parse.User.logOut();
+                        document.location.href = "/WebUcscTutor/default/index";
+                    }
+
+                    function resetTimer() {
+                        clearTimeout(t);
+                        t = setTimeout(logout, 3600000);
+                    }
+                };
+
+                inactivityTime();
+
+                if(currUser.get("bio") || currUser.get("bio") != ""){
+                    $("#editbio")[0].innerHTML = currUser.get("bio");
+                    $("#inputbio").val(currUser.get("bio"));
                 }
-            });
-        }
-    });
+                else{
+                    $("#editbio")[0].innerHTML = "No Description";
+                    $("#inputbio").val("No Description");
+                }
 
-    var profilepic = currUser.get("ProfilePic");
-    $("#editprofilepic")[0].src = profilepic.url();
-    var fname = currUser.get("FirstName");
-    var lname = currUser.get("LastName");
-    $("#name")[0].innerHTML = fname+" "+lname;
-    $("#username")[0].innerHTML = currUser.get("username");
-    if(currUser.get("bio") == ""){
-        $("#editbio")[0].val = "No Description";
-    }
-    else{
-        $("#editbio")[0].val = currUser.get("bio");
-    }
-    if(currUser.get("isTutor")){
-        $("#courselabel")[0].innerHTML = "Courses I Can Tutor";
-    }
-    else{
-        $("#courselabel")[0].innerHTML = "Courses I Want a Tutor For";
+
+                $("#editbio").click(function(e){
+                    $("#editbio").slideToggle();
+                    $("#inputbio").slideToggle();
+                });
+
+                $("#logoutbtn").click(function (e) {
+                    Parse.User.logOut();
+                    document.location.href = "/WebUcscTutor/default/index";
+                });
+                $("#editprofilepic").click(function (e) {
+                    document.getElementById('fileBrowser').click();
+                });
+                function readURL(input) {
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+
+                        reader.onload = function (e) {
+                            $('#editprofilepic').attr('src', e.target.result);
+                        };
+
+                        reader.readAsDataURL(input.files[0]);
+                    }
+                }
+
+                $("#fileBrowser").change(function (e) {
+                    readURL(this);
+                });
+                $("#saveprof").click(function (e) {
+
+                    var fileUploadControl = $("#fileBrowser")[0];
+                    if (fileUploadControl.files.length > 0) {
+                        var file = fileUploadControl.files[0];
+                        var name = "ProfilePic";
+
+                        var parseFile = new Parse.File(name, file);
+                        parseFile.save().then(function () {
+                            currUser.set("bio", $("#inputbio").val());
+                            currUser.set("ProfilePic", parseFile);
+                            currUser.save(null, {
+                                success: function (currUser) {
+                                    document.location.href = "/WebUcscTutor/default/index";
+                                },
+                                error: function (user, error) {
+                                    // Show the error message somewhere and let the user try again.
+                                    alert("Error: " + error.code + " " + error.message);
+                                }
+                            });
+                        }, function (error) {
+                            // The file either could not be read, or could not be saved to Parse.
+                            alert("Error: " + error.code + " " + error.message);
+                        });
+                    }
+                    else if (fileUploadControl.files.length <= 0) {
+                        currUser.set("bio", $("#inputbio").val());
+                        currUser.save(null, {
+                            success: function (currUser) {
+                                document.location.href = "/WebUcscTutor/default/index";
+                            },
+                            error: function (user, error) {
+                                // Show the error message somewhere and let the user try again.
+                                alert("Error: " + error.code + " " + error.message);
+                            }
+                        });
+                    }
+                });
+
+                var profilepic = currUser.get("ProfilePic");
+                $("#editprofilepic")[0].src = profilepic.url();
+                if (currUser.get("bio") == "") {
+                    $("#editbio")[0].val = "No Description";
+                }
+                else {
+                    $("#editbio")[0].val = currUser.get("bio");
+                }
+                if (currUser.get("isTutor")) {
+                    $("#courselabel")[0].innerHTML = "Courses I Can Tutor";
+                }
+                else {
+                    $("#courselabel")[0].innerHTML = "Courses I Want a Tutor For";
+                }
+
+                $("#cancel").click(function (e) {
+                    document.location.href = "/WebUcscTutor/default/index";
+                });
+            },
+            error: function (error) {
+                alert("Error: " + error.code + " " + error.message);
+            }
+        });
     }
 </script>

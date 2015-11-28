@@ -1,1 +1,10 @@
-/errors
+errors/
+sessions/
+.idea/jsLibraryMappings.xml
+.idea/.name
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/WebUcscTutor.iml
+.idea/workspace.xml
+static/.sass-cache/

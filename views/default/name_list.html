@@ -3,6 +3,13 @@
     <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
 </head>
 
+<div id="notloggedin">
+    <span>You haven't logged in yet! Please login or Sign Up!</span>
+</div>
+<div id="tutorlogged">
+    <span>I don't know how you got here but you're a tutor! You can't search for other tutors, silly!!</span>
+</div>
+
 <div id="logout" class="btn-group">
     <a id="message" class="btn btn-primary">Messages</a>
     <a id="prof" class="btn btn-primary">Profile</a>
@@ -20,7 +27,6 @@
         <th>Courses To Tutor</th>
         <th>Review</th>
         <th>Availability</th>
-        <th>Location</th>
     </tr>
     {{for i in range(len(users.get("results"))):}}
     <tr>
@@ -28,7 +34,6 @@
         <td id="course"></td>
         <td id="review"></td>
         <td id="schedule"></td>
-        <td id="location"></td>
     </tr>
     {{pass}}
 </table>
@@ -36,57 +41,106 @@
 <script type="text/javascript">
     Parse.initialize("sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO", "MaOO36yKaoEH6bdOlVCnNsaBYAhMfxnGS8MhYrTv");
 
-    $("#searchbtn").click(function(e){
-//        var query = new Parse.Query(Parse.User);
-//        query.equalTo("username", $("#searchtext").val());
-//        query.equalTo("isTutor", true);  // find all the women
-//        query.find({
-//            success: function(tutors) {
-//                // Do stuff
-//                $("#tutorName").html(tutors[0].get('FirstName') + " "+tutors[0].get('LastName'));
-//            },
-//            error: function(tutors, error){
-//                alert(error.message);
-//            }
-//        });
-    });
+    if(Parse.User.current() == null){
+        $("#notloggedin").show();
+        $("#tutorlogged").hide();
+        $("#logout").hide();
+        $("#search").hide();
+        $("#names").hide();
+        setTimeout(function(){
+            document.location.href = "/WebUcscTutor/default/index"
+        }, 5000);
+    }
+    else if(Parse.User.current().get("isTutor")){
+        $("#tutorlogged").show();
+        $("#notloggedin").hide();
+        $("#logout").hide();
+        $("#search").hide();
+        $("#names").hide();
+        setTimeout(function(){
+            document.location.href = "/WebUcscTutor/default/index"
+        }, 5000);
+    }
+    else{
+        $("#notloggedin").hide();
+        $("#tutorlogged").hide();
+        $("#logout").show();
+        $("#search").show();
+        $("#names").show();
+
+        var inactivityTime = function () {
+            var t;
+            window.onload = resetTimer;
+            document.onmousemove = resetTimer;
+            document.onkeypress = resetTimer;
+
+            function logout() {
+                alert("Your Session has Timed Out!");
+                Parse.User.logOut();
+                document.location.href = "/WebUcscTutor/default/index";
+            }
+
+            function resetTimer() {
+                clearTimeout(t);
+                t = setTimeout(logout, 3600000);
+            }
+        };
+        inactivityTime();
+
+        $("#message").click(function(e){
+            document.location.href = "/WebUcscTutor/default/messaging";
+        });
+
+        $("#searchbtn").click(function(e){
+    //        var query = new Parse.Query(Parse.User);
+    //        query.equalTo("username", $("#searchtext").val());
+    //        query.equalTo("isTutor", true);  // find all the women
+    //        query.find({
+    //            success: function(tutors) {
+    //                // Do stuff
+    //                $("#tutorName").html(tutors[0].get('FirstName') + " "+tutors[0].get('LastName'));
+    //            },
+    //            error: function(tutors, error){
+    //                alert(error.message);
+    //            }
+    //        });
+        });
 
 
-    $("#logoutbtn").click(function(e){
-        Parse.User.logOut();
-        document.location.href = "index";
-    });
-    $("#prof").click(function(e){
-        document.location.href = "index";
-    });
-    $("#message").click(function(e){
-        document.location.href = "messaging";
-    });
-    
-//    $("#searchbtn").click(function(e){
-//        var currUser = Parse.User.current();
-//        var objectId = currUser.id;
-//        // get text from input field
-//        var searchUsername = $("#searchtext").val();
-//
-//        // start query
-//        var query = new Parse.Query(Parse.User);
-//        query.equalTo("isTutor", true);
-//        query.equalTo("username", searchUsername);
-//        query.notEqualTo("objectId", objectId);
-//
-//        query.find({
-//            success: function (results) {
-//                // results has the list of users that match the search criterion
-//                $("#tutorName")[0].innerHTML = results[0].get('username');
-//                console.log(results[0]);
-//                for (var i = 0; i < results.length; i++) {
-//                    var object = results[i];
-//                    $("#tutorName")[0].innerHTML = object.get('username');
-//                }
-//            },
-//            error: function (error) {
-//                alert("Error: " + error.code + " " + error.message);
-//            }
-//        });
+        $("#logoutbtn").click(function(e){
+            Parse.User.logOut();
+            document.location.href = "/WebUcscTutor/default/index";
+        });
+        $("#prof").click(function(e){
+            document.location.href = "/WebUcscTutor/default/index";
+        });
+
+    //    $("#searchbtn").click(function(e){
+    //        var currUser = Parse.User.current();
+    //        var objectId = currUser.id;
+    //        // get text from input field
+    //        var searchUsername = $("#searchtext").val();
+    //
+    //        // start query
+    //        var query = new Parse.Query(Parse.User);
+    //        query.equalTo("isTutor", true);
+    //        query.equalTo("username", searchUsername);
+    //        query.notEqualTo("objectId", objectId);
+    //
+    //        query.find({
+    //            success: function (results) {
+    //                // results has the list of users that match the search criterion
+    //                $("#tutorName")[0].innerHTML = results[0].get('username');
+    //                console.log(results[0]);
+    //                for (var i = 0; i < results.length; i++) {
+    //                    var object = results[i];
+    //                    $("#tutorName")[0].innerHTML = object.get('username');
+    //                }
+    //            },
+    //            error: function (error) {
+    //                alert("Error: " + error.code + " " + error.message);
+    //            }
+    //        });
+    }
+
 </script>

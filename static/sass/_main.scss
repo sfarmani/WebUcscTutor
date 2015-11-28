@@ -15,8 +15,8 @@ td, th{
 tr{
   transition: all 700ms cubic-bezier(0.190, 1.000, 0.220, 1.000);
   transform: translateY(0) scale(0.95, 0.95);
-  @include box-shadow(rgba(#000,0.7) 0 0px 4px 0px);
-  @include border-radius(5px);
+  //@include box-shadow(rgba(#000,0.7) 0 0px 4px 0px);
+  //@include border-radius(5px);
   &:hover{
     background-color: #959595;
     color: #2546BC;
@@ -32,6 +32,11 @@ tr{
 #logout{
   float:right;
 }
+
+#searchTutor, #message, #editprof, #logoutbtn, #prof{
+  @include box-shadow(rgba(#00569f,0.7) 0 0px 4px 0px);
+}
+
 .btn {
   padding: 10px 15px;
   border: 0 none;
@@ -68,18 +73,32 @@ tr{
 
 form#form_login {
   margin: auto;
+  padding: 3%;
+  border: 1px solid #007299;
+  @include box-shadow(rgba(#33a6cc,0.7) 0 0px 4px 0px);
+  @include border-radius(10px);
 }
 
 #signupbtns{
-  margin-left: 35px;
+  //margin-left: 25%;
+  //margin-right: 35%;
+  width: 100%;
+  display:inline-flex;
 }
 
 #profilepic, #editprofilepic{
-  max-width: 200px;
-  min-width: 160px;
+  width:200px;
+}
+
+#pic{
+  max-width: 30%;
 }
 
 #profile{
+  border: 1px solid #7f7f7f;
+  @include box-shadow(rgba(#000,0.7) 0 0px 4px 0px);
+  @include border-radius(25px);
+  overflow: hidden;
   float: left;
 }
 
@@ -100,8 +119,16 @@ form#form_login {
 #editbio{
   margin-left: 4%;
   font-size: 15pt;
-  width: 323px;
-  height: 126px;
+  color: #1c3bd1;
+}
+
+#inputbio{
+  width: 844px;
+  height: 95px;
+  margin-left: 4%;
+  font-size: 15pt;
+  overflow-y: hidden;
+  resize: none;
 }
 
 #messages{

@@ -58,8 +58,8 @@
     </div>
     <br>
     <div id="signupbtns" class="btn-group">
-        <a id="tutorsignup" class="btn btn-primary">Sign Up As Tutor</a>
-        <a id="studentsignup" class="btn btn-primary">Sign Up As Student</a>
+        <a id="tutorsignup" class="btn btn-primary form-control" type="button">Sign Up As Tutor</a>
+        <a id="studentsignup" class="btn btn-primary form-control" type="button">Sign Up As Student</a>
     </div>
 </form>
 
@@ -70,11 +70,12 @@
         Parse.User.logIn($("#usernamefield").val(), $("#password").val(), {
             success: function(user) {
                 // Do stuff after successful login.
-                document.location.href = "index";
+                document.location.href = "/WebUcscTutor/default/index";
             },
             error: function(user, error) {
                 // The login failed. Check error to see why.
-                alert(error.message);
+                console.log(error.message);
+                alert("Password and Username Do No Match");
             }
         });
     }
@@ -90,7 +91,7 @@
         function logout() {
             alert("Your Session has Timed Out!");
             Parse.User.logOut();
-            document.location.href = "index";
+            document.location.href = "/WebUcscTutor/default/index";
         }
 
         function resetTimer() {
@@ -100,67 +101,74 @@
     };
 
     if(currUser){
-        var currUserId = currUser.id;
-        console.log(currUserId);
-        $.ajax('{{=URL('default', 'index')}}', {
-            data: {'currUserId': currUserId},
-            dataType: "text",
-            success: successFunc,
-            error: errorFunc
+        currUser.fetch({
+           success: function(currUser){
+                var currUserId = currUser.id;
+                console.log(currUserId);
+                $.ajax('{{=URL('default', 'index')}}', {
+                    data: {'currUserId': currUserId},
+                    dataType: "text",
+                    success: successFunc,
+                    error: errorFunc
+                });
+        
+                function successFunc(data, status){
+                    console.log("Success! User ID = " + currUserId);
+                }
+        
+                function errorFunc() {
+                    alert('error');
+                }
+                inactivityTime();
+
+                if(currUser.get("isTutor")){
+                    $("#searchTutor").hide();
+                }
+        
+                $("#form_login").hide();
+                $("#profile").show();
+                $("#userInfo").show();
+        
+                $("#logoutbtn").click(function(e){
+                    Parse.User.logOut();
+                    document.location.href = "/WebUcscTutor/default/index";
+                });
+        
+                $("#editprof").click(function(e){
+                    document.location.href = "/WebUcscTutor/default/editprof";
+                });
+        
+                $("#searchTutor").click(function(e){
+                   document.location.href = "/WebUcscTutor/default/name_list";
+                });
+        
+                $("#message").click(function(e){
+                   document.location.href = "/WebUcscTutor/default/messaging" + "/" + currUserId;
+                });
+        
+               var profilepic = currUser.get("ProfilePic");
+               $("#profilepic")[0].src = profilepic.url();
+               var fname = currUser.get("FirstName");
+               var lname = currUser.get("LastName");
+               $("#name")[0].innerHTML = fname+" "+lname;
+               $("#username")[0].innerHTML = currUser.get("username");
+               if(currUser.get("bio") === "" || !currUser.get("bio")){
+                   $("#bio")[0].innerHTML = "No Description";
+               }
+               else{
+                   $("#bio")[0].innerHTML = currUser.get("bio");
+               }
+               if(currUser.get("isTutor")){
+                   $("#courselabel")[0].innerHTML = "Courses I Can Tutor";
+               }
+               else{
+                   $("#courselabel")[0].innerHTML = "Courses I Want a Tutor For";
+               }
+           },
+            error: function(error){
+                alert("Error: " + error.code + " " + error.message);
+            }
         });
-
-    function successFunc(data, status){
-        console.log("Success! User ID = " + currUserId);
-    }
-
-    function errorFunc() {
-        alert('error');
-    }
-        inactivityTime();
-
-        if(currUser.get("isTutor")){
-            $("#searchTutor").hide();
-        }
-
-        $("#form_login").hide();
-        $("#profile").show();
-        $("#userInfo").show();
-
-        $("#logoutbtn").click(function(e){
-            Parse.User.logOut();
-            document.location.href = "index";
-        });
-
-        $("#editprof").click(function(e){
-            document.location.href = "editprof";
-        });
-
-        $("#searchTutor").click(function(e){
-           document.location.href = "name_list";
-        });
-
-        $("#message").click(function(e){
-           document.location.href = "messaging" + "/" + currUserId;
-        });
-
-        var profilepic = currUser.get("ProfilePic");
-        $("#profilepic")[0].src = profilepic.url();
-        var fname = currUser.get("FirstName");
-        var lname = currUser.get("LastName");
-        $("#name")[0].innerHTML = fname+" "+lname;
-        $("#username")[0].innerHTML = currUser.get("username");
-        if(currUser.get("bio") == ""){
-            $("#bio")[0].innerHTML = "No Description";
-        }
-        else{
-            $("#bio")[0].innerHTML = currUser.get("bio");
-        }
-        if(currUser.get("isTutor")){
-            $("#courselabel")[0].innerHTML = "Courses I Can Tutor";
-        }
-        else{
-            $("#courselabel")[0].innerHTML = "Courses I Want a Tutor For";
-        }
     }
     else{
         document.onkeydown=function(evt){
@@ -177,6 +185,12 @@
         $("#loginbtn").click(function(e){
             login();
         });
-    }
 
+        $("#tutorsignup").click(function(e){
+            document.location.href = "/WebUcscTutor/default/tutorsignup";
+        });
+        $("#studentsignup").click(function(e){
+            document.location.href = "/WebUcscTutor/default/studentsignup";
+        });
+    }
 </script>
