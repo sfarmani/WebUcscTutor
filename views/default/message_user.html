@@ -32,6 +32,8 @@
 </html>
 
 <script>
+    Parse.initialize("sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO", "MaOO36yKaoEH6bdOlVCnNsaBYAhMfxnGS8MhYrTv");
+    var currUser = Parse.User.current();
     $("#prof").click(function(e){
         document.location.href = "/WebUcscTutor/default/index";
     });
@@ -41,7 +43,7 @@
     });
 
     $("#logoutbtn").click(function(e){
-        Parse.User.current().logOut();
+        currUser.logOut();
         document.location.href = "/WebUcscTutor/default/index";
     });
 
@@ -54,14 +56,56 @@
 
     function publish(){
         pubnub = PUBNUB({
-            publish_key   : 'demo',
-            subscribe_key : 'demo'
+            publish_key   : 'pub-c-18ffe55c-a3d3-497d-8fee-426cd381796a',
+            subscribe_key : 'sub-c-5d35003c-9258-11e5-9a49-02ee2ddab7fe'
         });
 
+        var msg = $('#message-input').val();
+        var channel_name;
+        // want to have channel be consistent, since this is a private chat
+        // always have student id first, then tutor id
+        if (currUser.get("isTutor")){
+            channel_name = '{{=recipient_id}}' + '{{=curr_user_id}}';
+        }
+        else{
+            channel_name =  '{{=curr_user_id}}' + '{{=recipient_id}}';
+        }
+
         pubnub.publish({
-            channel : "hello_world",
-            message : "Hello from PubNub Docs!",
-            callback: function(m){ console.log(m) }
+            channel : channel_name,
+            message : msg,
+            callback: function(m){
+                console.log(m);
+                var ParseMessage = Parse.Object.extend("ParseMessage");
+                var parseMsg = new ParseMessage;
+                parseMsg.set("messageText", msg);
+                parseMsg.set("senderId", '{{=curr_user_id}}');
+                parseMsg.set("recipientId", '{{=recipient_id}}');
+                parseMsg.set("channel", channel_name);
+                parseMsg.set("timestamp", event[2]);
+                /**
+                 * Generates a GUID string.
+                 * @returns {String} The generated GUID.
+                 * @example af8a8416-6e18-a307-bd9c-f2c947bbb3aa
+                 * @author Slavik Meltser (slavik@meltser.info).
+                 * @link http://slavik.meltser.info/?p=142
+                 */
+                function guid() {
+                    function _p8(s) {
+                        var p = (Math.random().toString(16)+"000000000").substr(2,8);
+                        return s ? "-" + p.substr(0,4) + "-" + p.substr(4,4) : p ;
+                    }
+                    return _p8() + _p8(true) + _p8(true) + _p8();
+                }
+                var UUID = guid();
+                parseMsg.set("messageId", UUID);
+                alert(UUID);
+                parseMsg.save();
+            },
+            error: function (error) {
+                // Handle error here, like retry until success, for example
+                console.log(JSON.stringify(error));
+            }
         })
     }
 </script>

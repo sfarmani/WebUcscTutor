@@ -141,6 +141,7 @@ form#form_login {
 #message-input{
   overflow-y: hidden;
   resize: none;
+  margin-top: 1%;
   position: fixed;
   height: 38px;
   width: 89%;
@@ -148,6 +149,7 @@ form#form_login {
 
 #send-message-btn{
   float: right;
+  margin-top: 1%;
   height: 38px;
   width: 80px;
 }

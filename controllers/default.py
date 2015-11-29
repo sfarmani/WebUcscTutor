@@ -69,8 +69,8 @@ def message_user():
     session.users = users
 
     curr_user_id = request.args(3)
-    tutor_id = request.args(2)
-    user_list = [curr_user_id, tutor_id]
+    recipient_id = request.args(2)
+    user_list = [curr_user_id, recipient_id]
     print user_list
     connection = httplib.HTTPSConnection('api.parse.com', 443)
     params = urllib.urlencode({
@@ -93,7 +93,7 @@ def message_user():
     messages = json.loads(connection.getresponse().read())
     print messages
     # session.messages = messages
-    return dict(tutor_name=tutor_name, users=users, messages=messages, tutor_id=tutor_id)
+    return dict(tutor_name=tutor_name, users=users, messages=messages,curr_user_id=curr_user_id,  recipient_id=recipient_id)
 
 
 
