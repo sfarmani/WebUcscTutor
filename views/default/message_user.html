@@ -35,7 +35,7 @@
 </script>
 
 
-<script>
+<script type="text/javascript">
     $(function() {
         // make it scroll to bottom of div on load
 //        $('#message_list').scrollTop($('#message_list')[0].scrollHeight - $('#message_list')[0].clientHeight);
@@ -50,6 +50,24 @@
                 loading: true
             }
         });
+
+        var sortItems = function(data) {
+
+            return new Promise(function(resolve, reject) {
+                data['results'].sort(function(a, b) {
+                    return a.createdAt < b.createdAt ? - 1 : 1;
+                });
+                var promise2 = MAIN.set('msg_dict', data["results"]);
+                promise2.then(scrollBottom());
+            });
+        };
+
+        var setMain = function(data) {
+            return new Promise(function(resolve, reject) {
+                MAIN.set('msg_dict', data["results"]);
+            });
+        };
+
 
         function scrollBottom(){
             MAIN.nodes.message_list.scrollTop = MAIN.nodes.message_list.scrollHeight - MAIN.nodes.message_list.clientHeight
@@ -77,12 +95,7 @@
                      "X-Parse-REST-API-Key": "4udDwLuCkvJLR09ypSp1xsgKKVwBDmncRSRBd24K"
                  },
                  success : function(data) {
-                     //console.log('success, data = ' + JSON.stringify(data["results"]));
-                     data['results'].sort(function(a, b) {
-                        return a.createdAt < b.createdAt ? - 1 : 1;
-                     });
-                     var promise = MAIN.set('msg_dict', data["results"]);
-                     promise.then(scrollBottom());
+                     var promise1 = sortItems(data);
                  },
                  error : function(data) {
                      console.log('error, data = ' + JSON.stringify(data));
@@ -170,22 +183,7 @@
 
                     var query = encodeURIComponent('where='+ JSON.stringify(obj));
 
-                    $.ajax({
-                         type: "GET",
-                         url: "https://api.parse.com/1/classes/ParseMessage?" + query,
-                         dataType: "json",
-                         headers: {
-                             "X-Parse-Application-Id": "sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO",
-                             "X-Parse-REST-API-Key": "4udDwLuCkvJLR09ypSp1xsgKKVwBDmncRSRBd24K"
-                         },
-                         success : function(data) {
-                             var promise = MAIN.set('msg_dict', data["results"]);
-                             promise.then(scrollBottom());
-                         },
-                         error : function(data) {
-                             console.log('error, data = ' + JSON.stringify(data));
-                         }
-                    });
+                    loadMessages();
                 },
 
                 error: function (error) {
