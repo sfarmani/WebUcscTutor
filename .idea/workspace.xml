@@ -2,16 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ce43f85f-2f9b-4a71-8a1c-08699ddbe9cf" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/views/default/load_messages.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/js/ractive.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.sass-cache/39b17df40bfa7a107ec9d1ccab2a5c0029dae223/_main.scssc" afterPath="$PROJECT_DIR$/.sass-cache/39b17df40bfa7a107ec9d1ccab2a5c0029dae223/_main.scssc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/WebUcscTutor.iml" afterPath="$PROJECT_DIR$/.idea/WebUcscTutor.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/sass/_main.scss" afterPath="$PROJECT_DIR$/static/sass/_main.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/controllers/default.py" afterPath="$PROJECT_DIR$/controllers/default.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/layout.html" afterPath="$PROJECT_DIR$/views/layout.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/default/message_user.html" afterPath="$PROJECT_DIR$/views/default/message_user.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/css/myapp.css" afterPath="$PROJECT_DIR$/static/css/myapp.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="start.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -41,7 +32,7 @@
         <entry file="file://$PROJECT_DIR$/controllers/default.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="93" column="18" selection-start-line="93" selection-start-column="18" selection-end-line="93" selection-end-column="18" />
+              <caret line="17" column="18" selection-start-line="17" selection-start-column="18" selection-end-line="17" selection-end-column="18" />
               <folding>
                 <element signature="e#105#116#0" expanded="true" />
               </folding>
@@ -52,8 +43,18 @@
       <file leaf-file-name="message_user.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/views/default/message_user.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7328386">
-              <caret line="253" column="41" selection-start-line="253" selection-start-column="41" selection-end-line="253" selection-end-column="41" />
+            <state vertical-scroll-proportion="0.2987013">
+              <caret line="241" column="58" selection-start-line="241" selection-start-column="58" selection-end-line="241" selection-end-column="58" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="messaging.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/views/default/messaging.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-33.037037">
+              <caret line="55" column="0" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -824,14 +825,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views/default/messaging.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8523677">
-          <caret line="55" column="0" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/views/default/studentsignup.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.14763232">
@@ -909,16 +902,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/controllers/default.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="93" column="18" selection-start-line="93" selection-start-column="18" selection-end-line="93" selection-end-column="18" />
-          <folding>
-            <element signature="e#105#116#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/static/sass/_main.scss">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-7.9259257">
@@ -927,10 +910,28 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/views/default/messaging.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-33.037037">
+          <caret line="55" column="0" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controllers/default.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="17" column="18" selection-start-line="17" selection-start-column="18" selection-end-line="17" selection-end-column="18" />
+          <folding>
+            <element signature="e#105#116#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/views/default/message_user.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7328386">
-          <caret line="253" column="41" selection-start-line="253" selection-start-column="41" selection-end-line="253" selection-end-column="41" />
+        <state vertical-scroll-proportion="0.2987013">
+          <caret line="241" column="58" selection-start-line="241" selection-start-column="58" selection-end-line="241" selection-end-column="58" />
           <folding />
         </state>
       </provider>

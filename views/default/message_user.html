@@ -78,6 +78,9 @@
                  },
                  success : function(data) {
                      //console.log('success, data = ' + JSON.stringify(data["results"]));
+                     data['results'].sort(function(a, b) {
+                        return a.createdAt < b.createdAt ? - 1 : 1;
+                     });
                      var promise = MAIN.set('msg_dict', data["results"]);
                      promise.then(scrollBottom());
                  },
@@ -237,7 +240,6 @@
                     parseMsg.set("senderId", '{{=curr_user_id}}');
                     parseMsg.set("recipientId", '{{=recipient_id}}');
                     parseMsg.set("channel", channel_name);
-                    parseMsg.set("timestamp", event[2]);
                     parseMsg.setACL(acl);
 
                     var UUID = generateUUID();
