@@ -96,6 +96,33 @@ def message_user():
     return dict(tutor_name=tutor_name, users=users, messages=messages,curr_user_id=curr_user_id,  recipient_id=recipient_id)
 
 
+def load_messages():
+    sender_id = request.args(0)
+    recipient_id = request.args(1)
+    user_list = [sender_id, recipient_id]
+    print user_list
+    connection = httplib.HTTPSConnection('api.parse.com', 443)
+    params = urllib.urlencode({
+        "where": json.dumps({
+            "senderId": {
+                "$in": user_list
+             },
+            "recipientId": {
+                 "$in": user_list
+            }
+        }),
+        "order": "createdAt"
+    })
+    connection.connect()
+    connection.request('GET', '/1/classes/ParseMessage?%s' % params, '', {
+               "X-Parse-Application-Id": appId,
+               "X-Parse-REST-API-Key": apiKey
+    })
+
+    messages = json.loads(connection.getresponse().read())
+    print messages
+    return dict(messages=messages)
+
 
 def tutorsignup():
     return dict()

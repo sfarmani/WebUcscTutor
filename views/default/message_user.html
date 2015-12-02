@@ -4,108 +4,253 @@
 </head>
 
 <html>
+    <body>
+        <script src="{{=URL('static', 'js/pubnub-3.7.18.min.js')}}"></script>
+    </body>
+</html>
+
+<div id="target"></div>
+
+<script id="template" type="text/ractive">
     <div id="logout" class="btn-group">
-        <a id="searchTutor" class="btn btn-primary">Search For Tutors</a>
+        <a id="searchTutor" class="btn btn-primary"></a>
         <a id="prof" class="btn btn-primary">Profile</a>
         <a id="logoutbtn" class="btn btn-primary">Log Out</a>
     </div>
 
-    <body>
-        <script src="{{=URL('static', 'js/pubnub-3.7.18.min.js')}}"></script>
-    </body>
-    <div id="container">
-        <div id="header">{{=tutor_name}}</div>
-        <div id="messages" class="scrollable-messages">
-        {{for i in range(len(messages.get("results"))):}}
-            <div id="tutorName">{{=messages.get("results")[i].get("senderId")}}</div>
-            <div id="message">{{=messages.get("results")[i].get("messageText")}}</div>
-        {{pass}}
-        </div>
+    <div id="message_list">
+      {% #msg_dict %}
+          <div id="message">
+            {% messageText %}
+          </div>
+      {% /msg_dict %}
     </div>
 
     <div id="input-area">
         <div id="send-message">
-            <textarea id="message-input" class="form-control no-menu" maxlength="" aria-label="Message input"  spellcheck="true"></textarea>
+            <input id="message-input" class="form-control no-menu" maxlength="" aria-label="Message input"  spellcheck="true"></textarea>
             <a id="send-message-btn" class="btn btn-primary form-control">Send</a>
         </div>
     </div>
-</html>
+</script>
+
 
 <script>
-    Parse.initialize("sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO", "MaOO36yKaoEH6bdOlVCnNsaBYAhMfxnGS8MhYrTv");
-    var currUser = Parse.User.current();
-    $("#prof").click(function(e){
-        document.location.href = "/WebUcscTutor/default/index";
-    });
-
-    $("#searchTutor").click(function(e){
-        document.location.href = "/WebUcscTutor/default/name_list";
-    });
-
-    $("#logoutbtn").click(function(e){
-        currUser.logOut();
-        document.location.href = "/WebUcscTutor/default/index";
-    });
-
-    $("#send-message").click(function(e){
-        publish();
-    });
-
-    // make it scroll to bottom of div on load
-    $('#messages').scrollTop($('#messages')[0].scrollHeight - $('#messages')[0].clientHeight);
-
-    function publish(){
-        pubnub = PUBNUB({
-            publish_key   : 'pub-c-18ffe55c-a3d3-497d-8fee-426cd381796a',
-            subscribe_key : 'sub-c-5d35003c-9258-11e5-9a49-02ee2ddab7fe'
+    $(function() {
+        // make it scroll to bottom of div on load
+//        $('#message_list').scrollTop($('#message_list')[0].scrollHeight - $('#message_list')[0].clientHeight);
+        // Ractive object
+        var MAIN = new Ractive({
+            el: '#target',
+            template: '#template',
+            delimiters: ['{%', '%}'],
+            tripleDelimiters: ['{%%', '%%}'],
+            data: {
+                msg_dict: [],
+                loading: true
+            }
         });
 
-        var msg = $('#message-input').val();
-        var channel_name;
-        // want to have channel be consistent, since this is a private chat
-        // always have student id first, then tutor id
-        if (currUser.get("isTutor")){
-            channel_name = '{{=recipient_id}}' + '{{=curr_user_id}}';
-        }
-        else{
-            channel_name =  '{{=curr_user_id}}' + '{{=recipient_id}}';
+        function scrollBottom(){
+            MAIN.nodes.message_list.scrollTop = MAIN.nodes.message_list.scrollHeight - MAIN.nodes.message_list.clientHeight
         }
 
-        pubnub.publish({
-            channel : channel_name,
-            message : msg,
-            callback: function(m){
-                console.log(m);
-                var ParseMessage = Parse.Object.extend("ParseMessage");
-                var parseMsg = new ParseMessage;
-                parseMsg.set("messageText", msg);
-                parseMsg.set("senderId", '{{=curr_user_id}}');
-                parseMsg.set("recipientId", '{{=recipient_id}}');
-                parseMsg.set("channel", channel_name);
-                parseMsg.set("timestamp", event[2]);
-                /**
-                 * Generates a GUID string.
-                 * @returns {String} The generated GUID.
-                 * @example af8a8416-6e18-a307-bd9c-f2c947bbb3aa
-                 * @author Slavik Meltser (slavik@meltser.info).
-                 * @link http://slavik.meltser.info/?p=142
-                 */
-                function guid() {
-                    function _p8(s) {
-                        var p = (Math.random().toString(16)+"000000000").substr(2,8);
-                        return s ? "-" + p.substr(0,4) + "-" + p.substr(4,4) : p ;
-                    }
-                    return _p8() + _p8(true) + _p8(true) + _p8();
+        function loadMessages(){
+            var userlist = ['{{=curr_user_id}}', '{{=recipient_id}}'];
+
+            var obj = {
+                "senderId": {
+                    "$in": userlist
+                 },
+                "recipientId": {
+                     "$in": userlist
                 }
-                var UUID = guid();
-                parseMsg.set("messageId", UUID);
-                alert(UUID);
-                parseMsg.save();
-            },
-            error: function (error) {
-                // Handle error here, like retry until success, for example
-                console.log(JSON.stringify(error));
+            };
+
+            var query = encodeURIComponent('where='+ JSON.stringify(obj));
+            $.ajax({
+                 type: "GET",
+                 url: "https://api.parse.com/1/classes/ParseMessage?" + query,
+                 dataType: "json",
+                 headers: {
+                     "X-Parse-Application-Id": "sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO",
+                     "X-Parse-REST-API-Key": "4udDwLuCkvJLR09ypSp1xsgKKVwBDmncRSRBd24K"
+                 },
+                 success : function(data) {
+                     //console.log('success, data = ' + JSON.stringify(data["results"]));
+                     var promise = MAIN.set('msg_dict', data["results"]);
+                     promise.then(scrollBottom());
+                 },
+                 error : function(data) {
+                     console.log('error, data = ' + JSON.stringify(data));
+                 }
+            });
+        }
+
+
+        // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+        function generateUUID() {
+            var d = new Date().getTime();
+            if (window.performance && typeof window.performance.now === "function") {
+                d += performance.now(); //use high-precision timer if available
             }
-        })
-    }
+            var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = (d + Math.random() * 16) % 16 | 0;
+                d = Math.floor(d / 16);
+                return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+            });
+            return uuid;
+        }
+
+
+        Parse.initialize("sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO", "MaOO36yKaoEH6bdOlVCnNsaBYAhMfxnGS8MhYrTv");
+        var currUser = Parse.User.current();
+        $("#prof").click(function(e){
+            document.location.href = "/WebUcscTutor/default/index";
+        });
+
+        $("#searchTutor").click(function(e){
+            document.location.href = "/WebUcscTutor/default/name_list";
+        });
+
+        $("#logoutbtn").click(function(e){
+            Parse.User.logOut();
+            document.location.href = "/WebUcscTutor/default/index";
+        });
+
+        $("#send-message-btn").click(function(e){
+            publish();
+        });
+
+        document.onkeydown=function(evt){
+            var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
+            if(keyCode == 13) {
+                publish();
+            }
+        };
+
+        function subscribe() {
+            MAIN.nodes.message_list.scrollTop = MAIN.nodes.message_list.scrollHeight - MAIN.nodes.message_list.clientHeight;
+            pubnub = PUBNUB({
+                publish_key: 'pub-c-18ffe55c-a3d3-497d-8fee-426cd381796a',
+                subscribe_key: 'sub-c-5d35003c-9258-11e5-9a49-02ee2ddab7fe'
+            });
+
+            var channel_name;
+            // want to have channel be consistent, since this is a private chat
+            // always have student id first, then tutor id
+            if (currUser.get("isTutor")) {
+                channel_name = '{{=recipient_id}}' + '{{=curr_user_id}}';
+            }
+            else {
+                channel_name = '{{=curr_user_id}}' + '{{=recipient_id}}';
+            }
+
+            loadMessages();
+
+            pubnub.subscribe({
+                channel: channel_name,
+                message: function (m) {
+                    // make it scroll to bottom of div on load
+                    MAIN.nodes.message_list.scrollTop = MAIN.nodes.message_list.scrollHeight - MAIN.nodes.message_list.clientHeight;
+                    console.log("I am subscribing, m = " + m);
+                    var userlist = ['{{=curr_user_id}}', '{{=recipient_id}}'];
+
+                    var obj = {
+                        "senderId": {
+                            "$in": userlist
+                        },
+                        "recipientId": {
+                            "$in": userlist
+                        }
+                    };
+
+                    var query = encodeURIComponent('where='+ JSON.stringify(obj));
+
+                    $.ajax({
+                         type: "GET",
+                         url: "https://api.parse.com/1/classes/ParseMessage?" + query,
+                         dataType: "json",
+                         headers: {
+                             "X-Parse-Application-Id": "sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO",
+                             "X-Parse-REST-API-Key": "4udDwLuCkvJLR09ypSp1xsgKKVwBDmncRSRBd24K"
+                         },
+                         success : function(data) {
+                             var promise = MAIN.set('msg_dict', data["results"]);
+                             promise.then(scrollBottom());
+                         },
+                         error : function(data) {
+                             console.log('error, data = ' + JSON.stringify(data));
+                         }
+                    });
+                },
+
+                error: function (error) {
+                    // Handle error here, like retry until success, for example
+                    console.log(JSON.stringify(error));
+                }
+            })
+        }
+
+        subscribe();
+
+        //var message = PUBNUB.$('messages'), input = PUBNUB.$('input'), channel = 'chat';
+
+        function publish() {
+            // make it scroll to bottom of div on load
+            MAIN.nodes.message_list.scrollTop = MAIN.nodes.message_list.scrollHeight - MAIN.nodes.message_list.clientHeight;
+            pubnub = PUBNUB({
+                publish_key: 'pub-c-18ffe55c-a3d3-497d-8fee-426cd381796a',
+                subscribe_key: 'sub-c-5d35003c-9258-11e5-9a49-02ee2ddab7fe'
+            });
+
+            var msg = $('#message-input').val();
+            var channel_name;
+            // want to have channel be consistent, since this is a private chat
+            // always have student id first, then tutor id
+            if (currUser.get("isTutor")) {
+                channel_name = '{{=recipient_id}}' + '{{=curr_user_id}}';
+            }
+            else {
+                channel_name = '{{=curr_user_id}}' + '{{=recipient_id}}';
+            }
+
+            loadMessages();
+
+            pubnub.publish({
+                channel: channel_name,
+                message: msg,
+                callback: function (m) {
+                    // make it scroll to bottom of div on load
+                    console.log(m);
+                    var ParseMessage = Parse.Object.extend("ParseMessage");
+                    var parseMsg = new ParseMessage;
+
+                    // allows user to see messages they've received
+                    var acl = new Parse.ACL();
+                    acl.setPublicReadAccess(true);
+                    acl.setPublicWriteAccess(false);
+                    acl.setReadAccess('{{=recipient_id}}', true);
+                    acl.setWriteAccess('{{=recipient_id}}', false);
+
+                    parseMsg.set("messageText", msg);
+                    parseMsg.set("senderId", '{{=curr_user_id}}');
+                    parseMsg.set("recipientId", '{{=recipient_id}}');
+                    parseMsg.set("channel", channel_name);
+                    parseMsg.set("timestamp", event[2]);
+                    parseMsg.setACL(acl);
+
+                    var UUID = generateUUID();
+                    parseMsg.set("messageId", UUID);
+                    $('#message-input').val("");
+                    parseMsg.save();
+                },
+                error: function (error) {
+                    // Handle error here, like retry until success, for example
+                    console.log(JSON.stringify(error));
+                }
+            })
+        }
+        setInterval(loadMessages, 10000);
+    });
 </script>

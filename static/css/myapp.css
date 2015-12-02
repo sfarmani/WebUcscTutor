@@ -169,7 +169,7 @@ form#form_login {
 }
 
 /* line 134, ../sass/_main.scss */
-#messages {
+#message_list {
   overflow-y: auto;
   margin-top: 2%;
   height: 370px;
@@ -180,14 +180,16 @@ form#form_login {
 #message-input {
   overflow-y: hidden;
   resize: none;
+  margin-top: 1%;
   position: fixed;
   height: 38px;
   width: 89%;
 }
 
-/* line 149, ../sass/_main.scss */
+/* line 150, ../sass/_main.scss */
 #send-message-btn {
   float: right;
+  margin-top: 1%;
   height: 38px;
   width: 80px;
 }
