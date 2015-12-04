@@ -19,11 +19,19 @@
     </div>
 
     <div id="message_list">
-      {% #msg_dict %}
-          <div id="message">
-            {% messageText %}
-          </div>
-      {% /msg_dict %}
+        {% #msg_dict %}
+            <div id="message-container">
+                <div id="message-date">
+                    {% timestamp %}
+                </div>
+                <div id="message-username">
+                    {% senderName %}
+                </div>
+                <div id="message">
+                    {% messageText %}
+                </div>
+            </div>
+        {% /msg_dict %}
     </div>
 
     <div id="input-area">
@@ -37,8 +45,12 @@
 
 <script type="text/javascript">
     $(function() {
-        // make it scroll to bottom of div on load
-//        $('#message_list').scrollTop($('#message_list')[0].scrollHeight - $('#message_list')[0].clientHeight);
+        Parse.initialize("sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO", "MaOO36yKaoEH6bdOlVCnNsaBYAhMfxnGS8MhYrTv");
+        var currUser = Parse.User.current();
+        var currUserFirstName = currUser.get("FirstName");
+        var currUserLastName = currUser.get("LastName");
+        var currUserFullName = currUserFirstName + " " + currUserLastName;
+
         // Ractive object
         var MAIN = new Ractive({
             el: '#target',
@@ -51,20 +63,25 @@
             }
         });
 
-        var sortItems = function(data) {
+        var helpers = Ractive.defaults.data;
+        helpers.fromNow = function(timeString){
+            return moment(timeString).fromNow();
+        };
+        helpers.formatTime = function(timeString){
+            return moment(timeString).format("MMM d, h:mma");
+        };
+        helpers.humanizeTime = function(timeString){
+            return moment.duration(timeString).humanize();
+        };
 
+        // Sorts results, scrolls to the bottom of the message list synchronously using Promises
+        var sortItems = function(data) {
             return new Promise(function(resolve, reject) {
                 data['results'].sort(function(a, b) {
                     return a.createdAt < b.createdAt ? - 1 : 1;
                 });
                 var promise2 = MAIN.set('msg_dict', data["results"]);
                 promise2.then(scrollBottom());
-            });
-        };
-
-        var setMain = function(data) {
-            return new Promise(function(resolve, reject) {
-                MAIN.set('msg_dict', data["results"]);
             });
         };
 
@@ -87,19 +104,20 @@
 
             var query = encodeURIComponent('where='+ JSON.stringify(obj));
             $.ajax({
-                 type: "GET",
-                 url: "https://api.parse.com/1/classes/ParseMessage?" + query,
-                 dataType: "json",
-                 headers: {
-                     "X-Parse-Application-Id": "sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO",
-                     "X-Parse-REST-API-Key": "4udDwLuCkvJLR09ypSp1xsgKKVwBDmncRSRBd24K"
-                 },
-                 success : function(data) {
-                     var promise1 = sortItems(data);
-                 },
-                 error : function(data) {
-                     console.log('error, data = ' + JSON.stringify(data));
-                 }
+                type: "GET",
+                url: "https://api.parse.com/1/classes/ParseMessage?" + query,
+                data: {limit: 40, order: "-createdAt"},
+                dataType: "json",
+                headers: {
+                    "X-Parse-Application-Id": "sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO",
+                    "X-Parse-REST-API-Key": "4udDwLuCkvJLR09ypSp1xsgKKVwBDmncRSRBd24K"
+                },
+                success : function(data) {
+                    var promise1 = sortItems(data);
+                },
+                error : function(data) {
+                    console.log('error, data = ' + data);
+                }
             });
         }
 
@@ -119,8 +137,6 @@
         }
 
 
-        Parse.initialize("sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO", "MaOO36yKaoEH6bdOlVCnNsaBYAhMfxnGS8MhYrTv");
-        var currUser = Parse.User.current();
         $("#prof").click(function(e){
             document.location.href = "/WebUcscTutor/default/index";
         });
@@ -227,6 +243,9 @@
                     var ParseMessage = Parse.Object.extend("ParseMessage");
                     var parseMsg = new ParseMessage;
 
+                    var d = new Date();
+                    var n = d.toLocaleString();
+
                     // allows user to see messages they've received
                     var acl = new Parse.ACL();
                     acl.setPublicReadAccess(true);
@@ -237,7 +256,9 @@
                     parseMsg.set("messageText", msg);
                     parseMsg.set("senderId", '{{=curr_user_id}}');
                     parseMsg.set("recipientId", '{{=recipient_id}}');
+                    parseMsg.set("senderName", currUserFullName);
                     parseMsg.set("channel", channel_name);
+                    parseMsg.set("timestamp", n);
                     parseMsg.setACL(acl);
 
                     var UUID = generateUUID();

@@ -42,7 +42,7 @@ tr:hover {
 }
 
 /* line 36, ../sass/_main.scss */
-#searchTutor, #message, #editprof, #logoutbtn, #prof {
+#searchTutor, #editprof, #logoutbtn, #prof {
   -moz-box-shadow: rgba(0, 86, 159, 0.7) 0 0px 4px 0px;
   -webkit-box-shadow: rgba(0, 86, 159, 0.7) 0 0px 4px 0px;
   box-shadow: rgba(0, 86, 159, 0.7) 0 0px 4px 0px;
@@ -177,6 +177,15 @@ form#form_login {
 }
 
 /* line 141, ../sass/_main.scss */
+#message-container {
+  min-height: 75px;
+  vertical-align: text-bottom;
+  -moz-box-shadow: rgba(0, 86, 159, 0.7) 0 0px 4px 0px;
+  -webkit-box-shadow: rgba(0, 86, 159, 0.7) 0 0px 4px 0px;
+  box-shadow: rgba(0, 86, 159, 0.7) 0 0px 4px 0px;
+}
+
+/* line 147, ../sass/_main.scss */
 #message-input {
   overflow-y: hidden;
   resize: none;
@@ -186,7 +195,7 @@ form#form_login {
   width: 89%;
 }
 
-/* line 150, ../sass/_main.scss */
+/* line 156, ../sass/_main.scss */
 #send-message-btn {
   float: right;
   margin-top: 1%;
