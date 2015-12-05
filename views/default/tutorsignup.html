@@ -33,6 +33,11 @@
     </div>
     <br>
     <div>
+        <label for="courses">Please Enter the list of courses you want to tutor separated by a space. (case insensitive)</label>
+        <input class="form-control" type="text" id="courses" placeholder="i.e. CMPS115 CMPS101">
+    </div>
+    <br>
+    <div>
         <div id="containerpic">
             <img src="http://oi63.tinypic.com/2lmt1zq.jpg" id="pic">
         </div>
@@ -41,6 +46,10 @@
     <br>
     <div>
         <a id="signup" class="btn btn-primary form-control" type="button">Sign Up</a>
+    </div>
+    <br>
+    <div>
+        <a id="cancel" class="btn btn-primary form-control" type="button">Cancel</a>
     </div>
 </form>
 
@@ -76,13 +85,18 @@
            readURL(this);
         });
 
+        $("#cancel").click(function(e){
+           document.location.href = "/WebUcscTutor/default/index"
+        });
+
         $("#signup").click(function(e){
             if($("#password").val() == "" ||
                $("#passwordconfirm").val() == "" ||
                $("#email").val() == "" ||
                $("#usernamefield").val() == "" ||
                $("#FirstName").val() == "" ||
-               $("#LastName").val() == ""){
+               $("#LastName").val() == ""||
+               $("#courses").val() == ""){
                 alert("Please complete the form");
             }
             else if($("#password").val() != $("#passwordconfirm").val()){
@@ -98,7 +112,7 @@
                 alert("Username cannot include any non-word character\n(letter, number, underscore)");
             }
             else{
-
+                var courseArray = $("#courses").val().toUpperCase().split(/\s+/);
                 var fileUploadControl = $("#fileBrowser")[0];
                 if (fileUploadControl.files.length > 0) {
                     var file = fileUploadControl.files[0];
@@ -108,12 +122,13 @@
 
                     parseFile.save().then(function() {
                         var user = new Parse.User();
+                        user.set("webCourses", courseArray);
                         user.set("isTutor", true);
                         user.set("username", $("#usernamefield").val());
                         user.set("password", $("#password").val());
                         user.set("email", $("#email").val());
-                        user.set("FirstName", $("#FirstName").val());
-                        user.set("LastName", $("#LastName").val());
+                        user.set("FirstName", $("#FirstName").val().charAt(0).toUpperCase() + $("#FirstName").val().substr(1));
+                        user.set("LastName", $("#LastName").val().charAt(0).toUpperCase() + $("#LastName").val().substr(1));
                         user.set("ProfilePic", parseFile);
 
                         user.signUp(null, {

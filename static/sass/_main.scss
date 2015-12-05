@@ -67,13 +67,44 @@ tr{
   background: #204d76;
 }
 
+.btn-success{
+  background: #1BC500;
+  color: #fff;
+}
+
+.btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active, .open > .dropdown-toggle.btn-success {
+  background: #23FF00;
+}
+
+.btn-primary:active, .btn-primary.active {
+  background: #159A00;
+  box-shadow: none;
+}
+
+.btn-danger{
+  background: #EE0000;
+  color: #fff;
+}
+
+.btn-danger:hover, .btn-danger:focus, .btn-danger:active, .btn-danger.active, .open > .dropdown-toggle.btn-danger {
+  background: #FF0000;
+}
+
+.btn-danger:active, .btn-danger.active {
+  background: #BB0000;
+  box-shadow: none;
+}
+
 .col-xs-4{
   float: none;
 }
 
 form#form_login {
-  margin: auto;
   padding: 3%;
+  margin-top: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 5%;
   border: 1px solid #007299;
   @include box-shadow(rgba(#33a6cc,0.7) 0 0px 4px 0px);
   @include border-radius(10px);
@@ -122,7 +153,7 @@ form#form_login {
   color: #1c3bd1;
 }
 
-#inputbio{
+#inputbio, #inputcourses{
   width: 844px;
   height: 95px;
   margin-left: 4%;
@@ -141,21 +172,22 @@ form#form_login {
 #message-container{
   min-height: 75px;
   vertical-align: text-bottom;
-  @include box-shadow(rgba(#00569f,0.7) 0 0px 4px 0px);
+  @include box-shadow(rgba(#000,0.7) 0 2px 1px 0px);
 }
 
 #message-input{
   overflow-y: hidden;
   resize: none;
-  margin-top: 1%;
-  position: fixed;
-  height: 38px;
-  width: 89%;
+  height: 45px;
 }
 
 #send-message-btn{
-  float: right;
-  margin-top: 1%;
-  height: 38px;
-  width: 80px;
+  height: 45px;
+}
+
+#editpic{
+  color: #747474;
+  &:hover{
+    color: #393939;
+  }
 }

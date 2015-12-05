@@ -34,10 +34,12 @@
         {% /msg_dict %}
     </div>
 
-    <div id="input-area">
-        <div id="send-message">
-            <input id="message-input" class="form-control no-menu" maxlength="" aria-label="Message input"  spellcheck="true"></textarea>
-            <a id="send-message-btn" class="btn btn-primary form-control">Send</a>
+    <div id="input-area" class="row">
+        <div id="send-message" class="input-group">
+            <input id="message-input" type="text" class="form-control no-menu" maxlength="" aria-label="Message input"  spellcheck="true">
+            <span class="input-group-btn">
+                <button class="btn btn-primary" id="send-message-btn" type="button">Send</button>
+            </span>
         </div>
     </div>
 </script>

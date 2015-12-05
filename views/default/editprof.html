@@ -8,8 +8,8 @@
 </div>
 
 <div id="logout" class="btn-group">
-    <a id="saveprof" class="btn btn-primary">Save Profile</a>
-    <a id="cancel" class="btn btn-primary">cancel</a>
+    <a id="saveprof" class="btn btn-success">Save Profile</a>
+    <a id="cancel" class="btn btn-danger">cancel</a>
     <a id="logoutbtn" class="btn btn-primary">Log Out</a>
 </div>
 
@@ -37,6 +37,13 @@
                 <p id="courselabel"></p>
             </td>
         </tr>
+        <tr>
+            <td>
+                <input class="form-control" type="text" id="inputcourses" style="display: none;" placeholder="Add a Course i.e. CMPS115 CMPS101">
+                <table id="coursetable">
+                </table>
+            </td>
+        </tr>
     </table>
 </div>
 
@@ -60,9 +67,9 @@
         }, 5000);
     }
     else {
-
         currUser.fetch({
             success: function (currUser) {
+                window.onload = populateCourses();
                 $("#notloggedin").hide();
                 $("#profile").show();
                 $("#userInfo").show();
@@ -88,7 +95,17 @@
 
                 inactivityTime();
 
-                if(currUser.get("bio") || currUser.get("bio") != ""){
+                function populateCourses(){
+                   var courses = currUser.get("webCourses");
+                   for(var i = 0; i < courses.length; i++){
+                       var table = $("#coursetable");
+                       table.append('<tr><td>'+ courses[i]+'</td></tr>');
+                   }
+                }
+
+                $("#inputbio").val("No Description");
+
+                if(currUser.get("bio") || currUser.get("bio") !== "" || currUser.get("bio") != null){
                     $("#editbio")[0].innerHTML = currUser.get("bio");
                     $("#inputbio").val(currUser.get("bio"));
                 }
@@ -97,6 +114,16 @@
                     $("#inputbio").val("No Description");
                 }
 
+                if(currUser.get("webCourses")){
+                    var courseArray = currUser.get("webCourses");
+                    console.log(courseArray.toString().replace(/[, ]+/g, " ").trim());
+                    $("#inputcourses").val(courseArray.toString().replace(/[, ]+/g, " ").trim());
+                }
+
+                $("#coursetable").click(function(e){
+                    $("#coursetable").slideToggle();
+                    $("#inputcourses").slideToggle();
+                });
 
                 $("#editbio").click(function(e){
                     $("#editbio").slideToggle();
@@ -126,7 +153,7 @@
                     readURL(this);
                 });
                 $("#saveprof").click(function (e) {
-
+                    var courseArray = $("#inputcourses").val().toUpperCase().split(/\s+/);
                     var fileUploadControl = $("#fileBrowser")[0];
                     if (fileUploadControl.files.length > 0) {
                         var file = fileUploadControl.files[0];
@@ -136,6 +163,9 @@
                         parseFile.save().then(function () {
                             currUser.set("bio", $("#inputbio").val());
                             currUser.set("ProfilePic", parseFile);
+                            for(var i = 0; i < courseArray.length; i++){
+                                currUser.addUnique("webCourses", courseArray[i]);
+                            }
                             currUser.save(null, {
                                 success: function (currUser) {
                                     document.location.href = "/WebUcscTutor/default/index";
@@ -152,6 +182,9 @@
                     }
                     else if (fileUploadControl.files.length <= 0) {
                         currUser.set("bio", $("#inputbio").val());
+                        for(var i = 0; i < courseArray.length; i++){
+                            currUser.addUnique("webCourses", courseArray[i]);
+                        }
                         currUser.save(null, {
                             success: function (currUser) {
                                 document.location.href = "/WebUcscTutor/default/index";

@@ -92,18 +92,9 @@
         });
 
         $("#searchbtn").click(function(e){
-    //        var query = new Parse.Query(Parse.User);
-    //        query.equalTo("username", $("#searchtext").val());
-    //        query.equalTo("isTutor", true);  // find all the women
-    //        query.find({
-    //            success: function(tutors) {
-    //                // Do stuff
-    //                $("#tutorName").html(tutors[0].get('FirstName') + " "+tutors[0].get('LastName'));
-    //            },
-    //            error: function(tutors, error){
-    //                alert(error.message);
-    //            }
-    //        });
+            if($("#searchtext").val()){
+                document.location.href = "/WebUcscTutor/default/name_list" + "/" + $("#searchtext").val();
+            }
         });
 
 

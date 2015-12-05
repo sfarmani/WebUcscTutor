@@ -41,6 +41,12 @@
                 <p id="courselabel"></p>
             </td>
         </tr>
+        <tr>
+            <td>
+                <table id="coursetable">
+                </table>
+            </td>
+        </tr>
     </table>
 </div>
 
@@ -103,49 +109,64 @@
     if(currUser){
         currUser.fetch({
            success: function(currUser){
-                var currUserId = currUser.id;
-                console.log(currUserId);
-                $.ajax('{{=URL('default', 'index')}}', {
-                    data: {'currUserId': currUserId},
-                    dataType: "text",
-                    success: successFunc,
-                    error: errorFunc
-                });
-        
-                function successFunc(data, status){
-                    console.log("Success! User ID = " + currUserId);
-                }
-        
-                function errorFunc() {
-                    alert('error');
-                }
-                inactivityTime();
+               window.onload = populateCourses();
 
-                if(currUser.get("isTutor")){
-                    $("#searchTutor").hide();
-                }
+               var currUserId = currUser.id;
+
+               console.log(currUserId);
+               $.ajax('{{=URL('default', 'index')}}', {
+                   data: {'currUserId': currUserId},
+                   dataType: "text",
+                   success: successFunc,
+                   error: errorFunc
+               });
         
-                $("#form_login").hide();
-                $("#profile").show();
-                $("#userInfo").show();
+               function successFunc(data, status){
+                   console.log("Success! User ID = " + currUserId);
+               }
         
-                $("#logoutbtn").click(function(e){
-                    Parse.User.logOut();
-                    document.location.href = "/WebUcscTutor/default/index";
-                });
+               function errorFunc() {
+                   alert('error');
+               }
+               inactivityTime();
+
+               function populateCourses(){
+                   var courses = currUser.get("webCourses");
+                   if(courses){
+                       for(var i = 0; i < courses.length; i++){
+                           var table = $("#coursetable");
+                           table.append('<tr><td>'+ courses[i]+'</td></tr>');
+                       }
+                   }
+
+               }
+
+
+               if(currUser.get("isTutor")){
+                   $("#searchTutor").hide();
+               }
         
-                $("#editprof").click(function(e){
-                    document.location.href = "/WebUcscTutor/default/editprof";
-                });
+               $("#form_login").hide();
+               $("#profile").show();
+               $("#userInfo").show();
         
-                $("#searchTutor").click(function(e){
+               $("#logoutbtn").click(function(e){
+                   Parse.User.logOut();
+                   document.location.href = "/WebUcscTutor/default/index";
+               });
+        
+               $("#editprof").click(function(e){
+                   document.location.href = "/WebUcscTutor/default/editprof";
+               });
+        
+               $("#searchTutor").click(function(e){
                    document.location.href = "/WebUcscTutor/default/name_list";
-                });
+               });
         
-                $("#message").click(function(e){
+               $("#message").click(function(e){
                    document.location.href = "/WebUcscTutor/default/messaging" + "/" + currUserId;
-                });
-        
+               });
+
                var profilepic = currUser.get("ProfilePic");
                $("#profilepic")[0].src = profilepic.url();
                var fname = currUser.get("FirstName");

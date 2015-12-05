@@ -31,17 +31,16 @@ def get_info(strng):
                "X-Parse-Application-Id": appId,
                "X-Parse-REST-API-Key": apiKey
         })
-        # print json.loads(connection.getresponse().read())
         return json.loads(connection.getresponse().read())
 
 
 def index():
     curr_user_id = request.vars.currUserId
-
     return dict(curr_user_id=curr_user_id)
 
 
 def name_list():
+    # pass in args from the search button and query with those args. somehow
     users = get_info("get users")
     session.users = users
     return dict(users=users)
@@ -71,7 +70,7 @@ def message_user():
     curr_user_id = request.args(3)
     recipient_id = request.args(2)
     user_list = [curr_user_id, recipient_id]
-    print user_list
+    # print user_list
     connection = httplib.HTTPSConnection('api.parse.com', 443)
     params = urllib.urlencode({
         "where": json.dumps({
@@ -91,10 +90,9 @@ def message_user():
     })
 
     messages = json.loads(connection.getresponse().read())
-    print messages
+    # print messages
     # session.messages = messages
     return dict(tutor_name=tutor_name, users=users, messages=messages,curr_user_id=curr_user_id,  recipient_id=recipient_id)
-
 
 def load_messages():
     sender_id = request.args(0)
