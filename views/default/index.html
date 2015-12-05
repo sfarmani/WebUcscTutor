@@ -159,9 +159,9 @@
                    document.location.href = "/WebUcscTutor/default/editprof";
                });
         
-               $("#searchTutor").click(function(e){
-                   document.location.href = "/WebUcscTutor/default/name_list";
-               });
+                $("#searchTutor").click(function(e){
+                   document.location.href = "/WebUcscTutor/default/name_list" + "/" + currUserId;
+                });
         
                $("#message").click(function(e){
                    document.location.href = "/WebUcscTutor/default/messaging" + "/" + currUserId;

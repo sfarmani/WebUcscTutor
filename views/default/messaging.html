@@ -19,15 +19,15 @@
                 <th>Review</th>
                 <th>Availability</th>
             </tr>
-            {{for i in range(len(users.get("results"))):}}
+            {{for user in users.get("results"):}}
                 <tr class="clickable">
                     <td id="tutorName">
-                        {{=A(users.get("results")[i].get("FirstName")+" "+users.get("results")[i].get("LastName"),
+                        {{=A(user.get("FirstName") + " " + user.get("LastName"),
                              _href=URL('default', 'message_user',
-                                       args=[users.get("results")[i].get("FirstName")+" "+users.get("results")[i].get("LastName"),
-                                             users.get("results")[i].get("username"),
-                                             users.get("results")[i].get("objectId"),
-                                             curr_user_id]))}}
+                                       args=[user.get("FirstName")+" "+user.get("LastName"),
+                                             user.get("username"),
+                                             curr_user_id,
+                                             user.get("objectId")]))}}
                     </td>
                     <td id="course"></td>
                     <td id="review"></td>

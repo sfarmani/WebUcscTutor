@@ -19,7 +19,7 @@
     </div>
 
     <div id="message_list">
-        {% #msg_dict %}
+        {% #msg_list %}
             <div id="message-container">
                 <div id="message-date">
                     {% timestamp %}
@@ -31,7 +31,7 @@
                     {% messageText %}
                 </div>
             </div>
-        {% /msg_dict %}
+        {% /msg_list %}
     </div>
 
     <div id="input-area" class="row">
@@ -60,21 +60,10 @@
             delimiters: ['{%', '%}'],
             tripleDelimiters: ['{%%', '%%}'],
             data: {
-                msg_dict: [],
+                msg_list: [],
                 loading: true
             }
         });
-
-        var helpers = Ractive.defaults.data;
-        helpers.fromNow = function(timeString){
-            return moment(timeString).fromNow();
-        };
-        helpers.formatTime = function(timeString){
-            return moment(timeString).format("MMM d, h:mma");
-        };
-        helpers.humanizeTime = function(timeString){
-            return moment.duration(timeString).humanize();
-        };
 
         // Sorts results, scrolls to the bottom of the message list synchronously using Promises
         var sortItems = function(data) {
@@ -82,11 +71,10 @@
                 data['results'].sort(function(a, b) {
                     return a.createdAt < b.createdAt ? - 1 : 1;
                 });
-                var promise2 = MAIN.set('msg_dict', data["results"]);
+                var promise2 = MAIN.set('msg_list', data["results"]);
                 promise2.then(scrollBottom());
             });
         };
-
 
         function scrollBottom(){
             MAIN.nodes.message_list.scrollTop = MAIN.nodes.message_list.scrollHeight - MAIN.nodes.message_list.clientHeight
@@ -122,7 +110,6 @@
                 }
             });
         }
-
 
         // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
         function generateUUID() {
@@ -213,8 +200,6 @@
 
         subscribe();
 
-        //var message = PUBNUB.$('messages'), input = PUBNUB.$('input'), channel = 'chat';
-
         function publish() {
             // make it scroll to bottom of div on load
             MAIN.nodes.message_list.scrollTop = MAIN.nodes.message_list.scrollHeight - MAIN.nodes.message_list.clientHeight;
@@ -224,9 +209,10 @@
             });
 
             var msg = $('#message-input').val();
-            var channel_name;
+
             // want to have channel be consistent, since this is a private chat
             // always have student id first, then tutor id
+            var channel_name;
             if (currUser.get("isTutor")) {
                 channel_name = '{{=recipient_id}}' + '{{=curr_user_id}}';
             }
@@ -240,7 +226,6 @@
                 channel: channel_name,
                 message: msg,
                 callback: function (m) {
-                    // make it scroll to bottom of div on load
                     console.log(m);
                     var ParseMessage = Parse.Object.extend("ParseMessage");
                     var parseMsg = new ParseMessage;
@@ -274,6 +259,7 @@
                 }
             })
         }
+        // loads messages every 10 seconds, in case a message from Android app is sent/received
         setInterval(loadMessages, 10000);
     });
 </script>

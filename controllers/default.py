@@ -43,7 +43,9 @@ def name_list():
     # pass in args from the search button and query with those args. somehow
     users = get_info("get users")
     session.users = users
-    return dict(users=users)
+    curr_user_id = request.args(0)
+
+    return dict(users=users, curr_user_id=curr_user_id)
 
 
 def editprof():
@@ -64,62 +66,10 @@ def message_user():
     title = request.args(0)
     tutor_name = re.sub('[^0-9a-zA-Z]+', ' ', title)
 
-    users = get_info("get users")
-    session.users = users
+    curr_user_id = request.args(2)
+    recipient_id = request.args(3)
 
-    curr_user_id = request.args(3)
-    recipient_id = request.args(2)
-    user_list = [curr_user_id, recipient_id]
-    # print user_list
-    connection = httplib.HTTPSConnection('api.parse.com', 443)
-    params = urllib.urlencode({
-        "where": json.dumps({
-            "senderId": {
-                "$in": user_list
-             },
-            "recipientId": {
-                 "$in": user_list
-            }
-        }),
-        "order": "createdAt"
-    })
-    connection.connect()
-    connection.request('GET', '/1/classes/ParseMessage?%s' % params, '', {
-               "X-Parse-Application-Id": appId,
-               "X-Parse-REST-API-Key": apiKey
-    })
-
-    messages = json.loads(connection.getresponse().read())
-    # print messages
-    # session.messages = messages
-    return dict(tutor_name=tutor_name, users=users, messages=messages,curr_user_id=curr_user_id,  recipient_id=recipient_id)
-
-def load_messages():
-    sender_id = request.args(0)
-    recipient_id = request.args(1)
-    user_list = [sender_id, recipient_id]
-    print user_list
-    connection = httplib.HTTPSConnection('api.parse.com', 443)
-    params = urllib.urlencode({
-        "where": json.dumps({
-            "senderId": {
-                "$in": user_list
-             },
-            "recipientId": {
-                 "$in": user_list
-            }
-        }),
-        "order": "createdAt"
-    })
-    connection.connect()
-    connection.request('GET', '/1/classes/ParseMessage?%s' % params, '', {
-               "X-Parse-Application-Id": appId,
-               "X-Parse-REST-API-Key": apiKey
-    })
-
-    messages = json.loads(connection.getresponse().read())
-    print messages
-    return dict(messages=messages)
+    return dict(tutor_name=tutor_name, curr_user_id=curr_user_id,  recipient_id=recipient_id)
 
 
 def tutorsignup():
