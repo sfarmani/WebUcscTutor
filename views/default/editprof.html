@@ -20,10 +20,10 @@
     <input type="file" id="fileBrowser" style="visibility:hidden; display:none;" />
 </div>
 <div id="userInfo">
-    <table>
+    <table id="home">
         <tr>
             <td>
-                <p id="biolabel">Description</p>
+                <p id="biolabel">My Bio</p>
             </td>
         </tr>
         <tr>
@@ -99,7 +99,7 @@
                    var courses = currUser.get("webCourses");
                    for(var i = 0; i < courses.length; i++){
                        var table = $("#coursetable");
-                       table.append('<tr><td>'+ courses[i]+'</td></tr>');
+                       table.append('<tr><td id="course">'+ courses[i]+'</td></tr>');
                    }
                 }
 

@@ -29,9 +29,10 @@ td, th {
 /* line 33, ../sass/_main.scss */
 #logout {
   float: right;
+  padding: 0 1% 1% 1%;
 }
 
-/* line 37, ../sass/_main.scss */
+/* line 38, ../sass/_main.scss */
 .btn {
   padding: 10px 15px;
   border: 0 none;
@@ -40,73 +41,73 @@ td, th {
   text-transform: uppercase;
 }
 
-/* line 45, ../sass/_main.scss */
+/* line 46, ../sass/_main.scss */
 .btn:focus, .btn:active:focus, .btn.active:focus {
   outline: 0 none;
 }
 
-/* line 49, ../sass/_main.scss */
+/* line 50, ../sass/_main.scss */
 .btn-primary {
   background: #0099cc;
   color: #ffffff;
 }
 
-/* line 54, ../sass/_main.scss */
+/* line 55, ../sass/_main.scss */
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
   background: #33a6cc;
 }
 
-/* line 58, ../sass/_main.scss */
+/* line 59, ../sass/_main.scss */
 .btn-primary:active, .btn-primary.active {
   background: #007299;
   box-shadow: none;
 }
 
-/* line 63, ../sass/_main.scss */
+/* line 64, ../sass/_main.scss */
 .navbar.navbar-inverse.navbar-fixed-top {
   background: #204d76;
 }
 
-/* line 67, ../sass/_main.scss */
+/* line 68, ../sass/_main.scss */
 .btn-success {
   background: #1BC500;
   color: #fff;
 }
 
-/* line 72, ../sass/_main.scss */
+/* line 73, ../sass/_main.scss */
 .btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active, .open > .dropdown-toggle.btn-success {
   background: #23FF00;
 }
 
-/* line 76, ../sass/_main.scss */
+/* line 77, ../sass/_main.scss */
 .btn-primary:active, .btn-primary.active {
   background: #159A00;
   box-shadow: none;
 }
 
-/* line 81, ../sass/_main.scss */
+/* line 82, ../sass/_main.scss */
 .btn-danger {
   background: #EE0000;
   color: #fff;
 }
 
-/* line 86, ../sass/_main.scss */
+/* line 87, ../sass/_main.scss */
 .btn-danger:hover, .btn-danger:focus, .btn-danger:active, .btn-danger.active, .open > .dropdown-toggle.btn-danger {
   background: #FF0000;
 }
 
-/* line 90, ../sass/_main.scss */
+/* line 91, ../sass/_main.scss */
 .btn-danger:active, .btn-danger.active {
   background: #BB0000;
   box-shadow: none;
 }
 
-/* line 95, ../sass/_main.scss */
+/* line 96, ../sass/_main.scss */
 .col-xs-4 {
   float: none;
 }
 
-/* line 99, ../sass/_main.scss */
+/* line 100, ../sass/_main.scss */
 form#form_login {
   padding: 3%;
   margin-top: auto;
@@ -120,79 +121,96 @@ form#form_login {
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
   border-radius: 10px;
+  background: #fff;
 }
 
-/* line 110, ../sass/_main.scss */
+/* line 112, ../sass/_main.scss */
 #signupbtns {
   width: 100%;
   display: inline-flex;
 }
 
-/* line 115, ../sass/_main.scss */
+/* line 117, ../sass/_main.scss */
 #profilepic, #editprofilepic {
   width: 200px;
 }
 
-/* line 119, ../sass/_main.scss */
+/* line 121, ../sass/_main.scss */
 #pic {
   max-width: 30%;
 }
 
-/* line 123, ../sass/_main.scss */
+/* line 125, ../sass/_main.scss */
 #profile {
   -moz-box-shadow: rgba(0, 0, 0, 0.7) 0 0px 4px 0px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.7) 0 0px 4px 0px;
   box-shadow: rgba(0, 0, 0, 0.7) 0 0px 4px 0px;
   overflow: hidden;
   float: left;
+  margin: 4.5% 1% 1%;
 }
 
-/* line 131, ../sass/_main.scss */
+/* line 134, ../sass/_main.scss */
 #name, #biolabel, #courselabel {
   font-size: 23pt;
   color: #16268b;
 }
 
-/* line 135, ../sass/_main.scss */
+/* line 138, ../sass/_main.scss */
 #username {
+  float: right;
   padding-left: 4%;
   font-size: 23pt;
   color: #16268b;
 }
 
-/* line 140, ../sass/_main.scss */
+/* line 144, ../sass/_main.scss */
 #bio {
   padding-left: 4%;
   font-size: 15pt;
   color: #1c3bd1;
 }
 
-/* line 145, ../sass/_main.scss */
+/* line 150, ../sass/_main.scss */
 #editbio {
-  margin-left: 4%;
+  padding-left: 4%;
   font-size: 15pt;
   color: #1c3bd1;
+  cursor: pointer;
 }
 
-/* line 151, ../sass/_main.scss */
+/* line 157, ../sass/_main.scss */
+#course {
+  padding-left: 30%;
+  margin-left: 30%;
+  font-size: 15pt;
+  color: #1c3bd1;
+  cursor: pointer;
+}
+
+/* line 165, ../sass/_main.scss */
 #inputbio, #inputcourses {
-  width: 844px;
-  height: 95px;
+  width: 825px;
+  height: 75px;
   margin-left: 4%;
   font-size: 15pt;
   overflow-y: hidden;
   resize: none;
 }
 
-/* line 160, ../sass/_main.scss */
+/* line 174, ../sass/_main.scss */
 #message_list {
   overflow-y: auto;
-  margin-top: 2%;
   height: 370px;
-  width: 100%;
+  margin-left: -0.8%;
+  width: 101.3%;
+  -moz-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 3px 0px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 3px 0px;
+  box-shadow: rgba(0, 0, 0, 0.7) 0 1px 3px 0px;
+  background: #fff;
 }
 
-/* line 167, ../sass/_main.scss */
+/* line 183, ../sass/_main.scss */
 #message-container {
   min-height: 75px;
   vertical-align: text-bottom;
@@ -201,38 +219,54 @@ form#form_login {
   box-shadow: rgba(0, 0, 0, 0.7) 0 2px 1px 0px;
 }
 
-/* line 173, ../sass/_main.scss */
+/* line 188, ../sass/_main.scss */
 #message-input {
   overflow-y: hidden;
   resize: none;
   height: 45px;
 }
 
-/* line 179, ../sass/_main.scss */
+/* line 194, ../sass/_main.scss */
+#input-area {
+  margin-top: 1%;
+}
+
+/* line 198, ../sass/_main.scss */
 #send-message-btn {
   height: 45px;
 }
 
-/* line 183, ../sass/_main.scss */
+/* line 202, ../sass/_main.scss */
 #editpic {
   color: #747474;
 }
-/* line 185, ../sass/_main.scss */
+/* line 204, ../sass/_main.scss */
 #editpic:hover {
   color: #393939;
 }
 
-/* line 190, ../sass/_main.scss */
+/* line 209, ../sass/_main.scss */
 #userInfo {
   -moz-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 3px 0px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 3px 0px;
   box-shadow: rgba(0, 0, 0, 0.7) 0 1px 3px 0px;
   min-height: 300px;
   background: #fff;
+  padding: 1%;
+  margin-top: 3.5%;
 }
 
-/* line 196, ../sass/_main.scss */
+/* line 217, ../sass/_main.scss */
 #list {
+  -moz-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 3px 0px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 3px 0px;
+  box-shadow: rgba(0, 0, 0, 0.7) 0 1px 3px 0px;
+  background: #fff;
+}
+
+/* line 222, ../sass/_main.scss */
+#home {
+  width: 44%;
   -moz-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 3px 0px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 3px 0px;
   box-shadow: rgba(0, 0, 0, 0.7) 0 1px 3px 0px;

@@ -32,6 +32,7 @@ tr{
 }
 #logout{
   float:right;
+  padding: 0 1% 1% 1%;
 }
 
 .btn {
@@ -105,6 +106,7 @@ form#form_login {
   border: 1px solid #007299;
   @include box-shadow(rgba(#33a6cc,0.7) 0 0px 4px 0px);
   @include border-radius(10px);
+  background: #fff;
 }
 
 #signupbtns{
@@ -126,6 +128,7 @@ form#form_login {
   //@include border-radius(25px);
   overflow: hidden;
   float: left;
+  margin: 4.5% 1% 1%;
 }
 
 #name, #biolabel, #courselabel{
@@ -133,24 +136,35 @@ form#form_login {
   color: #16268b;
 }
 #username{
+  float: right;
   padding-left: 4%;
   font-size: 23pt;
   color: #16268b;
 }
-#bio,{
+#bio{
   padding-left: 4%;
   font-size: 15pt;
   color: #1c3bd1;
 }
+
 #editbio{
-  margin-left: 4%;
+  padding-left: 4%;
   font-size: 15pt;
   color: #1c3bd1;
+  cursor: pointer;
+}
+
+#course{
+  padding-left: 30%;
+  margin-left: 30%;
+  font-size: 15pt;
+  color: #1c3bd1;
+  cursor: pointer;
 }
 
 #inputbio, #inputcourses{
-  width: 844px;
-  height: 95px;
+  width: 825px;
+  height: 75px;
   margin-left: 4%;
   font-size: 15pt;
   overflow-y: hidden;
@@ -159,9 +173,11 @@ form#form_login {
 
 #message_list{
   overflow-y: auto;
-  margin-top: 2%;
   height: 370px;
-  width: 100%;
+  margin-left: -0.8%;
+  width: 101.3%;
+  @include box-shadow(rgba(#000,0.7) 0 1px 3px 0px);
+  background: #fff;
 }
 
 #message-container{
@@ -169,11 +185,14 @@ form#form_login {
   vertical-align: text-bottom;
   @include box-shadow(rgba(#000,0.7) 0 2px 1px 0px);
 }
-
 #message-input{
   overflow-y: hidden;
   resize: none;
   height: 45px;
+}
+
+#input-area{
+  margin-top: 1%;
 }
 
 #send-message-btn{
@@ -191,9 +210,17 @@ form#form_login {
   @include box-shadow(rgba(#000,0.7) 0 1px 3px 0px);
   min-height: 300px;
   background: #fff;
+  padding: 1%;
+  margin-top: 3.5%;
 }
 
 #list{
+  @include box-shadow(rgba(#000,0.7) 0 1px 3px 0px);
+  background: #fff;
+}
+
+#home{
+  width: 44%;
   @include box-shadow(rgba(#000,0.7) 0 1px 3px 0px);
   background: #fff;
 }

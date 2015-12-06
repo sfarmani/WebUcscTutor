@@ -23,12 +23,7 @@
         </tr>
         <tr>
             <td>
-                <p id="username"></p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p id="biolabel">Description</p>
+                <p id="biolabel">My Bio</p>
             </td>
         </tr>
         <tr>
@@ -133,7 +128,7 @@
                    if(courses){
                        for(var i = 0; i < courses.length; i++){
                            var table = $("#coursetable");
-                           table.append('<tr><td>'+ courses[i]+'</td></tr>');
+                           table.append('<tr><td id="course">'+ courses[i]+'</td></tr>');
                        }
                    }
 
@@ -166,12 +161,10 @@
                });
 
                var profilepic = currUser.get("ProfilePic");
-               console.log(profilepic);
                $("#profilepic")[0].src = profilepic.url();
                var fname = currUser.get("FirstName");
                var lname = currUser.get("LastName");
-               $("#name")[0].innerHTML = fname+" "+lname;
-               $("#username")[0].innerHTML = currUser.get("username");
+               $("#name")[0].innerHTML = fname+" "+lname + " @"+currUser.get("username");
                if(currUser.get("bio") === "" || !currUser.get("bio")){
                    $("#bio")[0].innerHTML = "No Description";
                }

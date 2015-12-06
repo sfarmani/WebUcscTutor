@@ -5,7 +5,7 @@
 
 <div id="logout" class="btn-group">
     <a id="searchTutor" class="btn btn-primary">Search For Tutors</a>
-    <a id="message" class="btn btn-primary">Messages</a>
+    <a id="message" class="btn btn-primary">Message This Tutor</a>
     <a id="prof" class="btn btn-primary">Profile</a>
     <a id="logoutbtn" class="btn btn-primary">Log Out</a>
 </div>
@@ -15,7 +15,7 @@
     <input type="file" id="fileBrowser" style="visibility:hidden; display:none;" />
 </div>
 <div id="userInfo">
-    <table>
+    <table id="home">
         <tr>
             <td>
                 <p id="name"></p>
@@ -23,12 +23,7 @@
         </tr>
         <tr>
             <td>
-                <p id="username"></p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p id="biolabel">Description</p>
+                <p id="biolabel">Bio</p>
             </td>
         </tr>
         <tr>
@@ -55,6 +50,7 @@
         Parse.initialize("sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO", "MaOO36yKaoEH6bdOlVCnNsaBYAhMfxnGS8MhYrTv");
 
         var user_id = '{{=user_id}}';
+        var currUser = Parse.User.current();
 
         function getUser() {
             var obj = {"objectId": user_id};
@@ -73,7 +69,7 @@
                     if(courses){
                         for(var i = 0; i < courses.length; i++){
                             var table = $("#coursetable");
-                            table.append('<tr><td>'+ courses[i]+'</td></tr>');
+                            table.append('<tr><td id="course">'+ courses[i]+'</td></tr>');
                         }
                     }
                     $("#logoutbtn").click(function(e){
@@ -84,7 +80,12 @@
                         document.location.href = "/WebUcscTutor/default/name_list";
                     });
                     $("#message").click(function(e){
-                        document.location.href = "/WebUcscTutor/default/messaging" + "/" + data["results"][0]["objectId"];
+                        document.location.href = "/WebUcscTutor/default/message_user" + "/" +
+                                data["results"][0]["FirstName"] + " " +
+                                data["results"][0]["LastName"] + "/" +
+                                data["results"][0]["username"] + "/" +
+                                currUser.id + "/" +
+                                data["results"][0]["objectId"];
                     });
                     $("#prof").click(function (e) {
                         document.location.href = "/WebUcscTutor/default/index";
@@ -93,8 +94,7 @@
                     $("#profilepic")[0].src = profilepic.url;
                     var fname = data["results"][0]["FirstName"];
                     var lname = data["results"][0]["LastName"];
-                    $("#name")[0].innerHTML = fname+" "+lname;
-                    $("#username")[0].innerHTML = data["results"][0]["username"];
+                    $("#name")[0].innerHTML = fname+" "+lname + " @" + data["results"][0]["username"];
                     if(data["results"][0]["bio"] === "" || !data["results"][0]["bio"]){
                         $("#bio")[0].innerHTML = "No Description";
                     }

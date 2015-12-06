@@ -34,10 +34,16 @@
 
         {% #tutor_list %}
         <tr id="list">
-            <td id="tutorName">
-                <a id="previewbtn" class="btn btn-primary" href="/WebUcscTutor/default/preview/{% objectId %}">{% FirstName %} {% LastName %}</a>
-            </td>
-            <td id="course">{%webCourses%}</td>
+                <td id="tutorName">
+                    <a id="previewbtn" class="btn btn-secondary" href="/WebUcscTutor/default/preview/{% objectId %}">
+                        {% FirstName %} {% LastName %}
+                    </a>
+                </td>
+                <td id="courses">
+                    <a id="previewbtn" class="btn btn-secondary" href="/WebUcscTutor/default/preview/{% objectId %}">
+                        {%webCourses%}
+                    </a>
+                </td>
             <td id="review"></td>
             <td id="schedule"></td>
         </tr>
