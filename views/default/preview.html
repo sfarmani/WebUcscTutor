@@ -1,0 +1,118 @@
+{{extend 'layout.html'}}
+<head>
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+</head>
+
+<div id="logout" class="btn-group">
+    <a id="searchTutor" class="btn btn-primary">Search For Tutors</a>
+    <a id="message" class="btn btn-primary">Messages</a>
+    <a id="prof" class="btn btn-primary">Profile</a>
+    <a id="logoutbtn" class="btn btn-primary">Log Out</a>
+</div>
+
+<div id="profile">
+    <img src="http://oi63.tinypic.com/2lmt1zq.jpg" id="profilepic">
+    <input type="file" id="fileBrowser" style="visibility:hidden; display:none;" />
+</div>
+<div id="userInfo">
+    <table>
+        <tr>
+            <td>
+                <p id="name"></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p id="username"></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p id="biolabel">Description</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p id="bio"></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p id="courselabel"></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table id="coursetable">
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        Parse.initialize("sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO", "MaOO36yKaoEH6bdOlVCnNsaBYAhMfxnGS8MhYrTv");
+
+        var user_id = '{{=user_id}}';
+
+        function getUser() {
+            var obj = {"objectId": user_id};
+
+            var query = encodeURIComponent('where=' + JSON.stringify(obj));
+            $.ajax({
+                type: "GET",
+                url: "https://api.parse.com/1/classes/_User?" + query,
+                dataType: "json",
+                headers: {
+                    "X-Parse-Application-Id": "sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO",
+                    "X-Parse-REST-API-Key": "4udDwLuCkvJLR09ypSp1xsgKKVwBDmncRSRBd24K"
+                },
+                success: function (data) {
+                    var courses = data["results"][0]["webCourses"];
+                    if(courses){
+                        for(var i = 0; i < courses.length; i++){
+                            var table = $("#coursetable");
+                            table.append('<tr><td>'+ courses[i]+'</td></tr>');
+                        }
+                    }
+                    $("#logoutbtn").click(function(e){
+                        Parse.User.logOut();
+                        document.location.href = "/WebUcscTutor/default/index";
+                    });
+                    $("#searchTutor").click(function(e){
+                        document.location.href = "/WebUcscTutor/default/name_list";
+                    });
+                    $("#message").click(function(e){
+                        document.location.href = "/WebUcscTutor/default/messaging" + "/" + data["results"][0]["objectId"];
+                    });
+                    $("#prof").click(function (e) {
+                        document.location.href = "/WebUcscTutor/default/index";
+                    });
+                    var profilepic = data["results"][0]["ProfilePic"];
+                    $("#profilepic")[0].src = profilepic.url;
+                    var fname = data["results"][0]["FirstName"];
+                    var lname = data["results"][0]["LastName"];
+                    $("#name")[0].innerHTML = fname+" "+lname;
+                    $("#username")[0].innerHTML = data["results"][0]["username"];
+                    if(data["results"][0]["bio"] === "" || !data["results"][0]["bio"]){
+                        $("#bio")[0].innerHTML = "No Description";
+                    }
+                    else{
+                        $("#bio")[0].innerHTML = data["results"][0]["bio"];
+                    }
+                    if(data["results"][0]["isTutor"]){
+                        $("#courselabel")[0].innerHTML = "Courses I Can Tutor";
+                    }
+                    else{
+                        $("#courselabel")[0].innerHTML = "Courses I Want a Tutor For";
+                    }
+                },
+                error: function (data) {
+                    console.log('error, data = ' + data);
+                }
+            });
+        }
+        getUser();
+    });
+</script>

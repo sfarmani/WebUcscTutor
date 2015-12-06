@@ -15,7 +15,7 @@
     <input type="file" id="fileBrowser" style="visibility:hidden; display:none;" />
 </div>
 <div id="userInfo">
-    <table>
+    <table id="home">
         <tr>
             <td>
                 <p id="name"></p>
@@ -76,7 +76,7 @@
         Parse.User.logIn($("#usernamefield").val(), $("#password").val(), {
             success: function(user) {
                 // Do stuff after successful login.
-                document.location.href = "/WebUcscTutor/default/index";
+                document.location.href = "/WebUcscTutor/default/index/" + user.id;
             },
             error: function(user, error) {
                 // The login failed. Check error to see why.
@@ -113,14 +113,12 @@
 
                var currUserId = currUser.id;
 
-               console.log(currUserId);
                $.ajax('{{=URL('default', 'index')}}', {
                    data: {'currUserId': currUserId},
                    dataType: "text",
                    success: successFunc,
                    error: errorFunc
                });
-        
                function successFunc(data, status){
                    console.log("Success! User ID = " + currUserId);
                }
@@ -160,7 +158,7 @@
                });
         
                 $("#searchTutor").click(function(e){
-                   document.location.href = "/WebUcscTutor/default/name_list" + "/" + currUserId;
+                   document.location.href = "/WebUcscTutor/default/name_list";
                 });
         
                $("#message").click(function(e){
@@ -168,6 +166,7 @@
                });
 
                var profilepic = currUser.get("ProfilePic");
+               console.log(profilepic);
                $("#profilepic")[0].src = profilepic.url();
                var fname = currUser.get("FirstName");
                var lname = currUser.get("LastName");

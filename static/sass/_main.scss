@@ -2,6 +2,7 @@ body{
   height: 100%;
   width: 100%;
   margin: 0;
+  background: #f6f6f6;
 }
 
 table#names{
@@ -13,14 +14,14 @@ td, th{
 }
 
 tr{
-  transition: all 700ms cubic-bezier(0.190, 1.000, 0.220, 1.000);
-  transform: translateY(0) scale(0.95, 0.95);
-  //@include box-shadow(rgba(#000,0.7) 0 0px 4px 0px);
-  //@include border-radius(5px);
-  &:hover{
-    background-color: #959595;
-    color: #2546BC;
-  }
+  //transition: all 700ms cubic-bezier(0.190, 1.000, 0.220, 1.000);
+  //transform: translateY(0) scale(0.95, 0.95);
+  ////@include box-shadow(rgba(#000,0.7) 0 0px 4px 0px);
+  ////@include border-radius(5px);
+  //&:hover{
+  //  background-color: #959595;
+  //  color: #2546BC;
+  //}
 }
 
 #searchtext{
@@ -31,10 +32,6 @@ tr{
 }
 #logout{
   float:right;
-}
-
-#searchTutor, #editprof, #logoutbtn, #prof{
-  @include box-shadow(rgba(#00569f,0.7) 0 0px 4px 0px);
 }
 
 .btn {
@@ -111,8 +108,6 @@ form#form_login {
 }
 
 #signupbtns{
-  //margin-left: 25%;
-  //margin-right: 35%;
   width: 100%;
   display:inline-flex;
 }
@@ -126,9 +121,9 @@ form#form_login {
 }
 
 #profile{
-  border: 1px solid #7f7f7f;
+  //border: 1px solid #7f7f7f;
   @include box-shadow(rgba(#000,0.7) 0 0px 4px 0px);
-  @include border-radius(25px);
+  //@include border-radius(25px);
   overflow: hidden;
   float: left;
 }
@@ -190,4 +185,15 @@ form#form_login {
   &:hover{
     color: #393939;
   }
+}
+
+#userInfo{
+  @include box-shadow(rgba(#000,0.7) 0 1px 3px 0px);
+  min-height: 300px;
+  background: #fff;
+}
+
+#list{
+  @include box-shadow(rgba(#000,0.7) 0 1px 3px 0px);
+  background: #fff;
 }

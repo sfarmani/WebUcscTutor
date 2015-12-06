@@ -20,7 +20,7 @@
     </div>
 
     <div id="search" class="btn-group">
-        <input id="searchtext" type="text">
+        <input id="searchtext" type="text" placeholder="i.e CMPS115">
         <a id="searchbtn" class="btn btn-primary">Search</a>
     </div>
 
@@ -33,16 +33,15 @@
         </tr>
 
         {% #tutor_list %}
-        <tr>
+        <tr id="list">
             <td id="tutorName">
-                {% FirstName %} {% LastName %}
+                <a id="previewbtn" class="btn btn-primary" href="/WebUcscTutor/default/preview/{% objectId %}">{% FirstName %} {% LastName %}</a>
             </td>
             <td id="course">{%webCourses%}</td>
             <td id="review"></td>
             <td id="schedule"></td>
         </tr>
         {% /tutor_list %}
-        {{pass}}
     </table>
 </script>
 
@@ -65,12 +64,12 @@
         });
 
         $("#searchbtn").click(function(e){
-            coursesToSearch = $('#searchtext').val();
+            coursesToSearch = $('#searchtext').val().toUpperCase();
             search();
         });
 
         document.onkeydown=function(evt){
-            coursesToSearch = $('#searchtext').val();
+            coursesToSearch = $('#searchtext').val().toUpperCase();
             var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
             if(keyCode == 13) {
                 search();
@@ -85,28 +84,7 @@
                     data['results'].splice(i, 1);
                 }
             }
-
-//            for (var i = 0; i < data['results'].length; i++) {
-//                if ($.inArray(coursesToSearch, data['results'][i]['webCourses']) < 0) {
-//                    console.log(data['results'][i]['webCourses']);
-//                    data['results'].splice(i, 1);
-//                }
-//            }
         }
-
-        // Prevents tutors from showing up that don't tutor the specified course
-//        var filterByCourses = function(data) {
-//            return new Promise(function(resolve, reject) {
-//                for (var i = 0; i < data['results'].length; i++){
-//                    var found = $.inArray(coursesToSearch, data['results'][i]['webCourses']);
-//                    console.log(data['results'][i]['webCourses']);
-//                    if (found < 0){
-//                        data['results'].splice(i)
-//                    }
-//                }
-//                MAIN.set('tutor_list', data["results"]);
-//            });
-//        };
 
         function search(){
             var obj = {
@@ -182,7 +160,7 @@
             inactivityTime();
 
             $("#message").click(function (e) {
-                document.location.href = "/WebUcscTutor/default/messaging";
+                document.location.href = "/WebUcscTutor/default/messaging" + "/" + currUser.id;
             });
 
             $("#logoutbtn").click(function (e) {
@@ -192,33 +170,6 @@
             $("#prof").click(function (e) {
                 document.location.href = "/WebUcscTutor/default/index";
             });
-
-            //    $("#searchbtn").click(function(e){
-            //        var currUser = Parse.User.current();
-            //        var objectId = currUser.id;
-            //        // get text from input field
-            //        var searchUsername = $("#searchtext").val();
-            //
-            //        // start query
-            //        var query = new Parse.Query(Parse.User);
-            //        query.equalTo("isTutor", true);
-            //        query.equalTo("username", searchUsername);
-            //        query.notEqualTo("objectId", objectId);
-            //
-            //        query.find({
-            //            success: function (results) {
-            //                // results has the list of users that match the search criterion
-            //                $("#tutorName")[0].innerHTML = results[0].get('username');
-            //                console.log(results[0]);
-            //                for (var i = 0; i < results.length; i++) {
-            //                    var object = results[i];
-            //                    $("#tutorName")[0].innerHTML = object.get('username');
-            //                }
-            //            },
-            //            error: function (error) {
-            //                alert("Error: " + error.code + " " + error.message);
-            //            }
-            //        });
         }
     });
 

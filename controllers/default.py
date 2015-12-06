@@ -57,6 +57,7 @@ def messaging():
     session.users = users
 
     curr_user_id = request.args(0)
+    print curr_user_id
 
     return dict(users=users, curr_user_id=curr_user_id)
 
@@ -78,3 +79,9 @@ def tutorsignup():
 
 def studentsignup():
     return dict()
+
+
+def preview():
+    user_id = request.args(0)
+    return dict(user_id=user_id)
+
