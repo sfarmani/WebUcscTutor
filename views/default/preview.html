@@ -19,6 +19,7 @@
         <tr>
             <td>
                 <p id="name"></p>
+                <p id="username"></p>
             </td>
         </tr>
         <tr>
@@ -94,7 +95,8 @@
                     $("#profilepic")[0].src = profilepic.url;
                     var fname = data["results"][0]["FirstName"];
                     var lname = data["results"][0]["LastName"];
-                    $("#name")[0].innerHTML = fname+" "+lname + " @" + data["results"][0]["username"];
+                    $("#name")[0].innerHTML = fname+" "+lname;
+                    $("#username")[0].innerHTML = " @" + data["results"][0]["username"];
                     if(data["results"][0]["bio"] === "" || !data["results"][0]["bio"]){
                         $("#bio")[0].innerHTML = "No Description";
                     }

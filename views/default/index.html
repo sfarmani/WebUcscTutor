@@ -4,21 +4,22 @@
 </head>
 
 <div id="logout" class="btn-group">
-    <a id="searchTutor" class="btn btn-primary">Search For Tutors</a>
+    <a id="searchTutor" class="btn btn-primary hidethis">Search For Tutors</a>
     <a id="message" class="btn btn-primary">Messages</a>
     <a id="editprof" class="btn btn-primary">Edit Profile</a>
     <a id="logoutbtn" class="btn btn-primary">Log Out</a>
 </div>
 
-<div id="profile">
+<div id="profile" class="hidethis">
     <img src="" id="profilepic">
     <input type="file" id="fileBrowser" style="visibility:hidden; display:none;" />
 </div>
-<div id="userInfo">
+<div id="userInfo" class="hidethis">
     <table id="home">
         <tr>
             <td>
                 <p id="name"></p>
+                <p id="username"></p>
             </td>
         </tr>
         <tr>
@@ -45,7 +46,7 @@
     </table>
 </div>
 
-<form id="form_login" class="col-xs-4">
+<form id="form_login" class="col-xs-4 hidethis">
     <div>
         <input class="form-control" type="text" id="usernamefield" placeholder="username">
     </div>
@@ -129,7 +130,7 @@
                    if(courses){
                        for(var i = 0; i < courses.length; i++){
                            var table = $("#coursetable");
-                           table.append('<tr><td id="course">'+ courses[i]+'</td></tr>');
+                           table.append('<tr><td id="coursed">'+ courses[i]+'</td></tr>');
                        }
                    }
 
@@ -137,13 +138,17 @@
 
 
                if(currUser.get("isTutor")){
-                   $("#searchTutor").hide();
+                   $("#searchTutor").addClass("hidethis");
+                   $("#searchTutor").remove();
                }
-
-               $("#form_login").hide();
-               $("#profile").show();
-               $("#userInfo").show();
-
+               else{
+                   $("#searchTutor").removeClass("hidethis")
+               }
+        
+               $("#form_login").addClass("hidethis");
+               $("#profile").removeClass("hidethis");
+               $("#userInfo").removeClass("hidethis");
+        
                $("#logoutbtn").click(function(e){
                    Parse.User.logOut();
                    document.location.href = "/WebUcscTutor/default/index";
@@ -165,7 +170,8 @@
                $("#profilepic")[0].src = profilepic.url();
                var fname = currUser.get("FirstName");
                var lname = currUser.get("LastName");
-               $("#name")[0].innerHTML = fname+" "+lname + " @"+currUser.get("username");
+               $("#name")[0].innerHTML = fname+" "+lname;
+               $("#username")[0].innerHTML = " @"+currUser.get("username");
                if(currUser.get("bio") === "" || !currUser.get("bio")){
                    $("#bio")[0].innerHTML = "No Description";
                }

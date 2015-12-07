@@ -3,11 +3,11 @@
     <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
 </head>
 
-<div id="notloggedin">
-    <span>You haven't logged in yet! Please login or Sign Up!</span>
+<div id="notloggedin" class="hidethis">
+    <span id="notloggedin">You haven't logged in yet! Please login or Sign Up!</span>
 </div>
 
-<div id="logout" class="btn-group">
+<div id="logout" class="btn-group hidethis">
     <a id="saveprof" class="btn btn-success">Save Profile</a>
     <a id="cancel" class="btn btn-danger">cancel</a>
     <a id="logoutbtn" class="btn btn-primary">Log Out</a>
@@ -15,11 +15,11 @@
 
 
 
-<div id="profile">
+<div id="profile" class="hidethis">
     <img src="" id="editprofilepic">
     <input type="file" id="fileBrowser" style="visibility:hidden; display:none;" />
 </div>
-<div id="userInfo">
+<div id="userInfo" class="hidethis">
     <table id="home">
         <tr>
             <td>
@@ -58,10 +58,10 @@
     }
 
     if(currUser == null){
-        $("#notloggedin").show();
-        $("#profile").hide();
-        $("#userInfo").hide();
-        $("#logout").hide();
+        $("#notloggedin").addClass("hidethis");
+        $("#profile").removeClass("hidethis");
+        $("#userInfo").addClass("hidethis");
+        $("#logout").addClass("hidethis");
         setTimeout(function(){
             document.location.href = "{{=URL('default', 'index')}}"
         }, 5000);
@@ -70,10 +70,10 @@
         currUser.fetch({
             success: function (currUser) {
                 window.onload = populateCourses();
-                $("#notloggedin").hide();
-                $("#profile").show();
-                $("#userInfo").show();
-                $("#logout").show();
+                $("#notloggedin").addClass("hidethis");
+                $("#profile").removeClass("hidethis");
+                $("#userInfo").removeClass("hidethis");
+                $("#logout").removeClass("hidethis");
 
                 var inactivityTime = function () {
                     var t;

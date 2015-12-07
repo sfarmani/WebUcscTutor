@@ -20,7 +20,7 @@
 
     <div id="message_list">
         {% #if loading %}
-            <div id="load_spinner">
+            <div id="load_spinners">
                 <i class="fa fa-spinner fa-pulse fa-4x"></i>
             </div>
         {% /if %}
@@ -250,6 +250,10 @@
                 return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
             });
             return uuid;
+        }
+
+        if(currUser.get("isTutor")){
+            $("#searchTutor").remove();
         }
 
         $("#prof").click(function(e){

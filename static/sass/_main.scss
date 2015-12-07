@@ -2,7 +2,7 @@ body{
   height: 100%;
   width: 100%;
   margin: 0;
-  background: #f6f6f6;
+  background: #2574A9;
 }
 
 table#names{
@@ -11,6 +11,11 @@ table#names{
 
 td, th{
   padding: 5px;
+}
+th{
+  background: #808080;
+  color: #fff;
+  @include box-shadow(rgba(#000,0.5) 0 2px 0px 0px);
 }
 
 tr{
@@ -26,6 +31,7 @@ tr{
 
 #searchtext{
   padding: 9.5px 15px;
+  @include box-shadow(rgba(#000,0.7) 0 1px 1px 0px);
 }
 #searchbtn{
   float: right;
@@ -41,6 +47,7 @@ tr{
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
+  @include box-shadow(rgba(#000,0.7) 0 1px 1px 0px);
 }
 
 .btn:focus, .btn:active:focus, .btn.active:focus {
@@ -63,33 +70,34 @@ tr{
 
 .navbar.navbar-inverse.navbar-fixed-top{
   background: #204d76;
+  @include box-shadow(rgba(#000,0.5) 0 4px 8px 4px);
 }
 
 .btn-success{
-  background: #1BC500;
+  background: #00B16A;
   color: #fff;
 }
 
 .btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active, .open > .dropdown-toggle.btn-success {
-  background: #23FF00;
+  background: #3FC380;
 }
 
-.btn-primary:active, .btn-primary.active {
-  background: #159A00;
+.btn-success:active, .btn-success.active {
+  background: #26A65B;
   box-shadow: none;
 }
 
 .btn-danger{
-  background: #EE0000;
+  background: #D91E18;
   color: #fff;
 }
 
 .btn-danger:hover, .btn-danger:focus, .btn-danger:active, .btn-danger.active, .open > .dropdown-toggle.btn-danger {
-  background: #FF0000;
+  background: #C0392B;
 }
 
 .btn-danger:active, .btn-danger.active {
-  background: #BB0000;
+  background: #96281B;
   box-shadow: none;
 }
 
@@ -103,8 +111,7 @@ form#form_login {
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 5%;
-  border: 1px solid #007299;
-  @include box-shadow(rgba(#33a6cc,0.7) 0 0px 4px 0px);
+  @include box-shadow(rgba(#000,0.5) 3px 5px 8px 2px);
   @include border-radius(10px);
   background: #fff;
 }
@@ -124,7 +131,7 @@ form#form_login {
 
 #profile{
   //border: 1px solid #7f7f7f;
-  @include box-shadow(rgba(#000,0.7) 0 0px 4px 0px);
+  @include box-shadow(rgba(#000,0.5) 3px 5px 8px 2px);
   //@include border-radius(25px);
   overflow: hidden;
   float: left;
@@ -133,24 +140,27 @@ form#form_login {
 
 #name, #biolabel, #courselabel{
   font-size: 23pt;
-  color: #16268b;
+  color: rgb(30, 139, 195);
+}
+#name{
+  float:left;
+  padding-right: 1%;
 }
 #username{
-  float: right;
-  padding-left: 4%;
-  font-size: 23pt;
-  color: #16268b;
+  font-size: 92%;
+  color: rgb(89, 171, 227);
+  padding-top: 2.5%;
 }
 #bio{
   padding-left: 4%;
   font-size: 15pt;
-  color: #1c3bd1;
+  color: rgb(34, 167, 240);
 }
 
 #editbio{
   padding-left: 4%;
   font-size: 15pt;
-  color: #1c3bd1;
+  color: rgb(34, 167, 240);
   cursor: pointer;
 }
 
@@ -158,8 +168,15 @@ form#form_login {
   padding-left: 30%;
   margin-left: 30%;
   font-size: 15pt;
-  color: #1c3bd1;
+  color: rgb(34, 167, 240);
   cursor: pointer;
+}
+
+#coursed{
+  padding-left: 30%;
+  margin-left: 30%;
+  font-size: 15pt;
+  color: rgb(34, 167, 240);
 }
 
 #inputbio, #inputcourses{
@@ -176,19 +193,21 @@ form#form_login {
   height: 370px;
   margin-left: -0.8%;
   width: 101.3%;
-  @include box-shadow(rgba(#000,0.7) 0 1px 3px 0px);
+  @include box-shadow(rgba(#000,0.5) 1px 4px 8px 4px);
   background: #fff;
 }
 
 #message-container{
   min-height: 75px;
   vertical-align: text-bottom;
-  @include box-shadow(rgba(#000,0.7) 0 2px 1px 0px);
+  @include box-shadow(rgba(#000,0.5) 0 1px 1px 0px);
+  padding: 1%;
 }
 #message-input{
   overflow-y: hidden;
   resize: none;
   height: 45px;
+  @include box-shadow(rgba(#000,0.5) 0px 4px 8px 1px);
 }
 
 #input-area{
@@ -197,6 +216,7 @@ form#form_login {
 
 #send-message-btn{
   height: 45px;
+  @include box-shadow(rgba(#000,0.5) 0px 4px 8px 1px);
 }
 
 #editpic{
@@ -207,7 +227,7 @@ form#form_login {
 }
 
 #userInfo{
-  @include box-shadow(rgba(#000,0.7) 0 1px 3px 0px);
+  @include box-shadow(rgba(#000,0.5) 5px 3px 8px 2px);
   min-height: 300px;
   background: #fff;
   padding: 1%;
@@ -215,18 +235,34 @@ form#form_login {
 }
 
 #list{
-  @include box-shadow(rgba(#000,0.7) 0 1px 3px 0px);
+  @include box-shadow(rgba(#000,0.7) 0 1px 1px 0px);
   background: #fff;
 }
 
 #home{
   width: 44%;
-  @include box-shadow(rgba(#000,0.7) 0 1px 3px 0px);
+  @include box-shadow(rgba(#000,0.5) 3px 5px 8px 2px);
   background: #fff;
+}
+
+.hidethis{
+  display: none;
 }
 
 #load_spinner{
   display: block;
   margin-left: auto;
   margin-right: auto;
+  color: #fff;
+}
+
+#load_spinners{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  color: #000;
+}
+
+#tutorlogged, #notloggedin, #loggedin{
+  color: #fff;
 }

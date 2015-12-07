@@ -6,7 +6,7 @@
 
 <html>
 <div id="logout" class="btn-group">
-    <a id="searchTutor" class="btn btn-primary">Search For Tutors</a>
+    <a id="searchTutor" class="btn btn-primary hidethis">Search For Tutors</a>
     <a id="prof" class="btn btn-primary">Profile</a>
     <a id="logoutbtn" class="btn btn-primary">Log Out</a>
 </div>
@@ -20,9 +20,9 @@
                 <th>Availability</th>
             </tr>
             {{for user in users.get("results"):}}
-                <tr class="clickable">
+                <tr class="clickable" id="list">
                     <td id="tutorName">
-                        {{if isTutor is True:}}
+                        {{if isTutor == "true":}}
                             {{=A(user.get("studentFirstName") + " " + user.get("studentLastName"),
                                  _href=URL('default', 'message_user',
                                            args=[user.get("studentFirstName")+" "+user.get("studentLastName"),
@@ -50,6 +50,16 @@
 </html>
         
 <script type="text/javascript">
+    Parse.initialize("sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO", "MaOO36yKaoEH6bdOlVCnNsaBYAhMfxnGS8MhYrTv");
+    var currUser = Parse.User.current();
+    if(currUser.get("isTutor")){
+        $("#searchTutor").addClass("hidethis");
+        $("#searchTutor").remove();
+    }
+    else{
+        $("#searchTutor").removeClass("hidethis")
+    }
+
     $("#prof").click(function(e){
         document.location.href = "/WebUcscTutor/default/index";
     });

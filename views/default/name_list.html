@@ -6,25 +6,25 @@
 <div id="target"></div>
 
 <script id="template" type="text/ractive">
-    <div id="notloggedin">
-        <span></span>
+    <div id="notloggedin" class="hidethis">
+        <span id="notloggedin"></span>
     </div>
-    <div id="tutorlogged">
-        <span>I don't know how you got here, but you're a tutor! You can't search for other tutors, silly!!</span>
+    <div id="tutorlogged" class="hidethis">
+        <span id="tutorlogged">I don't know how you got here, but you're a tutor! You can't search for other tutors, silly!!</span>
     </div>
 
-    <div id="logout" class="btn-group">
+    <div id="logout" class="btn-group hidethis">
         <a id="message" class="btn btn-primary">Messages</a>
         <a id="prof" class="btn btn-primary">Profile</a>
         <a id="logoutbtn" class="btn btn-primary">Log Out</a>
     </div>
 
-    <div id="search" class="btn-group">
+    <div id="search" class="btn-group hidethis">
         <input id="searchtext" type="text" placeholder="i.e CMPS115">
         <a id="searchbtn" class="btn btn-primary">Search</a>
     </div>
 
-    <table id="names">
+    <table id="names" class="hidethis">
         <tr>
             <th>Tutor Name</th>
             <th>Courses To Tutor</th>
@@ -133,31 +133,31 @@
         }
 
         if (Parse.User.current() == null) {
-            $("#notloggedin").show();
-            $("#tutorlogged").hide();
-            $("#logout").hide();
-            $("#search").hide();
-            $("#names").hide();
+            $("#notloggedin").removeClass("hidethis");
+            $("#tutorlogged").addClass("hidethis");
+            $("#logout").addClass("hidethis");
+            $("#search").addClass("hidethis");
+            $("#names").addClass("hidethis");
             setTimeout(function () {
                 document.location.href = "/WebUcscTutor/default/index"
             }, 5000);
         }
         else if (Parse.User.current().get("isTutor")) {
-            $("#tutorlogged").show();
-            $("#notloggedin").hide();
-            $("#logout").hide();
-            $("#search").hide();
-            $("#names").hide();
+            $("#tutorlogged").removeClass("hidethis");
+            $("#notloggedin").addClass("hidethis");
+            $("#logout").addClass("hidethis");
+            $("#search").addClass("hidethis");
+            $("#names").addClass("hidethis");
             setTimeout(function () {
                 document.location.href = "/WebUcscTutor/default/index"
             }, 5000);
         }
         else {
-            $("#notloggedin").hide();
-            $("#tutorlogged").hide();
-            $("#logout").show();
-            $("#search").show();
-            $("#names").show();
+            $("#notloggedin").addClass("hidethis");
+            $("#tutorlogged").addClass("hidethis");
+            $("#logout").removeClass("hidethis");
+            $("#search").removeClass("hidethis");
+            $("#names").removeClass("hidethis");
 
             var inactivityTime = function () {
                 var t;

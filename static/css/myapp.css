@@ -3,7 +3,7 @@ body {
   height: 100%;
   width: 100%;
   margin: 0;
-  background: #f6f6f6;
+  background: #2574A9;
 }
 
 /* line 8, ../sass/_main.scss */
@@ -16,179 +16,209 @@ td, th {
   padding: 5px;
 }
 
-/* line 27, ../sass/_main.scss */
-#searchtext {
-  padding: 9.5px 15px;
+/* line 15, ../sass/_main.scss */
+th {
+  background: #808080;
+  color: #fff;
+  -moz-box-shadow: rgba(0, 0, 0, 0.5) 0 2px 0px 0px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0 2px 0px 0px;
+  box-shadow: rgba(0, 0, 0, 0.5) 0 2px 0px 0px;
 }
 
-/* line 30, ../sass/_main.scss */
+/* line 32, ../sass/_main.scss */
+#searchtext {
+  padding: 9.5px 15px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 1px 0px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 1px 0px;
+  box-shadow: rgba(0, 0, 0, 0.7) 0 1px 1px 0px;
+}
+
+/* line 36, ../sass/_main.scss */
 #searchbtn {
   float: right;
 }
 
-/* line 33, ../sass/_main.scss */
+/* line 39, ../sass/_main.scss */
 #logout {
   float: right;
   padding: 0 1% 1% 1%;
 }
 
-/* line 38, ../sass/_main.scss */
+/* line 44, ../sass/_main.scss */
 .btn {
   padding: 10px 15px;
   border: 0 none;
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
+  -moz-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 1px 0px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 1px 0px;
+  box-shadow: rgba(0, 0, 0, 0.7) 0 1px 1px 0px;
 }
 
-/* line 46, ../sass/_main.scss */
+/* line 53, ../sass/_main.scss */
 .btn:focus, .btn:active:focus, .btn.active:focus {
   outline: 0 none;
 }
 
-/* line 50, ../sass/_main.scss */
+/* line 57, ../sass/_main.scss */
 .btn-primary {
   background: #0099cc;
   color: #ffffff;
 }
 
-/* line 55, ../sass/_main.scss */
+/* line 62, ../sass/_main.scss */
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
   background: #33a6cc;
 }
 
-/* line 59, ../sass/_main.scss */
+/* line 66, ../sass/_main.scss */
 .btn-primary:active, .btn-primary.active {
   background: #007299;
   box-shadow: none;
 }
 
-/* line 64, ../sass/_main.scss */
+/* line 71, ../sass/_main.scss */
 .navbar.navbar-inverse.navbar-fixed-top {
   background: #204d76;
+  -moz-box-shadow: rgba(0, 0, 0, 0.5) 0 4px 8px 4px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0 4px 8px 4px;
+  box-shadow: rgba(0, 0, 0, 0.5) 0 4px 8px 4px;
 }
 
-/* line 68, ../sass/_main.scss */
+/* line 76, ../sass/_main.scss */
 .btn-success {
-  background: #1BC500;
+  background: #00B16A;
   color: #fff;
 }
 
-/* line 73, ../sass/_main.scss */
+/* line 81, ../sass/_main.scss */
 .btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active, .open > .dropdown-toggle.btn-success {
-  background: #23FF00;
+  background: #3FC380;
 }
 
-/* line 77, ../sass/_main.scss */
-.btn-primary:active, .btn-primary.active {
-  background: #159A00;
+/* line 85, ../sass/_main.scss */
+.btn-success:active, .btn-success.active {
+  background: #26A65B;
   box-shadow: none;
 }
 
-/* line 82, ../sass/_main.scss */
+/* line 90, ../sass/_main.scss */
 .btn-danger {
-  background: #EE0000;
+  background: #D91E18;
   color: #fff;
 }
 
-/* line 87, ../sass/_main.scss */
+/* line 95, ../sass/_main.scss */
 .btn-danger:hover, .btn-danger:focus, .btn-danger:active, .btn-danger.active, .open > .dropdown-toggle.btn-danger {
-  background: #FF0000;
+  background: #C0392B;
 }
 
-/* line 91, ../sass/_main.scss */
+/* line 99, ../sass/_main.scss */
 .btn-danger:active, .btn-danger.active {
-  background: #BB0000;
+  background: #96281B;
   box-shadow: none;
 }
 
-/* line 96, ../sass/_main.scss */
+/* line 104, ../sass/_main.scss */
 .col-xs-4 {
   float: none;
 }
 
-/* line 100, ../sass/_main.scss */
+/* line 108, ../sass/_main.scss */
 form#form_login {
   padding: 3%;
   margin-top: auto;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 5%;
-  border: 1px solid #007299;
-  -moz-box-shadow: rgba(51, 166, 204, 0.7) 0 0px 4px 0px;
-  -webkit-box-shadow: rgba(51, 166, 204, 0.7) 0 0px 4px 0px;
-  box-shadow: rgba(51, 166, 204, 0.7) 0 0px 4px 0px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.5) 3px 5px 8px 2px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 3px 5px 8px 2px;
+  box-shadow: rgba(0, 0, 0, 0.5) 3px 5px 8px 2px;
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
   border-radius: 10px;
   background: #fff;
 }
 
-/* line 112, ../sass/_main.scss */
+/* line 119, ../sass/_main.scss */
 #signupbtns {
   width: 100%;
   display: inline-flex;
 }
 
-/* line 117, ../sass/_main.scss */
+/* line 124, ../sass/_main.scss */
 #profilepic, #editprofilepic {
   width: 200px;
 }
 
-/* line 121, ../sass/_main.scss */
+/* line 128, ../sass/_main.scss */
 #pic {
   max-width: 30%;
 }
 
-/* line 125, ../sass/_main.scss */
+/* line 132, ../sass/_main.scss */
 #profile {
-  -moz-box-shadow: rgba(0, 0, 0, 0.7) 0 0px 4px 0px;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.7) 0 0px 4px 0px;
-  box-shadow: rgba(0, 0, 0, 0.7) 0 0px 4px 0px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.5) 3px 5px 8px 2px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 3px 5px 8px 2px;
+  box-shadow: rgba(0, 0, 0, 0.5) 3px 5px 8px 2px;
   overflow: hidden;
   float: left;
   margin: 4.5% 1% 1%;
 }
 
-/* line 134, ../sass/_main.scss */
+/* line 141, ../sass/_main.scss */
 #name, #biolabel, #courselabel {
   font-size: 23pt;
-  color: #16268b;
+  color: #1e8bc3;
 }
 
-/* line 138, ../sass/_main.scss */
+/* line 145, ../sass/_main.scss */
+#name {
+  float: left;
+  padding-right: 1%;
+}
+
+/* line 149, ../sass/_main.scss */
 #username {
-  float: right;
-  padding-left: 4%;
-  font-size: 23pt;
-  color: #16268b;
+  font-size: 92%;
+  color: #59abe3;
+  padding-top: 2.5%;
 }
 
-/* line 144, ../sass/_main.scss */
+/* line 154, ../sass/_main.scss */
 #bio {
   padding-left: 4%;
   font-size: 15pt;
-  color: #1c3bd1;
+  color: #22a7f0;
 }
 
-/* line 150, ../sass/_main.scss */
+/* line 160, ../sass/_main.scss */
 #editbio {
   padding-left: 4%;
   font-size: 15pt;
-  color: #1c3bd1;
+  color: #22a7f0;
   cursor: pointer;
 }
 
-/* line 157, ../sass/_main.scss */
+/* line 167, ../sass/_main.scss */
 #course {
   padding-left: 30%;
   margin-left: 30%;
   font-size: 15pt;
-  color: #1c3bd1;
+  color: #22a7f0;
   cursor: pointer;
 }
 
-/* line 165, ../sass/_main.scss */
+/* line 175, ../sass/_main.scss */
+#coursed {
+  padding-left: 30%;
+  margin-left: 30%;
+  font-size: 15pt;
+  color: #22a7f0;
+}
+
+/* line 182, ../sass/_main.scss */
 #inputbio, #inputcourses {
   width: 825px;
   height: 75px;
@@ -198,84 +228,110 @@ form#form_login {
   resize: none;
 }
 
-/* line 174, ../sass/_main.scss */
+/* line 191, ../sass/_main.scss */
 #message_list {
   overflow-y: auto;
   height: 370px;
   margin-left: -0.8%;
   width: 101.3%;
-  -moz-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 3px 0px;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 3px 0px;
-  box-shadow: rgba(0, 0, 0, 0.7) 0 1px 3px 0px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.5) 1px 4px 8px 4px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 1px 4px 8px 4px;
+  box-shadow: rgba(0, 0, 0, 0.5) 1px 4px 8px 4px;
   background: #fff;
 }
 
-/* line 183, ../sass/_main.scss */
+/* line 200, ../sass/_main.scss */
 #message-container {
   min-height: 75px;
   vertical-align: text-bottom;
-  -moz-box-shadow: rgba(0, 0, 0, 0.7) 0 2px 1px 0px;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.7) 0 2px 1px 0px;
-  box-shadow: rgba(0, 0, 0, 0.7) 0 2px 1px 0px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.5) 0 1px 1px 0px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0 1px 1px 0px;
+  box-shadow: rgba(0, 0, 0, 0.5) 0 1px 1px 0px;
+  padding: 1%;
 }
 
-/* line 188, ../sass/_main.scss */
+/* line 206, ../sass/_main.scss */
 #message-input {
   overflow-y: hidden;
   resize: none;
   height: 45px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.5) 0px 4px 8px 1px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0px 4px 8px 1px;
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 4px 8px 1px;
 }
 
-/* line 194, ../sass/_main.scss */
+/* line 213, ../sass/_main.scss */
 #input-area {
   margin-top: 1%;
 }
 
-/* line 198, ../sass/_main.scss */
+/* line 217, ../sass/_main.scss */
 #send-message-btn {
   height: 45px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.5) 0px 4px 8px 1px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0px 4px 8px 1px;
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 4px 8px 1px;
 }
 
-/* line 202, ../sass/_main.scss */
+/* line 222, ../sass/_main.scss */
 #editpic {
   color: #747474;
 }
-/* line 204, ../sass/_main.scss */
+/* line 224, ../sass/_main.scss */
 #editpic:hover {
   color: #393939;
 }
 
-/* line 209, ../sass/_main.scss */
+/* line 229, ../sass/_main.scss */
 #userInfo {
-  -moz-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 3px 0px;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 3px 0px;
-  box-shadow: rgba(0, 0, 0, 0.7) 0 1px 3px 0px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.5) 5px 3px 8px 2px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 5px 3px 8px 2px;
+  box-shadow: rgba(0, 0, 0, 0.5) 5px 3px 8px 2px;
   min-height: 300px;
   background: #fff;
   padding: 1%;
   margin-top: 3.5%;
 }
 
-/* line 217, ../sass/_main.scss */
+/* line 237, ../sass/_main.scss */
 #list {
-  -moz-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 3px 0px;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 3px 0px;
-  box-shadow: rgba(0, 0, 0, 0.7) 0 1px 3px 0px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 1px 0px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 1px 0px;
+  box-shadow: rgba(0, 0, 0, 0.7) 0 1px 1px 0px;
   background: #fff;
 }
 
-/* line 222, ../sass/_main.scss */
+/* line 242, ../sass/_main.scss */
 #home {
   width: 44%;
-  -moz-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 3px 0px;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 3px 0px;
-  box-shadow: rgba(0, 0, 0, 0.7) 0 1px 3px 0px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.5) 3px 5px 8px 2px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 3px 5px 8px 2px;
+  box-shadow: rgba(0, 0, 0, 0.5) 3px 5px 8px 2px;
   background: #fff;
 }
 
-/* line 228, ../sass/_main.scss */
+/* line 248, ../sass/_main.scss */
+.hidethis {
+  display: none;
+}
+
+/* line 252, ../sass/_main.scss */
 #load_spinner {
   display: block;
   margin-left: auto;
   margin-right: auto;
+  color: #fff;
+}
+
+/* line 259, ../sass/_main.scss */
+#load_spinners {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  color: #000;
+}
+
+/* line 266, ../sass/_main.scss */
+#tutorlogged, #notloggedin, #loggedin {
+  color: #fff;
 }
