@@ -224,3 +224,9 @@ form#form_login {
   @include box-shadow(rgba(#000,0.7) 0 1px 3px 0px);
   background: #fff;
 }
+
+#load_spinner{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}

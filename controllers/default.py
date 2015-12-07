@@ -34,9 +34,11 @@ def get_info(strng):
         return json.loads(connection.getresponse().read())
 
 
+
 def index():
     curr_user_id = request.vars.currUserId
-    return dict(curr_user_id=curr_user_id)
+    isTutor = request.vars.isTutor
+    return dict(curr_user_id=curr_user_id, isTutor=isTutor)
 
 
 def name_list():
@@ -53,13 +55,31 @@ def editprof():
 
 
 def messaging():
-    users = get_info("get users")
+    curr_user_id = request.args(0)
+    isTutor = request.args(1)
+    print curr_user_id
+    connection = httplib.HTTPSConnection('api.parse.com', 443)
+    params = urllib.urlencode({"where": json.dumps({
+            "$or": [
+                {
+                    "tutorId":  curr_user_id
+                },
+                {
+                    "studentId": curr_user_id
+                }
+            ]
+        })
+    })
+    connection.connect()
+    connection.request('GET', '/1/classes/ContactsMetaData?%s' % params, '', {
+           "X-Parse-Application-Id": "sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO",
+           "X-Parse-REST-API-Key": "4udDwLuCkvJLR09ypSp1xsgKKVwBDmncRSRBd24K"
+         })
+    users = json.loads(connection.getresponse().read())
+    print users
     session.users = users
 
-    curr_user_id = request.args(0)
-    print curr_user_id
-
-    return dict(users=users, curr_user_id=curr_user_id)
+    return dict(users=users, curr_user_id=curr_user_id, isTutor=isTutor)
 
 
 def message_user():

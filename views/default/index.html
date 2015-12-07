@@ -109,7 +109,8 @@
                var currUserId = currUser.id;
 
                $.ajax('{{=URL('default', 'index')}}', {
-                   data: {'currUserId': currUserId},
+                   data: {'currUserId': currUserId,
+                          'isTutor': currUser.get("isTutor")},
                    dataType: "text",
                    success: successFunc,
                    error: errorFunc
@@ -117,7 +118,7 @@
                function successFunc(data, status){
                    console.log("Success! User ID = " + currUserId);
                }
-        
+
                function errorFunc() {
                    alert('error');
                }
@@ -138,26 +139,26 @@
                if(currUser.get("isTutor")){
                    $("#searchTutor").hide();
                }
-        
+
                $("#form_login").hide();
                $("#profile").show();
                $("#userInfo").show();
-        
+
                $("#logoutbtn").click(function(e){
                    Parse.User.logOut();
                    document.location.href = "/WebUcscTutor/default/index";
                });
-        
+
                $("#editprof").click(function(e){
                    document.location.href = "/WebUcscTutor/default/editprof";
                });
-        
+
                 $("#searchTutor").click(function(e){
                    document.location.href = "/WebUcscTutor/default/name_list";
                 });
-        
+
                $("#message").click(function(e){
-                   document.location.href = "/WebUcscTutor/default/messaging" + "/" + currUserId;
+                   document.location.href = "/WebUcscTutor/default/messaging" + "/" + currUserId + "/" + currUser.get("isTutor");
                });
 
                var profilepic = currUser.get("ProfilePic");

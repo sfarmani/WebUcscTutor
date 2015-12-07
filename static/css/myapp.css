@@ -272,3 +272,10 @@ form#form_login {
   box-shadow: rgba(0, 0, 0, 0.7) 0 1px 3px 0px;
   background: #fff;
 }
+
+/* line 228, ../sass/_main.scss */
+#load_spinner {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}

@@ -63,7 +63,7 @@
         $("#userInfo").hide();
         $("#logout").hide();
         setTimeout(function(){
-            document.location.href = "/WebUcscTutor/default/index"
+            document.location.href = "{{=URL('default', 'index')}}"
         }, 5000);
     }
     else {
@@ -84,7 +84,7 @@
                     function logout() {
                         alert("Your Session has Timed Out!");
                         Parse.User.logOut();
-                        document.location.href = "/WebUcscTutor/default/index";
+                        document.location.href = "{{=URL('default', 'index')}}";
                     }
 
                     function resetTimer() {
@@ -132,7 +132,7 @@
 
                 $("#logoutbtn").click(function (e) {
                     Parse.User.logOut();
-                    document.location.href = "/WebUcscTutor/default/index";
+                    document.location.href = "{{=URL('default', 'index')}}";
                 });
                 $("#editprofilepic").click(function (e) {
                     document.getElementById('fileBrowser').click();
@@ -168,7 +168,7 @@
                             }
                             currUser.save(null, {
                                 success: function (currUser) {
-                                    document.location.href = "/WebUcscTutor/default/index";
+                                    document.location.href = "{{=URL('default', 'index')}}";
                                 },
                                 error: function (user, error) {
                                     // Show the error message somewhere and let the user try again.
@@ -187,7 +187,7 @@
                         }
                         currUser.save(null, {
                             success: function (currUser) {
-                                document.location.href = "/WebUcscTutor/default/index";
+                                document.location.href = "{{=URL('default', 'index')}}";
                             },
                             error: function (user, error) {
                                 // Show the error message somewhere and let the user try again.
@@ -213,7 +213,7 @@
                 }
 
                 $("#cancel").click(function (e) {
-                    document.location.href = "/WebUcscTutor/default/index";
+                    document.location.href = "{{=URL('default', 'index')}}";
                 });
             },
             error: function (error) {

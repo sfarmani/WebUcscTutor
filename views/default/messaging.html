@@ -22,12 +22,21 @@
             {{for user in users.get("results"):}}
                 <tr class="clickable">
                     <td id="tutorName">
-                        {{=A(user.get("FirstName") + " " + user.get("LastName"),
-                             _href=URL('default', 'message_user',
-                                       args=[user.get("FirstName")+" "+user.get("LastName"),
-                                             user.get("username"),
-                                             curr_user_id,
-                                             user.get("objectId")]))}}
+                        {{if isTutor is True:}}
+                            {{=A(user.get("studentFirstName") + " " + user.get("studentLastName"),
+                                 _href=URL('default', 'message_user',
+                                           args=[user.get("studentFirstName")+" "+user.get("studentLastName"),
+                                                 user.get("studentUsername"),
+                                                 curr_user_id,
+                                                 user.get("studentId")]))}}
+                        {{else:}}
+                            {{=A(user.get("tutorFirstName") + " " + user.get("tutorLastName"),
+                                 _href=URL('default', 'message_user',
+                                           args=[user.get("tutorFirstName")+" "+user.get("tutorLastName"),
+                                                 user.get("tutorUsername"),
+                                                 curr_user_id,
+                                                 user.get("tutorId")]))}}
+                        {{pass}}
                     </td>
                     <td id="course"></td>
                     <td id="review"></td>
@@ -50,7 +59,7 @@
     });
 
     $("#logoutbtn").click(function(e){
-        Parse.User.current().logOut();
+        Parse.User.logOut();
         document.location.href = "/WebUcscTutor/default/index";
     });
 </script>

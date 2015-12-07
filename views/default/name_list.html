@@ -32,6 +32,12 @@
             <th>Availability</th>
         </tr>
 
+        {% #if loading %}
+            <div id="load_spinner">
+                <i class="fa fa-spinner fa-pulse fa-4x"></i>
+            </div>
+        {% /if %}
+
         {% #tutor_list %}
         <tr id="list">
                 <td id="tutorName">
@@ -49,6 +55,7 @@
         </tr>
         {% /tutor_list %}
     </table>
+
 </script>
 
 <script type="text/javascript">
@@ -65,7 +72,7 @@
             tripleDelimiters: ['{%%', '%%}'],
             data: {
                 tutor_list: [],
-                loading: true
+                loading: false
             }
         });
 
@@ -82,6 +89,10 @@
             }
         };
 
+        /*
+         * goes through results from query
+         * deletes (splices) any tutors that don't offer the specified course
+         */
         function filterByCourses(data) {
             var i = data['results'].length;
             while (i--) {
@@ -93,6 +104,7 @@
         }
 
         function search(){
+            MAIN.set('loading', true);
             var obj = {
                 "objectId": {
                     "$ne": currUser.id
@@ -111,6 +123,7 @@
                 },
                 success : function(data) {
                     filterByCourses(data);
+                    MAIN.set('loading', false);
                     MAIN.set('tutor_list', data["results"]);
                 },
                 error : function(data) {

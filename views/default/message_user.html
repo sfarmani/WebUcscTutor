@@ -19,6 +19,12 @@
     </div>
 
     <div id="message_list">
+        {% #if loading %}
+            <div id="load_spinner">
+                <i class="fa fa-spinner fa-pulse fa-4x"></i>
+            </div>
+        {% /if %}
+
         {% #msg_list %}
             <div id="message-container">
                 <div id="message-date">
@@ -48,10 +54,36 @@
 <script type="text/javascript">
     $(function() {
         Parse.initialize("sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO", "MaOO36yKaoEH6bdOlVCnNsaBYAhMfxnGS8MhYrTv");
+
+        // get data for current user
         var currUser = Parse.User.current();
         var currUserFirstName = currUser.get("FirstName");
         var currUserLastName = currUser.get("LastName");
         var currUserFullName = currUserFirstName + " " + currUserLastName;
+
+        // Query for the other user's data
+        // This is used when determining whether or not to add user to your contacts list
+        var Users = Parse.Object.extend("User");
+        var queryOtherUser = new Parse.Query(Users);
+        var recipientFirstName;
+        var recipientLastName;
+        var recipientUsername;
+        queryOtherUser.equalTo("objectId", '{{=recipient_id}}');
+        queryOtherUser.find({
+            success: function(results) {
+                console.log("Successfully retrieved " + results.length + " users.");
+                // Do something with the returned Parse.Object values
+                for (var i = 0; i < results.length; i++) {
+                    var object = results[i];
+                    recipientFirstName = object.get("FirstName");
+                    recipientLastName = object.get("LastName");
+                    recipientUsername = object.get("username");
+                }
+            },
+            error: function(error) {
+                console.log("Error: " + error.code + " " + error.message);
+            }
+        });
 
         // Ractive object
         var MAIN = new Ractive({
@@ -65,7 +97,9 @@
             }
         });
 
-        // Sorts results, scrolls to the bottom of the message list synchronously using Promises
+        /*
+         * Sorts results, scrolls to the bottom of the message list synchronously using Promises
+         */
         var sortItems = function(data) {
             return new Promise(function(resolve, reject) {
                 data['results'].sort(function(a, b) {
@@ -76,13 +110,24 @@
             });
         };
 
+
+        /*
+         * Scrolls to the bottom of the div containing the messages
+         */
         function scrollBottom(){
             MAIN.nodes.message_list.scrollTop = MAIN.nodes.message_list.scrollHeight - MAIN.nodes.message_list.clientHeight
         }
 
+
+        /*
+         * Loads messages using ajax + Parse.com's REST API
+         * Called every 10 seconds
+         * Does not send messages
+         */
         function loadMessages(){
             var userlist = ['{{=curr_user_id}}', '{{=recipient_id}}'];
 
+            // Parameters for query
             var obj = {
                 "senderId": {
                     "$in": userlist
@@ -92,6 +137,11 @@
                 }
             };
 
+            // Query we'd like to execute
+            // What it's saying:
+            //    Find all ParseMessage objects where the current user is
+            //    either the sender or the recipient, and where the other user
+            //    is either the sender or the recipient
             var query = encodeURIComponent('where='+ JSON.stringify(obj));
             $.ajax({
                 type: "GET",
@@ -104,6 +154,83 @@
                 },
                 success : function(data) {
                     var promise1 = sortItems(data);
+                    MAIN.set('loading', false);
+                },
+                error : function(data) {
+                    console.log('error, data = ' + data);
+                }
+            });
+        }
+
+        /*
+         * Sets contacts list using ajax + Parse.com's REST API
+         * Called from PubNub's publish() function
+         * Does not send messages
+         */
+        function setContactsLiist(){
+            var userlist = ['{{=curr_user_id}}', '{{=recipient_id}}'];
+
+            // Parameters for query
+            var obj = {
+                "senderId": {
+                    "$in": userlist
+                 },
+                "recipientId": {
+                     "$in": userlist
+                }
+            };
+
+            // Query we'd like to execute
+            // What it's saying:
+            //    Find all ParseMessage objects where the current user is
+            //    either the sender or the recipient, and where the other user
+            //    is either the sender or the recipient
+            var query = encodeURIComponent('where='+ JSON.stringify(obj));
+            $.ajax({
+                type: "GET",
+                url: "https://api.parse.com/1/classes/ParseMessage?" + query,
+                data: {limit: 40, order: "-createdAt"},
+                dataType: "json",
+                headers: {
+                    "X-Parse-Application-Id": "sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO",
+                    "X-Parse-REST-API-Key": "4udDwLuCkvJLR09ypSp1xsgKKVwBDmncRSRBd24K"
+                },
+                success : function(data) {
+                    var promise1 = sortItems(data);
+                    MAIN.set('loading', false);
+                    // if there are no messages between the two users
+                    //    Add the two users to each other's contacts lists
+                    if (data["results"].length <= 0){
+                        var ContactsMetaData = Parse.Object.extend("ContactsMetaData");
+                        var contactsMetaData = new ContactsMetaData;
+                        if (currUser.get("isTutor")) {
+                            // send tutor info
+                            contactsMetaData.set("tutorId", currUser.id);
+                            contactsMetaData.set("tutorFirstName", currUser.get("FirstName"));
+                            contactsMetaData.set("tutorLastName", currUser.get("LastName"));
+                            contactsMetaData.set("tutorUsername", currUser.get("username"));
+
+                            // send student info
+                            contactsMetaData.set("studentId", userlist[1]);
+                            contactsMetaData.set("studentFirstName", recipientFirstName);
+                            contactsMetaData.set("studentLastName", recipientLastName);
+                            contactsMetaData.set("studentUsername", recipientUsername);
+                        }
+                        else {
+                            // send student info
+                            contactsMetaData.set("studentId", currUser.id);
+                            contactsMetaData.set("studentFirstName", currUser.get("FirstName"));
+                            contactsMetaData.set("studentLastName", currUser.get("LastName"));
+                            contactsMetaData.set("studentUsername", currUser.get("username"));
+
+                            // send tutor info
+                            contactsMetaData.set("tutorId", userlist[1]);
+                            contactsMetaData.set("tutorFirstName", recipientFirstName);
+                            contactsMetaData.set("tutorLastName", recipientLastName);
+                            contactsMetaData.set("tutorUsername", recipientUsername);
+                        }
+                        contactsMetaData.save();
+                    }
                 },
                 error : function(data) {
                     console.log('error, data = ' + data);
@@ -125,18 +252,17 @@
             return uuid;
         }
 
-
         $("#prof").click(function(e){
-            document.location.href = "/WebUcscTutor/default/index";
+            document.location.href = "{{=URL('default', 'index')}}";
         });
 
         $("#searchTutor").click(function(e){
-            document.location.href = "/WebUcscTutor/default/name_list";
+            document.location.href = "{{=URL('default', 'name_list')}}" + "/" + currUser.id;
         });
 
         $("#logoutbtn").click(function(e){
             Parse.User.logOut();
-            document.location.href = "/WebUcscTutor/default/index";
+            document.location.href = "{{=URL('default', 'index')}}";
         });
 
         $("#send-message-btn").click(function(e){
@@ -220,7 +346,7 @@
                 channel_name = '{{=curr_user_id}}' + '{{=recipient_id}}';
             }
 
-            loadMessages();
+            setContactsLiist();
 
             pubnub.publish({
                 channel: channel_name,
