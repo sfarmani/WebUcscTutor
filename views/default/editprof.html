@@ -15,36 +15,43 @@
 
 
 
-<div id="profile" class="hidethis">
-    <img src="" id="editprofilepic">
-    <input type="file" id="fileBrowser" style="visibility:hidden; display:none;" />
-</div>
+
 <div id="userInfo" class="hidethis">
-    <table id="home">
-        <tr>
-            <td>
-                <p id="biolabel">My Bio</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <textarea id="inputbio" class="form-control no-menu" style="display: none;" spellcheck="true"></textarea>
-                <p id="editbio"></p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p id="courselabel"></p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <input class="form-control" type="text" id="inputcourses" style="display: none;" placeholder="Add a Course i.e. CMPS115 CMPS101">
-                <table id="coursetable">
-                </table>
-            </td>
-        </tr>
-    </table>
+    <div id="home">
+        <div id="profile" class="hidethis">
+            <img src="" id="editprofilepic">
+            <input type="file" id="fileBrowser" style="visibility:hidden; display:none;" />
+        </div>
+
+        <table>
+            <tr>
+                <td>
+                    <p id="biolabel">My Bio</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <textarea id="inputbio" class="form-control no-menu" style="display: none;" spellcheck="true"></textarea>
+                    <p id="editbio"></p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p id="courselabel"></p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a id="delete" class="btn btn-danger" style="display: none;">Delete</a>
+                    <a id="add" class="btn btn-success" style="display: none;">Add</a>
+                    <textarea class="form-control no-menu" id="inputcourses" style="display: none;" placeholder="Add a Course i.e. CMPS115 CMPS101"></textarea>
+                    <textarea class="form-control no-menu" id="deletecourses" style="display: none;" placeholder="Enter the classes you want to delete in a space separated list"></textarea>
+                    <table id="coursetable">
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
 
 
@@ -116,13 +123,28 @@
 
                 if(currUser.get("webCourses")){
                     var courseArray = currUser.get("webCourses");
-                    console.log(courseArray.toString().replace(/[, ]+/g, " ").trim());
                     $("#inputcourses").val(courseArray.toString().replace(/[, ]+/g, " ").trim());
                 }
 
                 $("#coursetable").click(function(e){
                     $("#coursetable").slideToggle();
+                    $("#delete").slideToggle();
+                    $("#add").slideToggle();
+                });
+
+                $("#add").click(function(e){
+                    $("#delete").slideToggle();
+                    $("#add").slideToggle();
                     $("#inputcourses").slideToggle();
+                    $("#delete").remove();
+                });
+
+                $("#delete").click(function(e){
+                    $("#add").slideToggle();
+                    $("#delete").slideToggle();
+                    $("#deletecourses").slideToggle();
+                    $("#coursetable").slideToggle();
+                    $("#add").remove();
                 });
 
                 $("#editbio").click(function(e){
@@ -154,6 +176,8 @@
                 });
                 $("#saveprof").click(function (e) {
                     var courseArray = $("#inputcourses").val().toUpperCase().split(/\s+/);
+                    var delcourseArray = $("#deletecourses").val().toUpperCase().split(/\s+/);
+                    console.log(delcourseArray);
                     var fileUploadControl = $("#fileBrowser")[0];
                     if (fileUploadControl.files.length > 0) {
                         var file = fileUploadControl.files[0];
@@ -163,9 +187,17 @@
                         parseFile.save().then(function () {
                             currUser.set("bio", $("#inputbio").val());
                             currUser.set("ProfilePic", parseFile);
-                            for(var i = 0; i < courseArray.length; i++){
-                                currUser.addUnique("webCourses", courseArray[i]);
+                            if($("#add").length){
+                                for(var i = 0; i < courseArray.length; i++){
+                                    currUser.addUnique("webCourses", courseArray[i]);
+                                }
                             }
+                            else if($("#delete").length){
+                                for(var j = 0; j < delcourseArray.length; j++){
+                                    currUser.remove("webCourses", delcourseArray[j]);
+                                }
+                            }
+
                             currUser.save(null, {
                                 success: function (currUser) {
                                     document.location.href = "{{=URL('default', 'index')}}";
@@ -182,8 +214,15 @@
                     }
                     else if (fileUploadControl.files.length <= 0) {
                         currUser.set("bio", $("#inputbio").val());
-                        for(var i = 0; i < courseArray.length; i++){
-                            currUser.addUnique("webCourses", courseArray[i]);
+                        if($("#add").length){
+                            for(var i = 0; i < courseArray.length; i++){
+                                currUser.addUnique("webCourses", courseArray[i]);
+                            }
+                        }
+                        else if($("#delete").length){
+                            for(var j = 0; j < delcourseArray.length; j++){
+                                currUser.remove("webCourses", delcourseArray[j]);
+                            }
                         }
                         currUser.save(null, {
                             success: function (currUser) {

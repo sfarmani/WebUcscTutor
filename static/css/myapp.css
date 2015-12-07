@@ -45,6 +45,14 @@ th {
 }
 
 /* line 44, ../sass/_main.scss */
+.container-fluid {
+  padding-right: 10px;
+  padding-left: 10px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* line 51, ../sass/_main.scss */
 .btn {
   padding: 10px 15px;
   border: 0 none;
@@ -56,29 +64,29 @@ th {
   box-shadow: rgba(0, 0, 0, 0.7) 0 1px 1px 0px;
 }
 
-/* line 53, ../sass/_main.scss */
+/* line 60, ../sass/_main.scss */
 .btn:focus, .btn:active:focus, .btn.active:focus {
   outline: 0 none;
 }
 
-/* line 57, ../sass/_main.scss */
+/* line 64, ../sass/_main.scss */
 .btn-primary {
   background: #0099cc;
   color: #ffffff;
 }
 
-/* line 62, ../sass/_main.scss */
+/* line 69, ../sass/_main.scss */
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
   background: #33a6cc;
 }
 
-/* line 66, ../sass/_main.scss */
+/* line 73, ../sass/_main.scss */
 .btn-primary:active, .btn-primary.active {
   background: #007299;
   box-shadow: none;
 }
 
-/* line 71, ../sass/_main.scss */
+/* line 78, ../sass/_main.scss */
 .navbar.navbar-inverse.navbar-fixed-top {
   background: #204d76;
   -moz-box-shadow: rgba(0, 0, 0, 0.5) 0 4px 8px 4px;
@@ -86,52 +94,49 @@ th {
   box-shadow: rgba(0, 0, 0, 0.5) 0 4px 8px 4px;
 }
 
-/* line 76, ../sass/_main.scss */
+/* line 83, ../sass/_main.scss */
 .btn-success {
   background: #00B16A;
   color: #fff;
 }
 
-/* line 81, ../sass/_main.scss */
+/* line 88, ../sass/_main.scss */
 .btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.active, .open > .dropdown-toggle.btn-success {
   background: #3FC380;
 }
 
-/* line 85, ../sass/_main.scss */
+/* line 92, ../sass/_main.scss */
 .btn-success:active, .btn-success.active {
   background: #26A65B;
   box-shadow: none;
 }
 
-/* line 90, ../sass/_main.scss */
+/* line 97, ../sass/_main.scss */
 .btn-danger {
   background: #D91E18;
   color: #fff;
 }
 
-/* line 95, ../sass/_main.scss */
+/* line 102, ../sass/_main.scss */
 .btn-danger:hover, .btn-danger:focus, .btn-danger:active, .btn-danger.active, .open > .dropdown-toggle.btn-danger {
   background: #C0392B;
 }
 
-/* line 99, ../sass/_main.scss */
+/* line 106, ../sass/_main.scss */
 .btn-danger:active, .btn-danger.active {
   background: #96281B;
   box-shadow: none;
 }
 
-/* line 104, ../sass/_main.scss */
+/* line 111, ../sass/_main.scss */
 .col-xs-4 {
   float: none;
 }
 
-/* line 108, ../sass/_main.scss */
+/* line 115, ../sass/_main.scss */
 form#form_login {
   padding: 3%;
-  margin-top: auto;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 5%;
+  margin: auto;
   -moz-box-shadow: rgba(0, 0, 0, 0.5) 3px 5px 8px 2px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.5) 3px 5px 8px 2px;
   box-shadow: rgba(0, 0, 0, 0.5) 3px 5px 8px 2px;
@@ -141,59 +146,59 @@ form#form_login {
   background: #fff;
 }
 
-/* line 119, ../sass/_main.scss */
+/* line 123, ../sass/_main.scss */
 #signupbtns {
   width: 100%;
   display: inline-flex;
 }
 
-/* line 124, ../sass/_main.scss */
+/* line 128, ../sass/_main.scss */
 #profilepic, #editprofilepic {
   width: 200px;
 }
 
-/* line 128, ../sass/_main.scss */
+/* line 132, ../sass/_main.scss */
 #pic {
   max-width: 30%;
 }
 
-/* line 132, ../sass/_main.scss */
+/* line 136, ../sass/_main.scss */
 #profile {
   -moz-box-shadow: rgba(0, 0, 0, 0.5) 3px 5px 8px 2px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.5) 3px 5px 8px 2px;
   box-shadow: rgba(0, 0, 0, 0.5) 3px 5px 8px 2px;
   overflow: hidden;
   float: left;
-  margin: 4.5% 1% 1%;
+  margin: 2% 1% 1%;
 }
 
-/* line 141, ../sass/_main.scss */
+/* line 145, ../sass/_main.scss */
 #name, #biolabel, #courselabel {
   font-size: 23pt;
   color: #1e8bc3;
 }
 
-/* line 145, ../sass/_main.scss */
+/* line 149, ../sass/_main.scss */
 #name {
   float: left;
   padding-right: 1%;
 }
 
-/* line 149, ../sass/_main.scss */
+/* line 153, ../sass/_main.scss */
 #username {
   font-size: 92%;
   color: #59abe3;
   padding-top: 2.5%;
 }
 
-/* line 154, ../sass/_main.scss */
+/* line 158, ../sass/_main.scss */
 #bio {
   padding-left: 4%;
   font-size: 15pt;
   color: #22a7f0;
 }
 
-/* line 160, ../sass/_main.scss */
+/* line 164, ../sass/_main.scss */
 #editbio {
   padding-left: 4%;
   font-size: 15pt;
@@ -201,7 +206,7 @@ form#form_login {
   cursor: pointer;
 }
 
-/* line 167, ../sass/_main.scss */
+/* line 171, ../sass/_main.scss */
 #course {
   padding-left: 30%;
   margin-left: 30%;
@@ -210,7 +215,7 @@ form#form_login {
   cursor: pointer;
 }
 
-/* line 175, ../sass/_main.scss */
+/* line 179, ../sass/_main.scss */
 #coursed {
   padding-left: 30%;
   margin-left: 30%;
@@ -218,17 +223,34 @@ form#form_login {
   color: #22a7f0;
 }
 
-/* line 182, ../sass/_main.scss */
-#inputbio, #inputcourses {
-  width: 825px;
-  height: 75px;
-  margin-left: 4%;
+/* line 186, ../sass/_main.scss */
+#inputbio {
+  width: 160%;
+  height: 100px;
   font-size: 15pt;
   overflow-y: hidden;
   resize: none;
 }
 
-/* line 191, ../sass/_main.scss */
+/* line 195, ../sass/_main.scss */
+#inputcourses {
+  width: 92%;
+  height: 100px;
+  font-size: 15pt;
+  overflow-y: hidden;
+  resize: none;
+}
+
+/* line 204, ../sass/_main.scss */
+#deletecourses {
+  width: 92%;
+  height: 100px;
+  font-size: 15pt;
+  overflow-y: hidden;
+  resize: none;
+}
+
+/* line 213, ../sass/_main.scss */
 #message_list {
   overflow-y: auto;
   height: 370px;
@@ -240,7 +262,7 @@ form#form_login {
   background: #fff;
 }
 
-/* line 200, ../sass/_main.scss */
+/* line 222, ../sass/_main.scss */
 #message-container {
   min-height: 75px;
   vertical-align: text-bottom;
@@ -250,7 +272,7 @@ form#form_login {
   padding: 1%;
 }
 
-/* line 206, ../sass/_main.scss */
+/* line 228, ../sass/_main.scss */
 #message-input {
   overflow-y: hidden;
   resize: none;
@@ -260,12 +282,13 @@ form#form_login {
   box-shadow: rgba(0, 0, 0, 0.5) 0px 4px 8px 1px;
 }
 
-/* line 213, ../sass/_main.scss */
+/* line 235, ../sass/_main.scss */
 #input-area {
   margin-top: 1%;
+  margin-bottom: 6%;
 }
 
-/* line 217, ../sass/_main.scss */
+/* line 240, ../sass/_main.scss */
 #send-message-btn {
   height: 45px;
   -moz-box-shadow: rgba(0, 0, 0, 0.5) 0px 4px 8px 1px;
@@ -273,16 +296,16 @@ form#form_login {
   box-shadow: rgba(0, 0, 0, 0.5) 0px 4px 8px 1px;
 }
 
-/* line 222, ../sass/_main.scss */
+/* line 245, ../sass/_main.scss */
 #editpic {
   color: #747474;
 }
-/* line 224, ../sass/_main.scss */
+/* line 247, ../sass/_main.scss */
 #editpic:hover {
   color: #393939;
 }
 
-/* line 229, ../sass/_main.scss */
+/* line 252, ../sass/_main.scss */
 #userInfo {
   -moz-box-shadow: rgba(0, 0, 0, 0.5) 5px 3px 8px 2px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.5) 5px 3px 8px 2px;
@@ -290,10 +313,10 @@ form#form_login {
   min-height: 300px;
   background: #fff;
   padding: 1%;
-  margin-top: 3.5%;
+  margin: 4.5% 27% 6% 22%;
 }
 
-/* line 237, ../sass/_main.scss */
+/* line 260, ../sass/_main.scss */
 #list {
   -moz-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 1px 0px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 1px 0px;
@@ -301,21 +324,21 @@ form#form_login {
   background: #fff;
 }
 
-/* line 242, ../sass/_main.scss */
+/* line 265, ../sass/_main.scss */
 #home {
-  width: 44%;
   -moz-box-shadow: rgba(0, 0, 0, 0.5) 3px 5px 8px 2px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.5) 3px 5px 8px 2px;
   box-shadow: rgba(0, 0, 0, 0.5) 3px 5px 8px 2px;
   background: #fff;
+  padding: 0% 1% 20% 1%;
 }
 
-/* line 248, ../sass/_main.scss */
+/* line 271, ../sass/_main.scss */
 .hidethis {
   display: none;
 }
 
-/* line 252, ../sass/_main.scss */
+/* line 275, ../sass/_main.scss */
 #load_spinner {
   display: block;
   margin-left: auto;
@@ -323,7 +346,7 @@ form#form_login {
   color: #fff;
 }
 
-/* line 259, ../sass/_main.scss */
+/* line 282, ../sass/_main.scss */
 #load_spinners {
   display: block;
   margin-left: auto;
@@ -331,7 +354,7 @@ form#form_login {
   color: #000;
 }
 
-/* line 266, ../sass/_main.scss */
+/* line 289, ../sass/_main.scss */
 #tutorlogged, #notloggedin, #loggedin {
   color: #fff;
 }

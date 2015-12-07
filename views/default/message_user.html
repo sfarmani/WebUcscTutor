@@ -255,6 +255,9 @@
         if(currUser.get("isTutor")){
             $("#searchTutor").remove();
         }
+        else{
+            $("#searchTutor").val("Search");
+        }
 
         $("#prof").click(function(e){
             document.location.href = "{{=URL('default', 'index')}}";
