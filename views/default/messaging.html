@@ -4,72 +4,126 @@
     <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
 </head>
 
-<html>
+<div id="target"></div>
+
+<script id="template" type="text/ractive">
 <div id="logout" class="btn-group">
-    <a id="searchTutor" class="btn btn-primary hidethis">Search For Tutors</a>
+    <a id="searchTutor" class="btn btn-primary hidethis"></a>
     <a id="prof" class="btn btn-primary">Profile</a>
     <a id="logoutbtn" class="btn btn-primary">Log Out</a>
 </div>
-<head>
-    <body>
-        <table id="names">
-            <tr>
-                <th>Tutor Name</th>
-                <th>Courses To Tutor</th>
-                <th>Review</th>
-                <th>Availability</th>
-            </tr>
-            {{for user in users.get("results"):}}
-                <tr class="clickable" id="list">
-                    <td id="tutorName">
-                        {{if isTutor == "true":}}
-                            {{=A(user.get("studentFirstName") + " " + user.get("studentLastName"),
-                                 _href=URL('default', 'message_user',
-                                           args=[user.get("studentFirstName")+" "+user.get("studentLastName"),
-                                                 user.get("studentUsername"),
-                                                 curr_user_id,
-                                                 user.get("studentId")]))}}
-                        {{else:}}
-                            {{=A(user.get("tutorFirstName") + " " + user.get("tutorLastName"),
-                                 _href=URL('default', 'message_user',
-                                           args=[user.get("tutorFirstName")+" "+user.get("tutorLastName"),
-                                                 user.get("tutorUsername"),
-                                                 curr_user_id,
-                                                 user.get("tutorId")]))}}
-                        {{pass}}
-                    </td>
-                    <td id="course"></td>
-                    <td id="review"></td>
-                    <td id="schedule"></td>
-                </tr>
+<table id="names">
+    <tr>
+        <th>Tutor Name</th>
+        <th>Courses To Tutor</th>
+        <th>Review</th>
+        <th>Availability</th>
+    </tr>
+    {% #contacts_list %}
+        <tr class="clickable" id="list">
+            <td id="tutorName">
+            {{if isTutor == "true":}}
+                <a href="{{=URL('default', 'message_user')}}/{%studentFirstName%} {%studentLastName%}/{%studentUsername%}/{%tutorId%}/{%studentId%}">
+                    {%studentFirstName%} {%studentLastName%}
+                </a>
+            {{else:}}
+                <a href="{{=URL('default', 'message_user')}}/{%tutorFirstName%} {%tutorLastName%}/{%tutorUsername%}/{%studentId%}/{%tutorId%}">
+                    {%tutorFirstName%} {%tutorLastName%}
+                </a>
             {{pass}}
-        </table>
-    </body>
-</head>
+            </td>
+            <td id="course"></td>
+            <td id="review"></td>
+            <td id="schedule"></td>
+        </tr>
+    {% /contacts_list %}
+</table>
 
-</html>
+</script>
         
 <script type="text/javascript">
-    Parse.initialize("sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO", "MaOO36yKaoEH6bdOlVCnNsaBYAhMfxnGS8MhYrTv");
-    var currUser = Parse.User.current();
-    if(currUser.get("isTutor")){
-        $("#searchTutor").addClass("hidethis");
-        $("#searchTutor").remove();
-    }
-    else{
-        $("#searchTutor").removeClass("hidethis")
-    }
+    $(function() {
+        Parse.initialize("sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO", "MaOO36yKaoEH6bdOlVCnNsaBYAhMfxnGS8MhYrTv");
+        var currUser = Parse.User.current();
 
-    $("#prof").click(function(e){
-        document.location.href = "/WebUcscTutor/default/index";
-    });
+        // Ractive object
+        var MAIN = new Ractive({
+            el: '#target',
+            template: '#template',
+            delimiters: ['{%', '%}'],
+            tripleDelimiters: ['{%%', '%%}'],
+            data: {
+                contacts_list: [],
+                loading: true
+            }
+        });
 
-    $("#searchTutor").click(function(e){
-        document.location.href = "/WebUcscTutor/default/name_list";
-    });
+        /*
+         * Loads contacts using ajax + Parse.com's REST API
+         * Called every 10 seconds
+         * Updates view when new contact is added (useful for tutors)
+         */
+        function loadContacts(){
 
-    $("#logoutbtn").click(function(e){
-        Parse.User.logOut();
-        document.location.href = "/WebUcscTutor/default/index";
+            // Parameters for query
+            var obj = {
+                "$or": [
+                    {
+                        "tutorId": currUser.id
+                    },
+                    {
+                        "studentId": currUser.id
+                    }
+                ]
+            };
+
+            // Query we'd like to execute
+            // What it's saying:
+            //    Find all ContactsMetaData objects where the current user is
+            //    either the tutor or the student in a previous conversation between users
+            var query = encodeURIComponent('where='+ JSON.stringify(obj));
+            $.ajax({
+                type: "GET",
+                url: "https://api.parse.com/1/classes/ContactsMetaData?" + query,
+                dataType: "json",
+                headers: {
+                    "X-Parse-Application-Id": "sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO",
+                    "X-Parse-REST-API-Key": "4udDwLuCkvJLR09ypSp1xsgKKVwBDmncRSRBd24K"
+                },
+                success : function(data) {
+                    MAIN.set('contacts_list', data["results"]);
+                },
+                error : function(data) {
+                    console.log('error, data = ' + data);
+                }
+            });
+        }
+
+        loadContacts();
+
+        if (currUser.get("isTutor")) {
+            $("#searchTutor").addClass("hidethis");
+            $("#searchTutor").remove();
+        }
+        else {
+            $("#searchTutor").removeClass("hidethis")
+        }
+
+        $("#prof").click(function (e) {
+            document.location.href = "/WebUcscTutor/default/index";
+        });
+
+        $("#searchTutor").click(function (e) {
+            document.location.href = "/WebUcscTutor/default/name_list";
+        });
+
+        $("#logoutbtn").click(function (e) {
+            Parse.User.logOut();
+            document.location.href = "/WebUcscTutor/default/index";
+        });
+
+        // Loads contacts every 10 seconds, in case a new user has messaged them
+        // Not currently compatible with Android app
+        setInterval(loadContacts, 10000);
     });
 </script>
