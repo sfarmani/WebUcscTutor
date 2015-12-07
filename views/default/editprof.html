@@ -103,7 +103,7 @@
                 inactivityTime();
 
                 function populateCourses(){
-                   var courses = currUser.get("webCourses");
+                   var courses = currUser.get("webCourses").sort();
                    for(var i = 0; i < courses.length; i++){
                        var table = $("#coursetable");
                        table.append('<tr><td id="course">'+ courses[i]+'</td></tr>');
