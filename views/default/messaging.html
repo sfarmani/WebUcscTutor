@@ -14,10 +14,7 @@
 </div>
 <table id="names">
     <tr>
-        <th>Tutor Name</th>
-        <th>Courses To Tutor</th>
-        <th>Review</th>
-        <th>Availability</th>
+        <th>Contacts</th>
     </tr>
 
     {% #if loading %}
@@ -39,9 +36,6 @@
                 </a>
             {{pass}}
             </td>
-            <td id="coursed"></td>
-            <td id="review"></td>
-            <td id="schedule"></td>
         </tr>
     {% /contacts_list %}
 </table>
@@ -66,9 +60,6 @@
         });
 
         loadContacts();
-        // Loads contacts every 10 seconds, in case a new user has messaged them
-        // Not currently compatible with Android app
-        setInterval(loadContacts, 10000);
 
         /*
          * Loads contacts using ajax + Parse.com's REST API
@@ -135,5 +126,9 @@
             document.location.href = "{{=URL('default', 'index')}}";
             //document.location.href = "/WebUcscTutor/default/index";
         });
+
+        // Loads contacts every 10 seconds, in case a new user has messaged them
+        // Not currently compatible with Android app
+        setInterval(loadContacts, 10000);
     });
 </script>

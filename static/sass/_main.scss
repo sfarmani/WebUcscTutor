@@ -255,7 +255,7 @@ form#form_login {
   margin: 4.5% 27% 6% 22%;
 }
 
-#list{
+#list, #temp{
   @include box-shadow(rgba(#000,0.7) 0 1px 1px 0px);
   background: #fff;
 }

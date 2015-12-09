@@ -98,9 +98,6 @@
             }
         };
 
-        // Loads messages every 10 seconds, in case a message from Android app is sent/received
-        setInterval(loadMessages, 10000);
-
         /*
          * Function that subscribes current user to a PubNub channel
          * What it does:
@@ -146,6 +143,84 @@
                     console.log(JSON.stringify(error));
                 }
             })
+        }
+
+        /*
+         * Sets contacts list using ajax + Parse.com's REST API
+         * Called from PubNub's publish() function
+         * Does not send messages
+         */
+        function setContactsLiist(){
+            var userlist = ['{{=curr_user_id}}', '{{=recipient_id}}'];
+
+            // Parameters for query
+            var obj = {
+                "senderId": {
+                    "$in": userlist
+                 },
+                "recipientId": {
+                     "$in": userlist
+                }
+            };
+
+            // Query we'd like to execute
+            // What it's saying:
+            //    Find all ParseMessage objects where the current user is
+            //    either the sender or the recipient, and where the other user
+            //    is either the sender or the recipient
+            var query = encodeURIComponent('where='+ JSON.stringify(obj));
+            $.ajax({
+                type: "GET",
+                url: "https://api.parse.com/1/classes/ParseMessage?" + query,
+                data: {limit: 40, order: "-createdAt"},
+                dataType: "json",
+                headers: {
+                    "X-Parse-Application-Id": "sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO",
+                    "X-Parse-REST-API-Key": "4udDwLuCkvJLR09ypSp1xsgKKVwBDmncRSRBd24K"
+                },
+                success : function(data) {
+                    sortItems(data);
+                    MAIN.set('loading', false);
+                    // If there are no messages between the two users:
+                    //    Add the two users to each other's contacts lists
+                    //    This is done by storing each other's data in the ContactsMetaData object in Parse
+                    // Otherwise, do nothing
+                    if (data["results"].length <= 0){
+                        var ContactsMetaData = Parse.Object.extend("ContactsMetaData");
+                        var contactsMetaData = new ContactsMetaData;
+                        if (currUser.get("isTutor")) {
+                            // send current user's info to Parse
+                            contactsMetaData.set("tutorId", currUser.id);
+                            contactsMetaData.set("tutorFirstName", currUser.get("FirstName"));
+                            contactsMetaData.set("tutorLastName", currUser.get("LastName"));
+                            contactsMetaData.set("tutorUsername", currUser.get("username"));
+
+                            // send other user's info to Parse
+                            contactsMetaData.set("studentId", userlist[1]);
+                            contactsMetaData.set("studentFirstName", recipientFirstName);
+                            contactsMetaData.set("studentLastName", recipientLastName);
+                            contactsMetaData.set("studentUsername", recipientUsername);
+                        }
+                        else {
+                            // send current user's info to Parse
+                            contactsMetaData.set("studentId", currUser.id);
+                            contactsMetaData.set("studentFirstName", currUser.get("FirstName"));
+                            contactsMetaData.set("studentLastName", currUser.get("LastName"));
+                            contactsMetaData.set("studentUsername", currUser.get("username"));
+
+                            // send other user's info to Parse
+                            contactsMetaData.set("tutorId", userlist[1]);
+                            contactsMetaData.set("tutorFirstName", recipientFirstName);
+                            contactsMetaData.set("tutorLastName", recipientLastName);
+                            contactsMetaData.set("tutorUsername", recipientUsername);
+                        }
+                        contactsMetaData.save();
+                    }
+                },
+                error : function(data) {
+                    console.log('error, data = ' + data);
+                }
+            });
         }
 
         /*
@@ -260,84 +335,6 @@
         }
 
         /*
-         * Sets contacts list using ajax + Parse.com's REST API
-         * Called from PubNub's publish() function
-         * Does not send messages
-         */
-        function setContactsLiist(){
-            var userlist = ['{{=curr_user_id}}', '{{=recipient_id}}'];
-
-            // Parameters for query
-            var obj = {
-                "senderId": {
-                    "$in": userlist
-                 },
-                "recipientId": {
-                     "$in": userlist
-                }
-            };
-
-            // Query we'd like to execute
-            // What it's saying:
-            //    Find all ParseMessage objects where the current user is
-            //    either the sender or the recipient, and where the other user
-            //    is either the sender or the recipient
-            var query = encodeURIComponent('where='+ JSON.stringify(obj));
-            $.ajax({
-                type: "GET",
-                url: "https://api.parse.com/1/classes/ParseMessage?" + query,
-                data: {limit: 40, order: "-createdAt"},
-                dataType: "json",
-                headers: {
-                    "X-Parse-Application-Id": "sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO",
-                    "X-Parse-REST-API-Key": "4udDwLuCkvJLR09ypSp1xsgKKVwBDmncRSRBd24K"
-                },
-                success : function(data) {
-                    sortItems(data);
-                    MAIN.set('loading', false);
-                    // If there are no messages between the two users:
-                    //    Add the two users to each other's contacts lists
-                    //    This is done by storing each other's data in the ContactsMetaData object in Parse
-                    // Otherwise, do nothing
-                    if (data["results"].length <= 0){
-                        var ContactsMetaData = Parse.Object.extend("ContactsMetaData");
-                        var contactsMetaData = new ContactsMetaData;
-                        if (currUser.get("isTutor")) {
-                            // send current user's info to Parse
-                            contactsMetaData.set("tutorId", currUser.id);
-                            contactsMetaData.set("tutorFirstName", currUser.get("FirstName"));
-                            contactsMetaData.set("tutorLastName", currUser.get("LastName"));
-                            contactsMetaData.set("tutorUsername", currUser.get("username"));
-
-                            // send other user's info to Parse
-                            contactsMetaData.set("studentId", userlist[1]);
-                            contactsMetaData.set("studentFirstName", recipientFirstName);
-                            contactsMetaData.set("studentLastName", recipientLastName);
-                            contactsMetaData.set("studentUsername", recipientUsername);
-                        }
-                        else {
-                            // send current user's info to Parse
-                            contactsMetaData.set("studentId", currUser.id);
-                            contactsMetaData.set("studentFirstName", currUser.get("FirstName"));
-                            contactsMetaData.set("studentLastName", currUser.get("LastName"));
-                            contactsMetaData.set("studentUsername", currUser.get("username"));
-
-                            // send other user's info to Parse
-                            contactsMetaData.set("tutorId", userlist[1]);
-                            contactsMetaData.set("tutorFirstName", recipientFirstName);
-                            contactsMetaData.set("tutorLastName", recipientLastName);
-                            contactsMetaData.set("tutorUsername", recipientUsername);
-                        }
-                        contactsMetaData.save();
-                    }
-                },
-                error : function(data) {
-                    console.log('error, data = ' + data);
-                }
-            });
-        }
-
-        /*
          * Gets necessary data from other user (recipient)
          * This allows us to update the list of contacts (in messaging.html)
          */
@@ -416,5 +413,8 @@
             Parse.User.logOut();
             document.location.href = "{{=URL('default', 'index')}}";
         });
+
+        // Loads messages every 10 seconds, in case a message from Android app is sent/received
+        setInterval(loadMessages, 10000);
     });
 </script>

@@ -318,7 +318,7 @@ form#form_login {
 }
 
 /* line 258, ../sass/_main.scss */
-#list {
+#list, #temp {
   -moz-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 1px 0px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.7) 0 1px 1px 0px;
   box-shadow: rgba(0, 0, 0, 0.7) 0 1px 1px 0px;
