@@ -14,8 +14,8 @@
     </div>
 
     <div id="logout" class="btn-group hidethis">
+        <a id="prof" class="btn btn-primary"><i class="fa fa-home"></i></a>
         <a id="message" class="btn btn-primary">Messages</a>
-        <a id="prof" class="btn btn-primary">Home</a>
         <a id="logoutbtn" class="btn btn-primary">Log Out</a>
     </div>
 
@@ -76,11 +76,13 @@
             }
         });
 
+        // Searches for tutor when SEARCH button is pressed
         $("#searchbtn").click(function(e){
             coursesToSearch = $('#searchtext').val().toUpperCase();
             search();
         });
 
+        // Searches for tutor when ENTER button is pressed (on keyboard)
         document.onkeydown=function(evt){
             coursesToSearch = $('#searchtext').val().toUpperCase();
             var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
@@ -90,21 +92,14 @@
         };
 
         /*
-         * goes through results from query
-         * deletes (splices) any tutors that don't offer the specified course
+         * Function that searches for any tutors that tutor the specified course
+         * What it does:
+         *    Queries for all tutors using jQuery's ajax() function, along with Parse's REST API
+         *    Filters through these tutors, cuts out any that don't offer the specified course
          */
-        function filterByCourses(data) {
-            var i = data['results'].length;
-            while (i--) {
-                if ($.inArray(coursesToSearch, data['results'][i]['webCourses']) < 0) {
-                    console.log(data['results'][i]['webCourses']);
-                    data['results'].splice(i, 1);
-                }
-            }
-        }
-
         function search(){
             MAIN.set('loading', true);
+
             var obj = {
                 "objectId": {
                     "$ne": currUser.id
@@ -112,6 +107,10 @@
                 "isTutor": true
             };
 
+            // Query we'd like to execute
+            // What it's saying:
+            //    Find all users that are tutors
+            //    Just to be safe, we also make sure the two users don't share the same Object ID
             var query = encodeURIComponent('where='+ JSON.stringify(obj));
             $.ajax({
                 type: "GET",
@@ -130,6 +129,20 @@
                     console.log('error, data = ' + data);
                 }
             });
+        }
+
+        /*
+         * Goes through results from query
+         * Deletes (splices) any tutors that don't offer the specified course
+         */
+        function filterByCourses(data) {
+            var i = data['results'].length;
+            while (i--) {
+                if ($.inArray(coursesToSearch, data['results'][i]['webCourses']) < 0) {
+                    console.log(data['results'][i]['webCourses']);
+                    data['results'].splice(i, 1);
+                }
+            }
         }
 
         if (Parse.User.current() == null) {

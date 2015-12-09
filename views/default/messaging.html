@@ -8,8 +8,8 @@
 
 <script id="template" type="text/ractive">
 <div id="logout" class="btn-group">
-    <a id="searchTutor" class="btn btn-primary hidethis"></a>
-    <a id="prof" class="btn btn-primary">Home</a>
+    <a id="searchTutor" class="btn btn-primary hidethis"><i class="fa fa-search"></i></a>
+    <a id="prof" class="btn btn-primary"><i class="fa fa-home"></i></a>
     <a id="logoutbtn" class="btn btn-primary">Log Out</a>
 </div>
 <table id="names">
@@ -19,6 +19,13 @@
         <th>Review</th>
         <th>Availability</th>
     </tr>
+
+    {% #if loading %}
+        <div id="load_spinners">
+            <i class="fa fa-spinner fa-pulse fa-4x"></i>
+        </div>
+    {% /if %}
+
     {% #contacts_list %}
         <tr class="clickable" id="list">
             <td id="tutorName">
@@ -58,6 +65,11 @@
             }
         });
 
+        loadContacts();
+        // Loads contacts every 10 seconds, in case a new user has messaged them
+        // Not currently compatible with Android app
+        setInterval(loadContacts, 10000);
+
         /*
          * Loads contacts using ajax + Parse.com's REST API
          * Called every 10 seconds
@@ -91,6 +103,7 @@
                     "X-Parse-REST-API-Key": "4udDwLuCkvJLR09ypSp1xsgKKVwBDmncRSRBd24K"
                 },
                 success : function(data) {
+                    MAIN.set('loading', false);
                     MAIN.set('contacts_list', data["results"]);
                 },
                 error : function(data) {
@@ -98,8 +111,6 @@
                 }
             });
         }
-
-        loadContacts();
 
         if (currUser.get("isTutor")) {
             $("#searchTutor").addClass("hidethis");
@@ -124,9 +135,5 @@
             document.location.href = "{{=URL('default', 'index')}}";
             //document.location.href = "/WebUcscTutor/default/index";
         });
-
-        // Loads contacts every 10 seconds, in case a new user has messaged them
-        // Not currently compatible with Android app
-        setInterval(loadContacts, 10000);
     });
 </script>

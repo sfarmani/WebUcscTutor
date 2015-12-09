@@ -13,8 +13,8 @@
 
 <script id="template" type="text/ractive">
     <div id="logout" class="btn-group">
-        <a id="searchTutor" class="btn btn-primary"></a>
-        <a id="prof" class="btn btn-primary">Home</a>
+        <a id="searchTutor" class="btn btn-primary"><i class="fa fa-search"></i></a>
+        <a id="prof" class="btn btn-primary"><i class="fa fa-home"></i></a>
         <a id="logoutbtn" class="btn btn-primary">Log Out</a>
     </div>
 
@@ -44,7 +44,7 @@
         <div id="send-message" class="input-group">
             <input id="message-input" type="text" class="form-control no-menu" maxlength="" aria-label="Message input"  spellcheck="true">
             <span class="input-group-btn">
-                <button class="btn btn-primary" id="send-message-btn" type="button">Send</button>
+                <button class="btn btn-primary" id="send-message-btn" type="button"><i class="fa fa-paper-plane"></i></button>
             </span>
         </div>
     </div>
@@ -68,24 +68,9 @@
         var recipientFirstName;
         var recipientLastName;
         var recipientUsername;
-        queryOtherUser.equalTo("objectId", '{{=recipient_id}}');
-        queryOtherUser.find({
-            success: function(results) {
-                console.log("Successfully retrieved " + results.length + " users.");
-                // Do something with the returned Parse.Object values
-                for (var i = 0; i < results.length; i++) {
-                    var object = results[i];
-                    recipientFirstName = object.get("FirstName");
-                    recipientLastName = object.get("LastName");
-                    recipientUsername = object.get("username");
-                }
-            },
-            error: function(error) {
-                console.log("Error: " + error.code + " " + error.message);
-            }
-        });
+        queryForOtherUser();
 
-        // Ractive object
+        // Ractive object, used to update the view without refreshing
         var MAIN = new Ractive({
             el: '#target',
             template: '#template',
@@ -97,185 +82,15 @@
             }
         });
 
-        /*
-         * Sorts results, scrolls to the bottom of the message list synchronously using Promises
-         */
-        var sortItems = function(data) {
-            return new Promise(function(resolve, reject) {
-                data['results'].sort(function(a, b) {
-                    return a.createdAt < b.createdAt ? - 1 : 1;
-                });
-                var promise2 = MAIN.set('msg_list', data["results"]);
-                promise2.then(scrollBottom());
-            });
-        };
+        // Subscribe user to PubNub Channel (i.e.: start listening for messages)
+        subscribe();
 
-
-        /*
-         * Scrolls to the bottom of the div containing the messages
-         */
-        function scrollBottom(){
-            MAIN.nodes.message_list.scrollTop = MAIN.nodes.message_list.scrollHeight - MAIN.nodes.message_list.clientHeight
-        }
-
-
-        /*
-         * Loads messages using ajax + Parse.com's REST API
-         * Called every 10 seconds
-         * Does not send messages
-         */
-        function loadMessages(){
-            var userlist = ['{{=curr_user_id}}', '{{=recipient_id}}'];
-
-            // Parameters for query
-            var obj = {
-                "senderId": {
-                    "$in": userlist
-                 },
-                "recipientId": {
-                     "$in": userlist
-                }
-            };
-
-            // Query we'd like to execute
-            // What it's saying:
-            //    Find all ParseMessage objects where the current user is
-            //    either the sender or the recipient, and where the other user
-            //    is either the sender or the recipient
-            var query = encodeURIComponent('where='+ JSON.stringify(obj));
-            $.ajax({
-                type: "GET",
-                url: "https://api.parse.com/1/classes/ParseMessage?" + query,
-                data: {limit: 40, order: "-createdAt"},
-                dataType: "json",
-                headers: {
-                    "X-Parse-Application-Id": "sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO",
-                    "X-Parse-REST-API-Key": "4udDwLuCkvJLR09ypSp1xsgKKVwBDmncRSRBd24K"
-                },
-                success : function(data) {
-                    var promise1 = sortItems(data);
-                    MAIN.set('loading', false);
-                },
-                error : function(data) {
-                    console.log('error, data = ' + data);
-                }
-            });
-        }
-
-        /*
-         * Sets contacts list using ajax + Parse.com's REST API
-         * Called from PubNub's publish() function
-         * Does not send messages
-         */
-        function setContactsLiist(){
-            var userlist = ['{{=curr_user_id}}', '{{=recipient_id}}'];
-
-            // Parameters for query
-            var obj = {
-                "senderId": {
-                    "$in": userlist
-                 },
-                "recipientId": {
-                     "$in": userlist
-                }
-            };
-
-            // Query we'd like to execute
-            // What it's saying:
-            //    Find all ParseMessage objects where the current user is
-            //    either the sender or the recipient, and where the other user
-            //    is either the sender or the recipient
-            var query = encodeURIComponent('where='+ JSON.stringify(obj));
-            $.ajax({
-                type: "GET",
-                url: "https://api.parse.com/1/classes/ParseMessage?" + query,
-                data: {limit: 40, order: "-createdAt"},
-                dataType: "json",
-                headers: {
-                    "X-Parse-Application-Id": "sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO",
-                    "X-Parse-REST-API-Key": "4udDwLuCkvJLR09ypSp1xsgKKVwBDmncRSRBd24K"
-                },
-                success : function(data) {
-                    var promise1 = sortItems(data);
-                    MAIN.set('loading', false);
-                    // if there are no messages between the two users
-                    //    Add the two users to each other's contacts lists
-                    if (data["results"].length <= 0){
-                        var ContactsMetaData = Parse.Object.extend("ContactsMetaData");
-                        var contactsMetaData = new ContactsMetaData;
-                        if (currUser.get("isTutor")) {
-                            // send tutor info
-                            contactsMetaData.set("tutorId", currUser.id);
-                            contactsMetaData.set("tutorFirstName", currUser.get("FirstName"));
-                            contactsMetaData.set("tutorLastName", currUser.get("LastName"));
-                            contactsMetaData.set("tutorUsername", currUser.get("username"));
-
-                            // send student info
-                            contactsMetaData.set("studentId", userlist[1]);
-                            contactsMetaData.set("studentFirstName", recipientFirstName);
-                            contactsMetaData.set("studentLastName", recipientLastName);
-                            contactsMetaData.set("studentUsername", recipientUsername);
-                        }
-                        else {
-                            // send student info
-                            contactsMetaData.set("studentId", currUser.id);
-                            contactsMetaData.set("studentFirstName", currUser.get("FirstName"));
-                            contactsMetaData.set("studentLastName", currUser.get("LastName"));
-                            contactsMetaData.set("studentUsername", currUser.get("username"));
-
-                            // send tutor info
-                            contactsMetaData.set("tutorId", userlist[1]);
-                            contactsMetaData.set("tutorFirstName", recipientFirstName);
-                            contactsMetaData.set("tutorLastName", recipientLastName);
-                            contactsMetaData.set("tutorUsername", recipientUsername);
-                        }
-                        contactsMetaData.save();
-                    }
-                },
-                error : function(data) {
-                    console.log('error, data = ' + data);
-                }
-            });
-        }
-
-        // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
-        function generateUUID() {
-            var d = new Date().getTime();
-            if (window.performance && typeof window.performance.now === "function") {
-                d += performance.now(); //use high-precision timer if available
-            }
-            var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-                var r = (d + Math.random() * 16) % 16 | 0;
-                d = Math.floor(d / 16);
-                return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-            });
-            return uuid;
-        }
-
-        if(currUser.get("isTutor")){
-            $("#searchTutor").remove();
-        }
-        else{
-            $("#searchTutor").val("Search");
-        }
-
-        $("#prof").click(function(e){
-            document.location.href = "{{=URL('default', 'index')}}";
-        });
-
-        $("#searchTutor").click(function(e){
-            document.location.href = "{{=URL('default', 'search')}}" + "/" + currUser.id;
-        });
-
-        $("#logoutbtn").click(function(e){
-            Parse.User.logOut();
-            document.location.href = "{{=URL('default', 'index')}}";
-        });
-
+        // Send message when SEND button is pressed
         $("#send-message-btn").click(function(e){
             publish();
         });
 
+        // Send message when ENTER button is pressed (on keyboard)
         document.onkeydown=function(evt){
             var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
             if(keyCode == 13) {
@@ -283,14 +98,26 @@
             }
         };
 
+        // Loads messages every 10 seconds, in case a message from Android app is sent/received
+        setInterval(loadMessages, 10000);
+
+        /*
+         * Function that subscribes current user to a PubNub channel
+         * What it does:
+         *    Scrolls to bottom of div containing messages each time there's a new message sent or received
+         *    Sets up PubNub with correct credentials abd channel name
+         *    Loads messages into div
+         *    Uses PubNub's subscribe() function to update messages in real-time
+         */
         function subscribe() {
-            MAIN.nodes.message_list.scrollTop = MAIN.nodes.message_list.scrollHeight - MAIN.nodes.message_list.clientHeight;
+            scrollToBottom();
             pubnub = PUBNUB({
                 publish_key: 'pub-c-18ffe55c-a3d3-497d-8fee-426cd381796a',
                 subscribe_key: 'sub-c-5d35003c-9258-11e5-9a49-02ee2ddab7fe'
             });
 
             var channel_name;
+
             // want to have channel be consistent, since this is a private chat
             // always have student id first, then tutor id
             if (currUser.get("isTutor")) {
@@ -302,24 +129,14 @@
 
             loadMessages();
 
+            // This is PubNub's subscribe() function
+            // Listens for new messages, including those sent by the current user
             pubnub.subscribe({
                 channel: channel_name,
                 message: function (m) {
                     // make it scroll to bottom of div on load
-                    MAIN.nodes.message_list.scrollTop = MAIN.nodes.message_list.scrollHeight - MAIN.nodes.message_list.clientHeight;
+                    scrollToBottom();
                     console.log("I am subscribing, m = " + m);
-                    var userlist = ['{{=curr_user_id}}', '{{=recipient_id}}'];
-
-                    var obj = {
-                        "senderId": {
-                            "$in": userlist
-                        },
-                        "recipientId": {
-                            "$in": userlist
-                        }
-                    };
-
-                    var query = encodeURIComponent('where='+ JSON.stringify(obj));
 
                     loadMessages();
                 },
@@ -331,11 +148,17 @@
             })
         }
 
-        subscribe();
-
+        /*
+         * Function that publishes a message to a PubNub channel
+         * What it does:
+         *    Scrolls to bottom of div containing messages each time there's a new message sent or received
+         *    Sets up PubNub with correct credentials abd channel name
+         *    Updates contacts list if these two users have never messaged each other
+         *    Uses PubNub's publish() function to update messages in real-time and send that info to Parse
+         */
         function publish() {
             // make it scroll to bottom of div on load
-            MAIN.nodes.message_list.scrollTop = MAIN.nodes.message_list.scrollHeight - MAIN.nodes.message_list.clientHeight;
+            scrollToBottom();
             pubnub = PUBNUB({
                 publish_key: 'pub-c-18ffe55c-a3d3-497d-8fee-426cd381796a',
                 subscribe_key: 'sub-c-5d35003c-9258-11e5-9a49-02ee2ddab7fe'
@@ -392,7 +215,206 @@
                 }
             })
         }
-        // loads messages every 10 seconds, in case a message from Android app is sent/received
-        setInterval(loadMessages, 10000);
+
+        /*
+         * Loads messages using ajax + Parse.com's REST API
+         * Called every 10 seconds
+         * Does not send messages
+         */
+        function loadMessages(){
+            var userlist = ['{{=curr_user_id}}', '{{=recipient_id}}'];
+
+            // Parameters for query
+            var obj = {
+                "senderId": {
+                    "$in": userlist
+                 },
+                "recipientId": {
+                     "$in": userlist
+                }
+            };
+
+            // Query we'd like to execute
+            // What it's saying:
+            //    Find all ParseMessage objects where the current user is
+            //    either the sender or the recipient, and where the other user
+            //    is either the sender or the recipient
+            var query = encodeURIComponent('where='+ JSON.stringify(obj));
+            $.ajax({
+                type: "GET",
+                url: "https://api.parse.com/1/classes/ParseMessage?" + query,
+                data: {limit: 40, order: "-createdAt"},
+                dataType: "json",
+                headers: {
+                    "X-Parse-Application-Id": "sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO",
+                    "X-Parse-REST-API-Key": "4udDwLuCkvJLR09ypSp1xsgKKVwBDmncRSRBd24K"
+                },
+                success : function(data) {
+                    sortItems(data);
+                    MAIN.set('loading', false);
+                },
+                error : function(data) {
+                    console.log('error, data = ' + data);
+                }
+            });
+        }
+
+        /*
+         * Sets contacts list using ajax + Parse.com's REST API
+         * Called from PubNub's publish() function
+         * Does not send messages
+         */
+        function setContactsLiist(){
+            var userlist = ['{{=curr_user_id}}', '{{=recipient_id}}'];
+
+            // Parameters for query
+            var obj = {
+                "senderId": {
+                    "$in": userlist
+                 },
+                "recipientId": {
+                     "$in": userlist
+                }
+            };
+
+            // Query we'd like to execute
+            // What it's saying:
+            //    Find all ParseMessage objects where the current user is
+            //    either the sender or the recipient, and where the other user
+            //    is either the sender or the recipient
+            var query = encodeURIComponent('where='+ JSON.stringify(obj));
+            $.ajax({
+                type: "GET",
+                url: "https://api.parse.com/1/classes/ParseMessage?" + query,
+                data: {limit: 40, order: "-createdAt"},
+                dataType: "json",
+                headers: {
+                    "X-Parse-Application-Id": "sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO",
+                    "X-Parse-REST-API-Key": "4udDwLuCkvJLR09ypSp1xsgKKVwBDmncRSRBd24K"
+                },
+                success : function(data) {
+                    sortItems(data);
+                    MAIN.set('loading', false);
+                    // If there are no messages between the two users:
+                    //    Add the two users to each other's contacts lists
+                    //    This is done by storing each other's data in the ContactsMetaData object in Parse
+                    // Otherwise, do nothing
+                    if (data["results"].length <= 0){
+                        var ContactsMetaData = Parse.Object.extend("ContactsMetaData");
+                        var contactsMetaData = new ContactsMetaData;
+                        if (currUser.get("isTutor")) {
+                            // send current user's info to Parse
+                            contactsMetaData.set("tutorId", currUser.id);
+                            contactsMetaData.set("tutorFirstName", currUser.get("FirstName"));
+                            contactsMetaData.set("tutorLastName", currUser.get("LastName"));
+                            contactsMetaData.set("tutorUsername", currUser.get("username"));
+
+                            // send other user's info to Parse
+                            contactsMetaData.set("studentId", userlist[1]);
+                            contactsMetaData.set("studentFirstName", recipientFirstName);
+                            contactsMetaData.set("studentLastName", recipientLastName);
+                            contactsMetaData.set("studentUsername", recipientUsername);
+                        }
+                        else {
+                            // send current user's info to Parse
+                            contactsMetaData.set("studentId", currUser.id);
+                            contactsMetaData.set("studentFirstName", currUser.get("FirstName"));
+                            contactsMetaData.set("studentLastName", currUser.get("LastName"));
+                            contactsMetaData.set("studentUsername", currUser.get("username"));
+
+                            // send other user's info to Parse
+                            contactsMetaData.set("tutorId", userlist[1]);
+                            contactsMetaData.set("tutorFirstName", recipientFirstName);
+                            contactsMetaData.set("tutorLastName", recipientLastName);
+                            contactsMetaData.set("tutorUsername", recipientUsername);
+                        }
+                        contactsMetaData.save();
+                    }
+                },
+                error : function(data) {
+                    console.log('error, data = ' + data);
+                }
+            });
+        }
+
+        /*
+         * Gets necessary data from other user (recipient)
+         * This allows us to update the list of contacts (in messaging.html)
+         */
+        function queryForOtherUser(){
+            queryOtherUser.equalTo("objectId", '{{=recipient_id}}');
+            queryOtherUser.find({
+                success: function(results) {
+                    console.log("Successfully retrieved " + results.length + " users.");
+                    // Do something with the returned Parse.Object values
+                    for (var i = 0; i < 1; i++) {
+                        var object = results[i];
+                        recipientFirstName = object.get("FirstName");
+                        recipientLastName = object.get("LastName");
+                        recipientUsername = object.get("username");
+                    }
+                },
+                error: function(error) {
+                    console.log("Error: " + error.code + " " + error.message);
+                }
+            });
+        }
+
+        /*
+         * Sorts results, scrolls to the bottom of the message list synchronously using Promises
+         */
+        var sortItems = function(data) {
+            return new Promise(function(resolve, reject) {
+                data['results'].sort(function(a, b) {
+                    return a.createdAt < b.createdAt ? - 1 : 1;
+                });
+                var promise2 = MAIN.set('msg_list', data["results"]);
+                promise2.then(scrollToBottom());
+            });
+        };
+
+        /*
+         * Scrolls to the bottom of the div containing the messages
+         */
+        function scrollToBottom(){
+            MAIN.nodes.message_list.scrollTop = MAIN.nodes.message_list.scrollHeight - MAIN.nodes.message_list.clientHeight;
+        }
+
+        /*
+         * This generates a random UUID for the message IDs
+         * Taken from http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+         */
+        function generateUUID() {
+            var d = new Date().getTime();
+            if (window.performance && typeof window.performance.now === "function") {
+                d += performance.now(); //use high-precision timer if available
+            }
+            var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = (d + Math.random() * 16) % 16 | 0;
+                d = Math.floor(d / 16);
+                return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+            });
+            return uuid;
+        }
+
+        if(currUser.get("isTutor")){
+            $("#searchTutor").remove();
+        }
+        else{
+            $("#searchTutor").val("Search");
+        }
+
+        $("#prof").click(function(e){
+            document.location.href = "{{=URL('default', 'index')}}";
+        });
+
+        $("#searchTutor").click(function(e){
+            document.location.href = "{{=URL('default', 'search')}}" + "/" + currUser.id;
+        });
+
+        $("#logoutbtn").click(function(e){
+            Parse.User.logOut();
+            document.location.href = "{{=URL('default', 'index')}}";
+        });
     });
 </script>

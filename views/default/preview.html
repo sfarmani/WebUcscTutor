@@ -4,9 +4,9 @@
 </head>
 
 <div id="logout" class="btn-group">
-    <a id="searchTutor" class="btn btn-primary">Search</a>
+    <a id="searchTutor" class="btn btn-primary"><i class="fa fa-search"></i></a>
+    <a id="prof" class="btn btn-primary"><i class="fa fa-home"></i></a>
     <a id="message" class="btn btn-primary">Message This Tutor</a>
-    <a id="prof" class="btn btn-primary">Home</a>
     <a id="logoutbtn" class="btn btn-primary">Log Out</a>
 </div>
 
@@ -96,7 +96,7 @@
                                 data["results"][0]["objectId"];
                     });
                     $("#prof").click(function (e) {
-                        document.location.href = "{{=URL('default', 'index')}}/" + Parse.User.current().id;
+                        document.location.href = "{{=URL('default', 'index')}}";
                         //document.location.href = "/WebUcscTutor/default/index";
                     });
                     var profilepic = data["results"][0]["ProfilePic"];
