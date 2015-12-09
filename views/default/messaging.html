@@ -24,15 +24,15 @@
             <td id="tutorName">
             {{if isTutor == "true":}}
                 <a href="{{=URL('default', 'message_user')}}/{%studentFirstName%} {%studentLastName%}/{%studentUsername%}/{%tutorId%}/{%studentId%}">
-                    {%studentFirstName%} {%studentLastName%}
+                   {%studentFirstName%} {%studentLastName%}
                 </a>
             {{else:}}
                 <a href="{{=URL('default', 'message_user')}}/{%tutorFirstName%} {%tutorLastName%}/{%tutorUsername%}/{%studentId%}/{%tutorId%}">
-                    {%tutorFirstName%} {%tutorLastName%}
+                   {%tutorFirstName%} {%tutorLastName%}
                 </a>
             {{pass}}
             </td>
-            <td id="course"></td>
+            <td id="coursed"></td>
             <td id="review"></td>
             <td id="schedule"></td>
         </tr>
@@ -110,16 +110,19 @@
         }
 
         $("#prof").click(function (e) {
-            document.location.href = "/WebUcscTutor/default/index";
+            document.location.href = "{{=URL('default', 'index')}}";
+            //document.location.href = "/WebUcscTutor/default/index";
         });
 
         $("#searchTutor").click(function (e) {
-            document.location.href = "/WebUcscTutor/default/name_list";
+            document.location.href = "{{=URL('default', 'search')}}";
+            //document.location.href = "/WebUcscTutor/default/name_list";
         });
 
         $("#logoutbtn").click(function (e) {
             Parse.User.logOut();
-            document.location.href = "/WebUcscTutor/default/index";
+            document.location.href = "{{=URL('default', 'index')}}";
+            //document.location.href = "/WebUcscTutor/default/index";
         });
 
         // Loads contacts every 10 seconds, in case a new user has messaged them

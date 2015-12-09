@@ -76,7 +76,7 @@
         Parse.User.logIn($("#usernamefield").val(), $("#password").val(), {
             success: function(user) {
                 // Do stuff after successful login.
-                document.location.href = "/WebUcscTutor/default/index/" + user.id;
+                document.location.href = "{{=URL('default', 'index')}}";
             },
             error: function(user, error) {
                 // The login failed. Check error to see why.
@@ -97,7 +97,7 @@
         function logout() {
             alert("Your Session has Timed Out!");
             Parse.User.logOut();
-            document.location.href = "/WebUcscTutor/default/index";
+            document.location.href = "{{=URL('default', 'index')}}";
         }
 
         function resetTimer() {
@@ -140,7 +140,6 @@
 
                }
 
-
                if(currUser.get("isTutor")){
                    $("#searchTutor").addClass("hidethis");
                    $("#searchTutor").remove();
@@ -148,26 +147,26 @@
                else{
                    $("#searchTutor").removeClass("hidethis")
                }
-        
+
                $("#form_login").addClass("hidethis");
                $("#profile").removeClass("hidethis");
                $("#userInfo").removeClass("hidethis");
-        
+
                $("#logoutbtn").click(function(e){
-                   Parse.User.logOut();
-                   document.location.href = "/WebUcscTutor/default/index";
+                    Parse.User.logOut();
+                    document.location.href = "{{=URL('default', 'index')}}";
                });
 
                $("#editprof").click(function(e){
-                   document.location.href = "/WebUcscTutor/default/editprof";
+                    document.location.href = "{{=URL('default', 'editprof')}}";
                });
 
                 $("#searchTutor").click(function(e){
-                   document.location.href = "/WebUcscTutor/default/name_list";
+                    document.location.href = "{{=URL('default', 'search')}}";
                 });
 
                $("#message").click(function(e){
-                   document.location.href = "/WebUcscTutor/default/messaging" + "/" + currUserId + "/" + currUser.get("isTutor");
+                    document.location.href = "{{=URL('default', 'messaging')}}/" + currUserId + "/" + currUser.get("isTutor");
                });
 
                var profilepic = currUser.get("ProfilePic");
@@ -211,10 +210,10 @@
         });
 
         $("#tutorsignup").click(function(e){
-            document.location.href = "/WebUcscTutor/default/tutorsignup";
+            document.location.href = "{{=URL('default', 'tutorsignup')}}";
         });
         $("#studentsignup").click(function(e){
-            document.location.href = "/WebUcscTutor/default/studentsignup";
+            document.location.href = "{{=URL('default', 'studentsignup')}}";
         });
     }
 </script>

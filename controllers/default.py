@@ -41,7 +41,7 @@ def index():
     return dict(curr_user_id=curr_user_id, isTutor=isTutor)
 
 
-def name_list():
+def search():
     # pass in args from the search button and query with those args. somehow
     users = get_info("get users")
     session.users = users

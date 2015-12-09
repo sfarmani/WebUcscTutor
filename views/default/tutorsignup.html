@@ -61,7 +61,8 @@
         $("#loggedin").show();
         $("#form_login").hide();
         setTimeout(function(){
-            document.location.href = "/WebUcscTutor/default/index";
+            document.location.href = "{{=URL('default', 'index')}}/" + Parse.User.current().id;
+            //document.location.href = "{{=URL('default', 'index')}}";
         }, 5000);
     }
     else{
@@ -86,7 +87,7 @@
         });
 
         $("#cancel").click(function(e){
-           document.location.href = "/WebUcscTutor/default/index"
+            document.location.href = "{{=URL('default', 'index')}}";
         });
 
         $("#signup").click(function(e){
@@ -134,7 +135,8 @@
                         user.signUp(null, {
                             success: function(user) {
                                 // Hooray! Let them use the app now.
-                                document.location.href = "/WebUcscTutor/default/index";
+                                document.location.href = "{{=URL('default', 'index')}}";
+                                //document.location.href = "/WebUcscTutor/default/index";
                             },
                           error: function(user, error) {
                             // Show the error message somewhere and let the user try again.
@@ -157,7 +159,8 @@
                     user.signUp(null, {
                         success: function(user) {
                             // Hooray! Let them use the app now.
-                            document.location.href = "/WebUcscTutor/default/index";
+                            document.location.href = "{{=URL('default', 'index')}}";
+                            //document.location.href = "/WebUcscTutor/default/index";
                         },
                         error: function(user, error) {
                             // Show the error message somewhere and let the user try again.

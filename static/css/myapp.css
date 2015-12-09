@@ -137,7 +137,7 @@ th {
 /* line 116, ../sass/_main.scss */
 form#form_login {
   padding: 3%;
-  margin: auto;
+  margin: auto auto 6% auto;
   -moz-box-shadow: rgba(0, 0, 0, 0.5) 3px 5px 8px 2px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.5) 3px 5px 8px 2px;
   box-shadow: rgba(0, 0, 0, 0.5) 3px 5px 8px 2px;
@@ -226,7 +226,7 @@ form#form_login {
 
 /* line 187, ../sass/_main.scss */
 #inputbio {
-  width: 160%;
+  width: 106%;
   height: 100px;
   font-size: 15pt;
   overflow-y: hidden;
@@ -235,7 +235,7 @@ form#form_login {
 
 /* line 195, ../sass/_main.scss */
 #inputcourses {
-  width: 92%;
+  width: 106%;
   height: 100px;
   font-size: 15pt;
   overflow-y: hidden;
@@ -244,7 +244,7 @@ form#form_login {
 
 /* line 203, ../sass/_main.scss */
 #deletecourses {
-  width: 92%;
+  width: 106%;
   height: 100px;
   font-size: 15pt;
   overflow-y: hidden;
@@ -358,4 +358,9 @@ form#form_login {
 /* line 287, ../sass/_main.scss */
 #tutorlogged, #notloggedin, #loggedin {
   color: #fff;
+}
+
+/* line 291, ../sass/_main.scss */
+#studentsignup, #tutorsignup {
+  font-size: 79%;
 }

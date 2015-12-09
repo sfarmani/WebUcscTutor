@@ -37,7 +37,7 @@ def _():
     app = request.application
     ctr = request.controller
     # useful links to internal and external resources
-    response.menu += [(T('My Sites'), False, URL('admin', 'default', 'site'))]
+    # response.menu += [(T('My Sites'), False, URL('admin', 'default', 'site'))]
 if DEVELOPMENT_MENU: _()
 
 if "auth" in locals(): auth.wikimenu() 

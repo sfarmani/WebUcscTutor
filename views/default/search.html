@@ -21,7 +21,7 @@
 
     <div id="search" class="btn-group hidethis">
         <input id="searchtext" type="text" placeholder="i.e CMPS115">
-        <a id="searchbtn" class="btn btn-primary">Search</a>
+        <a id="searchbtn" class="btn btn-primary"><i class="fa fa-search"></i></a>
     </div>
 
     <table id="names" class="hidethis">
@@ -41,12 +41,12 @@
         {% #tutor_list %}
             <tr id="list">
                 <td id="tutorName">
-                    <a id="previewbtn" class="btn btn-secondary" href="/WebUcscTutor/default/preview/{% objectId %}">
+                    <a id="previewbtn" class="btn btn-secondary" href="{{=URL('default', 'preview')}}/{%objectId%}">
                         {% FirstName %} {% LastName %}
                     </a>
                 </td>
                 <td id="courses">
-                    <a id="previewbtn" class="btn btn-secondary" href="/WebUcscTutor/default/preview/{% objectId %}">
+                    <a id="previewbtn" class="btn btn-secondary" href="{{=URL('default', 'preview')}}/{%objectId%}">
                         {%webCourses%}
                     </a>
                 </td>
@@ -139,7 +139,8 @@
             $("#search").addClass("hidethis");
             $("#names").addClass("hidethis");
             setTimeout(function () {
-                document.location.href = "/WebUcscTutor/default/index"
+                document.location.href = "{{=URL('default', 'index')}}/" + currUser.id;
+                //document.location.href = "/WebUcscTutor/default/index"
             }, 5000);
         }
         else if (Parse.User.current().get("isTutor")) {
@@ -149,7 +150,8 @@
             $("#search").addClass("hidethis");
             $("#names").addClass("hidethis");
             setTimeout(function () {
-                document.location.href = "/WebUcscTutor/default/index"
+                document.location.href = "{{=URL('default', 'index')}}";
+                //document.location.href = "/WebUcscTutor/default/index"
             }, 5000);
         }
         else {
@@ -168,7 +170,8 @@
                 function logout() {
                     alert("Your Session has Timed Out!");
                     Parse.User.logOut();
-                    document.location.href = "/WebUcscTutor/default/index";
+                    document.location.href = "{{=URL('default', 'index')}}/";
+                    //document.location.href = "/WebUcscTutor/default/index";
                 }
 
                 function resetTimer() {
@@ -179,15 +182,18 @@
             inactivityTime();
 
             $("#message").click(function (e) {
-                document.location.href = "/WebUcscTutor/default/messaging" + "/" + currUser.id;
+                document.location.href = "{{=URL('default', 'messaging')}}/" + currUser.id;
+                //document.location.href = "/WebUcscTutor/default/messaging/" + currUser.id;
             });
 
             $("#logoutbtn").click(function (e) {
                 Parse.User.logOut();
-                document.location.href = "/WebUcscTutor/default/index";
+                document.location.href = "{{=URL('default', 'index')}}";
+                //document.location.href = "/WebUcscTutor/default/index";
             });
             $("#prof").click(function (e) {
-                document.location.href = "/WebUcscTutor/default/index";
+                document.location.href = "{{=URL('default', 'index')}}";
+                //document.location.href = "/WebUcscTutor/default/index";
             });
         }
     });

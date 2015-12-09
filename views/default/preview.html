@@ -80,10 +80,12 @@
                     }
                     $("#logoutbtn").click(function(e){
                         Parse.User.logOut();
-                        document.location.href = "/WebUcscTutor/default/index";
+                        document.location.href = "{{=URL('default', 'index')}}";
+                        //document.location.href = "/WebUcscTutor/default/index";
                     });
                     $("#searchTutor").click(function(e){
-                        document.location.href = "/WebUcscTutor/default/name_list";
+                        document.location.href = "{{=URL('default', 'search')}}";
+                        //document.location.href = "/WebUcscTutor/default/name_list";
                     });
                     $("#message").click(function(e){
                         document.location.href = "/WebUcscTutor/default/message_user" + "/" +
@@ -94,7 +96,8 @@
                                 data["results"][0]["objectId"];
                     });
                     $("#prof").click(function (e) {
-                        document.location.href = "/WebUcscTutor/default/index";
+                        document.location.href = "{{=URL('default', 'index')}}/" + Parse.User.current().id;
+                        //document.location.href = "/WebUcscTutor/default/index";
                     });
                     var profilepic = data["results"][0]["ProfilePic"];
                     $("#profilepic")[0].src = profilepic.url;
