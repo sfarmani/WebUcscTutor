@@ -6,11 +6,14 @@
 <div id="target"></div>
 
 <script id="template" type="text/ractive">
+    <div id="emailnotverifed" class="hidethis">
+        <span id="a">Please verify your email before you can start searching.</span>
+    </div>
     <div id="notloggedin" class="hidethis">
-        <span id="notloggedin"></span>
+        <span id="a">You haven't logged in yet! Please login or Sign Up!</span>
     </div>
     <div id="tutorlogged" class="hidethis">
-        <span id="tutorlogged">I don't know how you got here, but you're a tutor! You can't search for other tutors, silly!!</span>
+        <span id="a">I don't know how you got here, but you're a tutor! You can't search for other tutors, silly!!</span>
     </div>
 
     <div id="logout" class="btn-group hidethis">
@@ -141,7 +144,7 @@
             }
         }
 
-        if (Parse.User.current() == null) {
+        if (currUser == null) { // if user isn't logged in yet, then hide everything except for the text and redirect them.
             $("#notloggedin").removeClass("hidethis");
             $("#tutorlogged").addClass("hidethis");
             $("#logout").addClass("hidethis");
@@ -149,10 +152,10 @@
             $("#names").addClass("hidethis");
             setTimeout(function () {
                 document.location.href = "{{=URL('default', 'index')}}/" + currUser.id;
-                //document.location.href = "/WebUcscTutor/default/index"
-            }, 5000);
+            }, 3000);
         }
-        else if (Parse.User.current().get("isTutor")) {
+        // if user is a tutor then hide everything except a text. A tutor can't search for other tutors.
+        else if (currUser.get("isTutor")) {
             $("#tutorlogged").removeClass("hidethis");
             $("#notloggedin").addClass("hidethis");
             $("#logout").addClass("hidethis");
@@ -160,16 +163,29 @@
             $("#names").addClass("hidethis");
             setTimeout(function () {
                 document.location.href = "{{=URL('default', 'index')}}";
-                //document.location.href = "/WebUcscTutor/default/index"
-            }, 5000);
+            }, 3000);
         }
-        else {
+        else if(currUser.get("emailVerified")){
+            $("#logout").removeClass("hidethis");
+            $("#names").removeClass("hidethis");
+            $("#emailnotverifed").addClass("hidethis");
+        }
+        else if(!currUser.get("emailVerified")){
+            $("#logout").addClass("hidethis");
+            $("#names").addClass("hidethis");
+            $("#emailnotverifed").removeClass("hidethis");
+            setTimeout(function(){
+                document.location.href = "{{=URL('default', 'index')}}";
+            }, 3000);
+        }
+        else { // if user is logged in and is a student then show the search layout and hide the texts
             $("#notloggedin").addClass("hidethis");
             $("#tutorlogged").addClass("hidethis");
             $("#logout").removeClass("hidethis");
             $("#search").removeClass("hidethis");
             $("#names").removeClass("hidethis");
 
+            // function for if a user is inactive.
             var inactivityTime = function () {
                 var t;
                 window.onload = resetTimer;
@@ -190,19 +206,20 @@
             };
             inactivityTime();
 
+            // message history button
             $("#message").click(function (e) {
                 document.location.href = "{{=URL('default', 'messaging')}}/" + currUser.id;
-                //document.location.href = "/WebUcscTutor/default/messaging/" + currUser.id;
             });
 
+            // logout button
             $("#logoutbtn").click(function (e) {
                 Parse.User.logOut();
                 document.location.href = "{{=URL('default', 'index')}}";
-                //document.location.href = "/WebUcscTutor/default/index";
             });
+
+            // home button
             $("#prof").click(function (e) {
                 document.location.href = "{{=URL('default', 'index')}}";
-                //document.location.href = "/WebUcscTutor/default/index";
             });
         }
     });

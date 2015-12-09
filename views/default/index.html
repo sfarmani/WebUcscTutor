@@ -13,7 +13,7 @@
 <div id="userInfo" class="hidethis">
     <div id="home">
         <div id="profile" class="hidethis">
-            <img src="" id="profilepic">
+            <img src="http://oi63.tinypic.com/2lmt1zq.jpg" id="profilepic">
             <input type="file" id="fileBrowser" style="visibility:hidden; display:none;" />
         </div>
 
@@ -69,12 +69,14 @@
 </form>
 
 <script type="text/javascript">
+    // initialize parse for use.
     Parse.initialize("sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO", "MaOO36yKaoEH6bdOlVCnNsaBYAhMfxnGS8MhYrTv");
 
+    // attempt to login.
     function login(){
         Parse.User.logIn($("#usernamefield").val(), $("#password").val(), {
             success: function(user) {
-                // Do stuff after successful login.
+                // redirect after successful login.
                 document.location.href = "{{=URL('default', 'index')}}";
             },
             error: function(user, error) {
@@ -85,8 +87,10 @@
         });
     }
 
+    // set the current user
     var currUser = Parse.User.current();
 
+    // check to see if a user is inactive or not. after 1 hour log them out.
     var inactivityTime = function () {
         var t;
         window.onload = resetTimer;
@@ -105,13 +109,16 @@
         }
     };
 
+    // if the current use is logged in...
     if(currUser){
+        // get the latest data. (fetch() is a function that gets the lastest data from parse.)
         currUser.fetch({
            success: function(currUser){
+               // populate the courses
                window.onload = populateCourses();
 
+               // get the current user's id
                var currUserId = currUser.id;
-
                $.ajax('{{=URL('default', 'index')}}', {
                    data: {'currUserId': currUserId,
                           'isTutor': currUser.get("isTutor")},
@@ -126,8 +133,11 @@
                function errorFunc() {
                    alert('error');
                }
+
                inactivityTime();
 
+               // gets the courses from the current user's table and sorts them into alphabetical order.
+                // then displays them vertically in a table.
                function populateCourses(){
                    var courses = currUser.get("webCourses").sort();
                    if(courses){
@@ -136,50 +146,65 @@
                            table.append('<tr><td id="coursed">'+ courses[i]+'</td></tr>');
                        }
                    }
-
                }
 
+               // if the user is a tutor, then hide and remove the search button
                if(currUser.get("isTutor")){
                    $("#searchTutor").addClass("hidethis");
                    $("#searchTutor").remove();
                }
-               else{
+               else{ // display the search button
                    $("#searchTutor").removeClass("hidethis")
                }
 
+               // because at this point the user is already logged in, the login form needs to be hidden
+               // and the profile needs to be displayed.
                $("#form_login").addClass("hidethis");
                $("#profile").removeClass("hidethis");
                $("#userInfo").removeClass("hidethis");
 
+               // when logout button is pressed, log the user out.
                $("#logoutbtn").click(function(e){
                     Parse.User.logOut();
                     document.location.href = "{{=URL('default', 'index')}}";
                });
 
+               // when Edit Profile button is pressed redirect to the edit profile page.
                $("#editprof").click(function(e){
                     document.location.href = "{{=URL('default', 'editprof')}}";
                });
 
-                $("#searchTutor").click(function(e){
-                    document.location.href = "{{=URL('default', 'search')}}";
-                });
+               // When search button is pressed, take them to search page.
+               $("#searchTutor").click(function(e){
+                   document.location.href = "{{=URL('default', 'search')}}";
+               });
 
+               // when message button pressed take them to messaging page.
                $("#message").click(function(e){
                     document.location.href = "{{=URL('default', 'messaging')}}/" + currUserId + "/" + currUser.get("isTutor");
                });
 
+               // get the current user's profile picture and display it
                var profilepic = currUser.get("ProfilePic");
                $("#profilepic")[0].src = profilepic.url();
+
+               // get the first and last name of the user and concat them together and display it.
                var fname = currUser.get("FirstName");
                var lname = currUser.get("LastName");
                $("#name")[0].innerHTML = fname+" "+lname;
+
+               // get the username and display it
                $("#username")[0].innerHTML = " @"+currUser.get("username");
-               if(currUser.get("bio") === "" || !currUser.get("bio")){
+
+               // get the current users's bio and display it
+               if(currUser.get("bio") === "" || !currUser.get("bio")){// if empty then display "No Description"
                    $("#bio")[0].innerHTML = "No Description";
                }
-               else{
+               else{// else display the bio
                    $("#bio")[0].innerHTML = currUser.get("bio");
                }
+
+               // if the current user is a tutor, then change the label for courses to the correct label.
                if(currUser.get("isTutor")){
                    $("#courselabel")[0].innerHTML = "Courses I Can Tutor";
                }
@@ -188,11 +213,13 @@
                }
            },
             error: function(error){
+                // if parse could not update the user's info correctly.
                 alert("Error: " + error.code + " " + error.message);
             }
         });
     }
-    else{
+    else{ // if no user has logged in yet.
+        // when enter key is pressed then perform the login() function.
         document.onkeydown=function(evt){
             var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
             if(keyCode == 13) {
@@ -200,17 +227,21 @@
             }
         };
 
-        $("#profile").hide();
-        $("#userInfo").hide();
-        $("#logout").hide();
-        $("#form_login").show();
+        // display the login page.
+        $("#profile").addClass("hidethis");
+        $("#userInfo").addClass("hidethis");
+        $("#logout").addClass("hidethis");
+        $("#form_login").removeClass("hidethis");
         $("#loginbtn").click(function(e){
             login();
         });
 
+        // redirect to tutor sign up flow.
         $("#tutorsignup").click(function(e){
             document.location.href = "{{=URL('default', 'tutorsignup')}}";
         });
+
+        // redirect to student sign up flow.
         $("#studentsignup").click(function(e){
             document.location.href = "{{=URL('default', 'studentsignup')}}";
         });

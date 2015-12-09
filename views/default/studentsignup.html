@@ -3,11 +3,11 @@
     <script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
 </head>
 
-<div id="loggedin">
-    <span id="loggedin">You're Already Logged in!</span>
+<div id="loggedin" class="hidethis">
+    <span id="a">You're Already Logged in!</span>
 </div>
 
-<form id="form_login" class="col-xs-4">
+<form id="form_login" class="col-xs-4 hidethis">
     <div>
         <input class="form-control" type="text" id="FirstName" placeholder="First Name">
     </div>
@@ -55,26 +55,32 @@
 
 
 <script type="text/javascript">
+    // initialize parse for use
     Parse.initialize("sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO", "MaOO36yKaoEH6bdOlVCnNsaBYAhMfxnGS8MhYrTv");
 
+    // if user is already logged in then show a text and redirect in three seconds
     if(Parse.User.current() != null){
-        $("#loggedin").show();
-        $("#form_login").hide();
+        $("#loggedin").removeClass("hidethis");
+        $("#form_login").addClass("hidethis");
         setTimeout(function(){
-            document.location.href = "/WebUcscTutor/default/index";
-        }, 5000);
+            document.location.href = "{{'default', 'index'}}";
+        }, 3000);
     }
-    else{
-        $("#loggedin").hide();
-        $("#form_login").show();
+    else{ //  if user has not logged in yet, remove text and show the signup form.
+        $("#loggedin").addClass("hidethis");
+        $("#form_login").removeClass("hidethis");
+
+        // when picture placeholder is clicked, open a file browser to select a picture
         $("#pic").click(function(e){
             document.getElementById('fileBrowser').click();
         });
 
+        // cancel button
         $("#cancel").click(function(e){
             document.location.href = "{{=URL('default', 'index')}}";
-            // document.location.href = "/WebUcscTutor/default/index"
         });
+
+        // replaces the old image with the new selected image.
         function readURL(input){
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
@@ -86,11 +92,17 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
+
+        // when filebrowser is selected by clicking on the profile picture
+        // run readURL
         $("#fileBrowser").change(function(e){
            readURL(this);
         });
 
+        // sign up button
         $("#signup").click(function(e){
+
+            // if any field is left empty alert the user to complete the form.
             if($("#password").val() == "" ||
                $("#passwordconfirm").val() == "" ||
                $("#email").val() == "" ||
@@ -100,29 +112,38 @@
                $("#courses").val() == ""){
                 alert("Please complete the form");
             }
-            else if($("#password").val() != $("#passwordconfirm").val()){
+            else if($("#password").val() != $("#passwordconfirm").val()){ // if passwords do not match
                 alert("Password Does Not Match");
             }
-            else if(!$("#email").val().match(/[a-zA-Z]+@ucsc.edu/)){
+            else if(!$("#email").val().match(/[a-zA-Z]+@ucsc.edu/)){ // if email doesn't end with @ucsc.edu
                 alert("Please sign up with your UCSC email")
             }
-            else if($("#password").val().length < 4){
+            else if($("#password").val().length < 4){// if password isn't of length 4 or more
                 alert("Password has to be 4 or more characters.");
             }
-            else if(!$("#usernamefield").val().match(/[a-zA-Z]+/)){
+            else if(!$("#usernamefield").val().match(/[a-zA-Z]+/)){ // if username is a non-word character
                 alert("Username cannot include any non-word character\n(letter, number, underscore)");
             }
-            else{
+            else{// if everything in the form is okay
+                // take the courses from the input field and put them into an array
                 var courseArray = $("#courses").val().toUpperCase().split(/\s+/);
-                var fileUploadControl = $("#fileBrowser")[0];
-                if (fileUploadControl.files.length > 0) {
-                    var file = fileUploadControl.files[0];
-                    var name = "ProfilePic";
 
+                // check to see if a new picture has been selected.
+                var fileUploadControl = $("#fileBrowser")[0];
+                if (fileUploadControl.files.length > 0) {// if a new picture has been selected
+                    var file = fileUploadControl.files[0];
+                    var name = "ProfilePic.jpg";
+
+                    // make a new parsefile
                     var parseFile = new Parse.File(name, file);
 
+                    // save the parsefile/new picture
                     parseFile.save().then(function() {
+
+                        //make a new parse user
                         var user = new Parse.User();
+
+                        // input the user's info into parse
                         user.set("webCourses", courseArray);
                         user.set("isTutor", false);
                         user.set("username", $("#usernamefield").val());
@@ -132,35 +153,42 @@
                         user.set("LastName", $("#LastName").val().charAt(0).toUpperCase() + $("#LastName").val().substr(1));
                         user.set("ProfilePic", parseFile);
 
+                        // sign them up
                         user.signUp(null, {
                             success: function(user) {
                                 // Hooray! Let them use the app now.
-                                document.location.href = "{{=URL('default', 'index')}}/" + Parse.User.current().id;
-                                // document.location.href = "/WebUcscTutor/default/index";
+                                document.location.href = "{{=URL('default', 'index')}}";
                             },
-                          error: function(user, error) {
-                            // Show the error message somewhere and let the user try again.
-                            alert("Error: " + error.code + " " + error.message);
-                          }
+                            error: function(user, error) {
+                                // Show the error message somewhere and let the user try again.
+                                alert("Error: " + error.code + " " + error.message);
+                            }
                         });
                     }, function(error) {
                       // The file either could not be read, or could not be saved to Parse.
                         alert("Error: " + error.code + " " + error.message);
                     });
                 }
+                // else if a new picture has not been selected, then ignore saving a new profile pic.
                 else if(fileUploadControl.files.length <= 0){
+
+                    // make a new parse user
                     var user = new Parse.User();
-                    user.set("isTutor", true);
+
+                    // input the user's info into parse
+                    user.set("webCourses", courseArray);
+                    user.set("isTutor", false);
                     user.set("username", $("#usernamefield").val());
                     user.set("password", $("#password").val());
                     user.set("email", $("#email").val());
-                    user.set("FirstName", $("#FirstName").val());
-                    user.set("LastName", $("#LastName").val());
+                    user.set("FirstName", $("#FirstName").val().charAt(0).toUpperCase() + $("#FirstName").val().substr(1));
+                    user.set("LastName", $("#LastName").val().charAt(0).toUpperCase() + $("#LastName").val().substr(1));
+
+                    // sign up the user
                     user.signUp(null, {
                         success: function(user) {
                             // Hooray! Let them use the app now.
                             document.location.href = "{{=URL('default', 'index')}}";
-                            //document.location.href = "/WebUcscTutor/default/index";
                         },
                         error: function(user, error) {
                             // Show the error message somewhere and let the user try again.

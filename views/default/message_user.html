@@ -12,6 +12,11 @@
 <div id="target"></div>
 
 <script id="template" type="text/ractive">
+
+    <div id="emailnotverifed" class="hidethis">
+        <span id="a">Please verify your email before you can start messaging.</span>
+    </div>
+
     <div id="logout" class="btn-group">
         <a id="searchTutor" class="btn btn-primary"><i class="fa fa-search"></i></a>
         <a id="prof" class="btn btn-primary"><i class="fa fa-home"></i></a>
@@ -397,8 +402,19 @@
         if(currUser.get("isTutor")){
             $("#searchTutor").remove();
         }
-        else{
-            $("#searchTutor").val("Search");
+        
+        if(currUser.get("emailVerified")){
+            $("#logout").removeClass("hidethis");
+            $("#names").removeClass("hidethis");
+            $("#emailnotverifed").addClass("hidethis");
+        }
+        else if(!currUser.get("emailVerified")){
+            $("#logout").addClass("hidethis");
+            $("#names").addClass("hidethis");
+            $("#emailnotverifed").removeClass("hidethis");
+            setTimeout(function(){
+                document.location.href = "{{=URL('default', 'index')}}";
+            }, 3000);
         }
 
         $("#prof").click(function(e){

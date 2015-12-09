@@ -10,6 +10,9 @@
     <a id="logoutbtn" class="btn btn-primary">Log Out</a>
 </div>
 
+<div id="emailnotverifed" class="hidethis">
+    <span id="a">Please verify your email before you can start previewing.</span>
+</div>
 
 <div id="userInfo">
     <div id="home">
@@ -47,20 +50,46 @@
                     </table>
                 </td>
             </tr>
-        </div>
-    </table>
+        </table>
+    </div>
 </div>
 
 <script type="text/javascript">
     $(function() {
+        // initialize parse for use.
         Parse.initialize("sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO", "MaOO36yKaoEH6bdOlVCnNsaBYAhMfxnGS8MhYrTv");
 
+        // get the id of the user that you want to preview from default.py
         var user_id = '{{=user_id}}';
+        // get the current user as well.
         var currUser = Parse.User.current();
 
+        // function for if a user is inactive.
+        var inactivityTime = function () {
+            var t;
+            window.onload = resetTimer;
+            document.onmousemove = resetTimer;
+            document.onkeypress = resetTimer;
+
+            function logout() {
+                alert("Your Session has Timed Out!");
+                Parse.User.logOut();
+                document.location.href = "{{=URL('default', 'index')}}/";
+            }
+
+            function resetTimer() {
+                clearTimeout(t);
+                t = setTimeout(logout, 3600000);
+            }
+        };
+        inactivityTime();
+
+        // query for the user you want to preview
         function getUser() {
+            // obj where the objectid is the same as the id of the user that you want to preview
             var obj = {"objectId": user_id};
 
+            // start the query for the user.
             var query = encodeURIComponent('where=' + JSON.stringify(obj));
             $.ajax({
                 type: "GET",
@@ -70,55 +99,91 @@
                     "X-Parse-Application-Id": "sm3IJPOksqi4vIIN99wmppWnGWFZ0lvsVLNQ9VuO",
                     "X-Parse-REST-API-Key": "4udDwLuCkvJLR09ypSp1xsgKKVwBDmncRSRBd24K"
                 },
-                success: function (data) {
-                    var courses = data["results"][0]["webCourses"];
-                    if(courses){
+                success: function (data) { // on success do the following
+                    // get the courses from the user's table and sort it.
+                    var courses = data["results"][0]["webCourses"].sort();
+                    if(courses){ // if the array isn't empty then display the courses vertically
                         for(var i = 0; i < courses.length; i++){
                             var table = $("#coursetable");
                             table.append('<tr><td id="course">'+ courses[i]+'</td></tr>');
                         }
                     }
+                    else{ // else display "no courses
+                        var table = $("#coursetable");
+                        table.append('<tr><td id="course">' + "No courses" + '</td></tr>');
+                    }
+
+                    // logout buttn
                     $("#logoutbtn").click(function(e){
                         Parse.User.logOut();
                         document.location.href = "{{=URL('default', 'index')}}";
                         //document.location.href = "/WebUcscTutor/default/index";
                     });
+
+                    // search button
                     $("#searchTutor").click(function(e){
                         document.location.href = "{{=URL('default', 'search')}}";
-                        //document.location.href = "/WebUcscTutor/default/name_list";
                     });
+
+                    // message this tutor button
                     $("#message").click(function(e){
-                        document.location.href = "/WebUcscTutor/default/message_user" + "/" +
-                                data["results"][0]["FirstName"] + " " +
-                                data["results"][0]["LastName"] + "/" +
-                                data["results"][0]["username"] + "/" +
-                                currUser.id + "/" +
-                                data["results"][0]["objectId"];
+                        document.location.href = "{{=URL('default', 'message_user')}}/" + data["results"][0]["FirstName"] + " " +
+                                                    data["results"][0]["LastName"] + "/" +
+                                                    data["results"][0]["username"] + "/" +
+                                                    currUser.id + "/" +
+                                                    data["results"][0]["objectId"];
                     });
+
+                    // home button
                     $("#prof").click(function (e) {
                         document.location.href = "{{=URL('default', 'index')}}";
                         //document.location.href = "/WebUcscTutor/default/index";
                     });
+
+                    // get the current user's profile picture and display it
                     var profilepic = data["results"][0]["ProfilePic"];
                     $("#profilepic")[0].src = profilepic.url;
+
+                    // get the first and last name of the user and concat them together and display it.
                     var fname = data["results"][0]["FirstName"];
                     var lname = data["results"][0]["LastName"];
                     $("#name")[0].innerHTML = fname+" "+lname;
+
+                    // get the username and display it
                     $("#username")[0].innerHTML = " @" + data["results"][0]["username"];
-                    if(data["results"][0]["bio"] === "" || !data["results"][0]["bio"]){
+
+                    // get the users's bio and display it
+                    if(data["results"][0]["bio"] === "" || !data["results"][0]["bio"]){// if empty then display "No Description"
                         $("#bio")[0].innerHTML = "No Description";
                     }
-                    else{
+                    else{// else display the bio
                         $("#bio")[0].innerHTML = data["results"][0]["bio"];
                     }
+
+                    // if the user is a tutor, then change the label for courses to the correct label.
                     if(data["results"][0]["isTutor"]){
                         $("#courselabel")[0].innerHTML = "Courses I Can Tutor";
                     }
                     else{
                         $("#courselabel")[0].innerHTML = "Courses I Want a Tutor For";
                     }
+
+                    if(currUser.get("emailVerified")){
+                        $("#logout").removeClass("hidethis");
+                        $("#userInfo").removeClass("hidethis");
+                        $("#emailnotverifed").addClass("hidethis");
+                    }
+                    else if(!currUser.get("emailVerified")){
+                        $("#logout").addClass("hidethis");
+                        $("#userInfo").addClass("hidethis");
+                        $("#emailnotverifed").removeClass("hidethis");
+                        setTimeout(function(){
+                            document.location.href = "{{=URL('default', 'index')}}";
+                        }, 3000);
+                    }
                 },
                 error: function (data) {
+                    // if parse could not update the user's info correctly.
                     console.log('error, data = ' + data);
                 }
             });
